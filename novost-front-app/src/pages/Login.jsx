@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css'; // Importa los estilos
-import restaurantImage from '../../assets/images/restaurant.jpg'; // Asegúrate de tener la imagen aquí
+import restaurantImage from '../assets/images/restaurant.jpg'; // Asegúrate de tener la imagen aquí
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
