@@ -1,25 +1,30 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
-import { stripePromise } from './lib/stripe'; // El archivo que creamos antes
-import Login from './pages/Login';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword'; 
+import ResetPassword from './pages/auth/ResetPassword';   
 import MisReservas from './pages/MisReservas';
 import Reservar from './pages/Reservar';
+import UserProfile from './pages/profile/UserProfile';
+import ChangePassword from './pages/profile/ChangePassword';
+import Home from './pages/home/Home';
 
 function App() {
   return (
-    <Elements stripe={stripePromise}>
-      <Router>
-        <Routes>
-          {/* Ruta por defecto redirige a login */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          
-          {/* Nuevas rutas de Reservas */}
-          <Route path="/reservar" element={<Reservar />} />
-          <Route path="/mis-reservas" element={<MisReservas />} />
-        </Routes>
-      </Router>
-    </Elements>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/restaurar-password" element={<ResetPassword />} />
+        <Route path="/reservar" element={<Reservar />} />
+        <Route path="/mis-reservas" element={<MisReservas />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 
