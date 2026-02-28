@@ -70,7 +70,18 @@ const Login = () => {
       localStorage.setItem('cedula', user.cedula);
       localStorage.setItem('usuario', JSON.stringify(user));
 
-      navigate('/home'); 
+      switch (user.rol) {
+        case 'ADMINISTRADOR':
+          navigate('/admin-home');
+          break;
+        case 'TRABAJADOR':
+          navigate('/worker-home');
+          break;
+        case 'CLIENTE':
+        default:
+          navigate('/home');
+          break;
+      }
     } catch (error) {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
