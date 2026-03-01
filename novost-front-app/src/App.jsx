@@ -12,11 +12,25 @@ import RegistrarTrabajador from './pages/auth/RegisterWorker';
 import Terminos from './pages/home/Terminos';
 import Layout from './components/layout/Layout';
 import AccessibilityBar from './components/layout/AccessibilityBar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     
     <Router>
- 
+       <ToastContainer 
+        position="bottom-left"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <AccessibilityBar /> 
 
       <Routes>
