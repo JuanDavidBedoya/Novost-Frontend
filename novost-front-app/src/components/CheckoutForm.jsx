@@ -1,5 +1,6 @@
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useState } from 'react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function CheckoutForm({ idReserva }) {
   const stripe = useStripe();
@@ -17,7 +18,7 @@ export default function CheckoutForm({ idReserva }) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // A donde redirigir tras el pago
+        // Importante: status=success al final
         return_url: `${window.location.origin}/mis-reservas?status=success`,
       },
     });
@@ -32,16 +33,30 @@ export default function CheckoutForm({ idReserva }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-white rounded-lg shadow-md">
-      <h3 className="text-lg font-bold mb-4">Finalizar Pago</h3>
-      <PaymentElement />
+    <form onSubmit={handleSubmit} className="mt-6">
+      {/* Contenedor sutil para los campos de Stripe */}
+      <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6">
+         <PaymentElement />
+      </div><br></br>
+
       <button 
         disabled={isProcessing || !stripe || !elements}
-        className="w-full mt-6 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+        className="btn-novost w-full"
+        style={{ padding: '1.2rem', fontSize: '1.1rem', justifyContent: 'center' }}
       >
-        {isProcessing ? "Procesando..." : "Pagar ahora"}
-      </button>
-      {message && <div className="mt-4 text-red-500 text-sm">{message}</div>}
+        {isProcessing ? "Procesando pago..." : "Confirmar y Pagar"}
+      </button><br></br>
+
+      {message && (
+        <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm font-medium text-center">
+          {message}
+        </div>
+      )}
+
+      {/* Sello de confianza */}
+      <div className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-widest">
+         <ShieldCheck size={16} className="text-green-500" /> Pagos seguros por Stripe
+      </div>
     </form>
   );
 }

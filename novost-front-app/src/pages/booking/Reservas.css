@@ -1,0 +1,239 @@
+/* --- CONTENEDORES --- */
+.novost-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 4rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.select-custom-align {
+    padding-right: 12px !important; /* Ajusta este valor según veas el icono del calendario */
+    cursor: pointer;
+    background-position: calc(100% - 12px) center !important; /* Si usas flecha personalizada */
+}
+
+.reserva-glass-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 3rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.reserva-glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 6px;
+  background: var(--primary-color);
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.novost-input {
+  width: 100%;
+  padding: 1rem;
+  background: #f8f9fa;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.novost-input:focus {
+  background: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+  outline: none;
+}
+
+/* --- LISTA DE RESERVAS (ESTILO GRID) --- */
+.reservas-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.reserva-mini-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  border-bottom: 4px solid #eee;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reserva-mini-card:hover {
+  transform: translateY(-8px);
+  border-bottom-color: var(--primary-color);
+  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.15);
+}
+
+.status-chip {
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.status-PENDIENTE { background: #fff8e1; color: #ffa000; }
+.status-PAGADA { background: #e8f5e9; color: #2e7d32; }
+.status-CANCELADA { background: #ffebee; color: #c62828; }
+
+/* Botón Estilo Novost */
+.btn-novost {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+}
+
+.btn-novost:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+.btn-cancelar-alt {
+    background: #fff1f1 !important; /* Fondo rojizo muy suave */
+    color: #e53e3e !important;    /* Texto rojo */
+    box-shadow: none !important;
+    border: 1px solid #fed7d7 !important;
+}
+
+.btn-cancelar-alt:hover {
+    background: #f56565 !important;
+    color: white !important;
+    border-color: #f56565 !important;
+    transform: translateY(-2px);
+}
+
+/* Limpieza de etiquetas br innecesarias en el grid para evitar saltos extraños */
+.reserva-mini-card br {
+    display: none;
+}
+
+/* Asegurar que el contenedor de los botones siempre empuje hacia abajo */
+.reserva-mini-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 200px; /* Ajusta según el contenido de tus cards */
+}
+
+
+/* Estilo Alternativo para el botón de Pagar (por ejemplo, verde o con bordes) */
+.btn-pagar-alt {
+    background: #e8f5e9 !important; /* Fondo verde muy suave */
+    color: #2e7d32 !important;    /* Texto verde oscuro */
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 800;
+    border: 2px solid #c8e6c9 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: none !important;
+}
+
+.btn-pagar-alt:hover {
+    background: #2e7d32 !important; /* Cambia a verde sólido */
+    color: white !important;         /* Texto blanco */
+    border-color: #2e7d32 !important;
+    transform: translateY(-3px);     /* Efecto de elevación */
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.2) !important;
+}
+
+.btn-pagar-alt:active {
+    transform: scale(0.95);
+}
+
+/* =========================================
+   ESTILOS DEL MODAL DE PAGO (GLASSMORPHISM)
+   ========================================= */
+
+.novost-modal-overlay {
+  position: fixed;
+  inset: 0; /* Sustituye top, right, bottom, left a 0 */
+  background: rgba(15, 23, 42, 0.6); /* Fondo oscuro semitransparente */
+  backdrop-filter: blur(8px); /* Efecto de cristal / desenfoque */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: fadeInModal 0.3s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(8px); }
+}
+
+/* Reutilizamos el estilo de tu card principal, pero adaptado para el modal */
+.novost-modal-content {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin-top: 0; /* Anula el margin-top de reserva-glass-card */
+  padding: 2.5rem;
+  animation: slideUpModal 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Botón de cerrar (X) flotante dentro de la card */
+.modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  transform: rotate(90deg);
+}
