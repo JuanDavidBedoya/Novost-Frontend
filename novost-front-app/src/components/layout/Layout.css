@@ -3,10 +3,9 @@
   flex-direction: column;
   min-height: 100vh;
   background-color: #f9f9f9;
-  font-family: 'Inter', system-ui, sans-serif; /* Tipografía oficial */
+  font-family: 'Inter', system-ui, sans-serif; 
 }
 
-/* Header Styles */
 .app-header {
   background-color: var(--primary-color); /* Color morado */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -14,7 +13,7 @@
   top: 0;
   z-index: 100;
   padding: 1rem 2rem;
-  color: white; /* Texto blanco por defecto en el header */
+  color: white; 
 }
 
 .header-container {
@@ -29,9 +28,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.8rem; /* Letra más grande */
+  font-size: 1.8rem; 
   font-weight: 700;
-  color: white; /* Blanco para resaltar sobre morado */
+  color: white; 
   text-decoration: none;
   letter-spacing: 0.5px;
 }
@@ -43,14 +42,14 @@
 
 .header-nav a {
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.85); /* Blanco ligeramente opaco */
-  font-size: 1.15rem; /* Letra más grande */
+  color: rgba(255, 255, 255, 0.85); 
+  font-size: 1.15rem; 
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .header-nav a:hover {
-  color: white; /* Al pasar el mouse se vuelve blanco puro */
+  color: white; 
 }
 
 .header-actions {
@@ -58,7 +57,6 @@
   gap: 1rem;
 }
 
-/* Botones del header */
 .btn-icon {
   display: flex;
   align-items: center;
@@ -67,13 +65,12 @@
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 1rem; /* Letra más grande */
+  font-size: 1rem;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
-/* Botón de perfil modificado para que se vea bien en fondo morado */
 .profile-btn { 
   color: var(--primary-color); 
   background: white; 
@@ -83,21 +80,19 @@
   transform: translateY(-2px);
 }
 
-/* Botón de salir modificado */
 .logout-btn { 
   color: white; 
   background: rgba(255, 255, 255, 0.15); 
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 .logout-btn:hover { 
-  background: #e74c3c; /* Sigue siendo rojo al pasar el mouse */
+  background: #e74c3c;
   border-color: #e74c3c;
   transform: translateY(-2px);
 }
 
-/* Solo agregamos este ajuste para subirle el tamaño a la letra del footer */
 .footer-section p, .footer-section a {
-  font-size: 1.05rem; /* Letra más grande en el footer */
+  font-size: 1.05rem; 
 }
 
 @media (max-width: 768px) {
@@ -106,16 +101,14 @@
   .header-container { padding: 0.5rem; }
 }
 
-/* Main Content Area */
 .main-content {
-  flex: 1; /* Esto hace que el main empuje al footer hacia abajo si hay poco contenido */
+  flex: 1; 
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* Footer Styles */
 .app-footer {
   background-color: #2c2c2c;
   color: #fff;
@@ -171,4 +164,113 @@
   border-top: 1px solid #444;
   color: #888;
   font-size: 0.85rem;
+}
+
+.accessibility-bar {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0.5rem;
+  border-radius: 12px 0 0 12px;
+  z-index: 9999; 
+  border: 1px solid #eaeaea;
+  border-right: none;
+  font-family: 'Inter', system-ui, sans-serif; 
+}
+
+.accessibility-bar button {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 0.6rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: inherit;
+}
+
+.accessibility-bar button:hover {
+  background-color: #f0f0f0;
+  color: var(--primary-color, #8a2be2);
+  transform: scale(1.1);
+}
+
+.accessibility-bar button.active-mode {
+  background-color: var(--primary-color, #8a2be2);
+  color: white;
+}
+
+body.text-only-mode img {
+  display: none !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+body.text-only-mode .card-overlay {
+  background: #2c3e50 !important; 
+  position: relative !important;
+  opacity: 1 !important;
+}
+
+body.text-only-mode .card-desc {
+  opacity: 1 !important; 
+  transform: translateY(0) !important;
+}
+
+body.text-only-mode .auth-image-section {
+  display: none !important;
+}
+
+.acc-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.acc-tooltip {
+  position: absolute;
+  right: 120%; 
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500; 
+  letter-spacing: 0.3px;
+}
+
+.acc-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #333;
+}
+
+.acc-item:hover .acc-tooltip {
+  opacity: 1;
+  visibility: visible;
+  right: 110%;
+}
+
+.reset-btn:hover {
+  color: #e74c3c !important;
 }

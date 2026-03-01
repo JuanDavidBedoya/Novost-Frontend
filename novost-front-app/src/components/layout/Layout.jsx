@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <div className="app-layout">
       <Header />
-      {/* Outlet renderiza el componente hijo de la ruta actual (Home, Profile, etc.) */}
+
       <main className="main-content">
         <Outlet />
       </main>

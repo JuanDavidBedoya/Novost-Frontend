@@ -4,7 +4,6 @@
   animation: fadeIn 0.8s ease-out;
 }
 
-/* --- HERO SECTION --- */
 .home-hero {
   text-align: center;
   margin-bottom: 3.5rem;
@@ -39,7 +38,6 @@
   border-radius: 2px;
 }
 
-/* --- GRID SECTION --- */
 .image-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -62,10 +60,9 @@
   }
 }
 
-/* --- CARDS --- */
 .grid-card {
   position: relative;
-  aspect-ratio: 4 / 5; /* Formato vertical (retrato) más elegante */
+  aspect-ratio: 4 / 5; 
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
@@ -76,23 +73,22 @@
 
 .grid-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.2); /* Sombra con el tono morado */
+  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.2); 
 }
 
 .card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.85; /* Ligera opacidad para que no deslumbre */
+  opacity: 0.85; 
   transition: transform 0.7s ease, opacity 0.4s ease;
 }
 
 .grid-card:hover .card-image {
   transform: scale(1.08);
-  opacity: 0.6; /* Se oscurece un poco más al hacer hover */
+  opacity: 0.6; 
 }
 
-/* Overlay con degradado permanente */
 .card-overlay {
   position: absolute;
   inset: 0;
@@ -110,7 +106,7 @@
 }
 
 .grid-card:hover .card-overlay {
-  /* Al hacer hover, el degradado toma un tinte morado sutil */
+
   background: linear-gradient(
     to bottom, 
     rgba(0,0,0,0) 0%, 
@@ -153,18 +149,17 @@
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.95rem;
   margin: 0;
-  opacity: 0; /* Oculto por defecto */
+  opacity: 0; 
   transform: translateY(10px);
   transition: all 0.4s ease;
 }
 
 .grid-card:hover .card-desc {
-  opacity: 1; /* Aparece al hacer hover */
+  opacity: 1; 
   transform: translateY(0);
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Borde superior que aparece al hacer hover */
 .card-hover-border {
   position: absolute;
   top: 0;

@@ -3,12 +3,11 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/apiConfig'; 
 import './Profile.css'; 
-import restaurantImg from '../../assets/images/restaurant.jpg';
+import restaurantImg from '../../assets/images/Profile.jpg';
 
 const UserProfile = () => {
   const navigate = useNavigate();
 
-  // Obtenemos la cédula del localStorage
   const cedulaUsuario = localStorage.getItem('cedula'); 
 
   const [formData, setFormData] = useState({
@@ -23,7 +22,6 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(true);
 
-  // NUEVO: Efecto para cargar los datos al iniciar
   useEffect(() => {
     const fetchUserData = async () => {
       if (!cedulaUsuario) {
@@ -39,7 +37,7 @@ const UserProfile = () => {
           telefono: response.data.telefono
         });
       } catch (error) {
-        showToast("❌ Error al cargar los datos del usuario");
+        showToast(" Error al cargar los datos del usuario");
       } finally {
         setFetchingData(false);
       }
@@ -70,12 +68,12 @@ const UserProfile = () => {
         nombre: formData.nombre,
         telefono: formData.telefono
       });
-      showToast("✅ Perfil actualizado exitosamente");
+      showToast(" Perfil actualizado exitosamente");
     } catch (error) {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       } else {
-        showToast("❌ Error al actualizar el perfil");
+        showToast("❌Error al actualizar el perfil");
       }
     } finally {
       setLoading(false);
@@ -99,7 +97,7 @@ const UserProfile = () => {
         />
         <div className="login-branding">
           <h1>Novost</h1>
-          <p>La elegancia y la mejor comida en un solo lugar</p>
+          <p>Revisa y actualiza tu perfil</p>
         </div>
       </div>
 

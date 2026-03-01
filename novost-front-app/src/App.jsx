@@ -11,10 +11,13 @@ import Home from './pages/home/Home';
 import RegistrarTrabajador from './pages/auth/RegisterWorker';
 import Terminos from './pages/home/Terminos';
 import Layout from './components/layout/Layout';
-
+import AccessibilityBar from './components/layout/AccessibilityBar';
 function App() {
   return (
     <Router>
+ 
+      <AccessibilityBar /> 
+
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
@@ -32,7 +35,7 @@ function App() {
           <Route path="/worker-home" element={<Home />} />
           <Route path="/registrar-trabajador" element={<RegistrarTrabajador />} />
           <Route path="/terminos" element={<Terminos />} />
-          </Route>
+        </Route>
       </Routes>
     </Router>
   );

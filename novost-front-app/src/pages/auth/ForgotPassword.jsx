@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
-import restaurantImg from '../../assets/images/restaurant.jpg'; 
+import restaurantImg from '../../assets/images/Restart.jpg'; 
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ const ForgotPassword = () => {
     try {
       await api.post('/auth/recobrar-password', { email });
       setSuccess(true);
-      showToast("✅ Enlace enviado a tu correo");
+      showToast("Enlace enviado a tu correo");
     } catch (error) {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       } else {
-        showToast("❌ Error al procesar la solicitud");
+        showToast("Error al procesar la solicitud");
       }
     } finally {
       setLoading(false);
