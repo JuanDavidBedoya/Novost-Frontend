@@ -4,7 +4,7 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
-import restaurantImg from '../../assets/images/restaurant.jpg'; 
+import restaurantImg from '../../assets/images/Login.jpg'; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Login = () => {
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      showToast("✅ " + response.data); 
+      showToast("Correcto " + response.data); 
       setPaso(2); 
     } catch (error) {
       if (error.response && error.response.data) {
@@ -64,7 +64,7 @@ const Login = () => {
 
     try {
       const response = await api.post('/auth/verificar-login', { email, codigo: codigoVerificacion });
-      const { token, user } = response.data; // Mantenemos 'user' corregido
+      const { token, user } = response.data; 
       
       localStorage.setItem('token', token);
       localStorage.setItem('cedula', user.cedula);

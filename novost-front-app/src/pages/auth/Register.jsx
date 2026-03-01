@@ -4,7 +4,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import './Auth.css';
-import restaurantImg from '../../assets/images/restaurant.jpg';
+import restaurantImg from '../../assets/images/Login.jpg';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Register = () => {
 
       await api.post('/auth/registrar', payload);
       
-      showToast("✅ Registro exitoso. Redirigiendo a Iniciar Sesión...");
+      showToast("Registro exitoso. Redirigiendo a Iniciar Sesión...");
       setTimeout(() => {
         navigate('/login');
       }, 2000);

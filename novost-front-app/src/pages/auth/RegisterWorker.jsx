@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
-// Asegúrate de que la ruta apunte correctamente a tu Auth.css
 import './Auth.css'; 
-import restaurantImg from '../../assets/images/restaurant.jpg';
+import restaurantImg from '../../assets/images/Worker.jpg';
 
 const RegistrarTrabajador = () => {
   const navigate = useNavigate();
@@ -49,19 +48,17 @@ const RegistrarTrabajador = () => {
         contrasena: formData.password
       };
 
-      // Llamamos al nuevo endpoint del backend
       await api.post('/auth/registrar-trabajador', payload);
       
-      showToast("✅ Trabajador registrado exitosamente.");
+      showToast("Trabajador registrado exitosamente.");
       
-      // Limpiamos el formulario para registrar a otro si es necesario
       setFormData({ cedula: '', nombre: '', telefono: '', email: '', password: '' });
 
     } catch (error) {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       } else {
-        showToast("❌ Error de conexión con el servidor");
+        showToast("Error de conexión con el servidor");
       }
     } finally {
       setLoading(false);
@@ -92,13 +89,13 @@ const RegistrarTrabajador = () => {
         <div className="auth-form-container">
           <div className="auth-header">
             <button 
-              onClick={() => navigate('/')} // Ajusta esta ruta al dashboard del admin
+              onClick={() => navigate('/admin-home')} 
               className="auth-link-secondary"
               style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}
             >
               <ArrowLeft size={18} style={{ marginRight: '5px' }}/> Volver al Panel
             </button>
-            <h2>Alta de Trabajador</h2>
+            <h2>Nuevo Trabajador</h2>
             <p>Ingresa los datos del nuevo empleado. Se le enviará un correo con su acceso.</p>
           </div>
 
@@ -111,7 +108,7 @@ const RegistrarTrabajador = () => {
                 name="cedula"
                 type="text"
                 className={`auth-input ${errors.cedula ? 'input-error' : ''}`}
-                placeholder="Ej: 1234567890"
+                placeholder="1234567890"
                 value={formData.cedula}
                 onChange={handleChange}
                 disabled={loading}
@@ -126,7 +123,7 @@ const RegistrarTrabajador = () => {
                 name="nombre"
                 type="text"
                 className={`auth-input ${errors.nombre ? 'input-error' : ''}`}
-                placeholder="Ej: María López"
+                placeholder="María López"
                 value={formData.nombre}
                 onChange={handleChange}
                 disabled={loading}
@@ -141,7 +138,7 @@ const RegistrarTrabajador = () => {
                 name="telefono"
                 type="tel"
                 className={`auth-input ${errors.telefono ? 'input-error' : ''}`}
-                placeholder="Ej: 3001234567"
+                placeholder="3001234567"
                 value={formData.telefono}
                 onChange={handleChange}
                 disabled={loading}
@@ -156,7 +153,7 @@ const RegistrarTrabajador = () => {
                 name="email"
                 type="email"
                 className={`auth-input ${errors.email ? 'input-error' : ''}`}
-                placeholder="Ej: correo@ejemplo.com"
+                placeholder="correo@ejemplo.com"
                 value={formData.email}
                 onChange={handleChange}
                 disabled={loading}

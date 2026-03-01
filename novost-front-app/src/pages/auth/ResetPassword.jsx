@@ -4,12 +4,12 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
-import restaurantImg from '../../assets/images/restaurant.jpg'; 
+import restaurantImg from '../../assets/images/Restart.jpg'; 
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token'); // Capturamos el token de la URL
+  const token = searchParams.get('token'); 
 
   const [nuevaContrasenia, setNuevaContrasenia] = useState('');
   const [errors, setErrors] = useState({});
@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
     try {
       await api.post('/auth/resetear-password', { token, nuevaContrasenia });
-      showToast("✅ Contraseña restaurada exitosamente");
+      showToast("Contraseña restaurada exitosamente");
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -37,19 +37,18 @@ const ResetPassword = () => {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       } else {
-        showToast("❌ Error al restaurar la contraseña");
+        showToast("Error al restaurar la contraseña");
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Pantalla de error si no hay token
   if (!token) {
     return (
       <div className="auth-page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
         <div className="auth-form-container">
-          <h2 style={{ color: 'var(--error-color)' }}>❌ Enlace inválido</h2>
+          <h2 style={{ color: 'var(--error-color)' }}>Enlace inválido</h2>
           <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Falta el token de recuperación o el enlace ha expirado.</p>
           <button onClick={() => navigate('/login')} className="auth-submit-button" style={{ marginTop: '2rem' }}>
             Volver al Login

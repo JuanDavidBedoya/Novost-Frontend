@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import api from '../../api/apiConfig'; 
 import './Profile.css'; 
-import restaurantImg from '../../assets/images/restaurant.jpg';
+import restaurantImg from '../../assets/images/Password.jpg';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
   
-  // Asumimos que la cédula está guardada
   const cedulaUsuario = localStorage.getItem('cedula') || '1234567890'; 
 
   const [formData, setFormData] = useState({
@@ -44,7 +43,7 @@ const ChangePassword = () => {
     try {
       await api.put(`/usuarios/${cedulaUsuario}/password`, formData);
       
-      showToast("✅ Contraseña actualizada exitosamente.");
+      showToast("Contraseña actualizada exitosamente.");
       setTimeout(() => {
         navigate('/profile'); // Devolvemos al usuario al perfil
       }, 2000);
@@ -53,7 +52,7 @@ const ChangePassword = () => {
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       } else {
-        showToast("❌ Ocurrió un error al cambiar la contraseña");
+        showToast("Ocurrió un error al cambiar la contraseña");
       }
     } finally {
       setLoading(false);
@@ -75,7 +74,7 @@ const ChangePassword = () => {
         />
         <div className="login-branding">
           <h1>Novost</h1>
-          <p>La elegancia y la mejor comida en un solo lugar</p>
+          <p>Actualiza tu clave de acceso</p>
         </div>
       </div>
 
