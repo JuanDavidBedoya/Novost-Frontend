@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../api/apiConfig';
 import { Search, Trash2, CreditCard, Clock, Users, Calendar } from 'lucide-react';
-import PagoModal from '../../components/PagoModal';
+import PagoModal from '../../components/pasarela/PagoModal';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'react-toastify';
+import { showErrorToast } from '../../lib/errorHandler';
 
 const MySwal = withReactContent(Swal);
 
@@ -71,7 +72,7 @@ export default function MisReservas() {
         toast.success("Reserva cancelada correctamente");
         fetchReservas();
       } catch (error) {
-        toast.error("No se pudo cancelar: " + (error.response?.data?.message || "Error"));
+        showErrorToast(error, toast);
       }
     }
   };
@@ -85,7 +86,7 @@ export default function MisReservas() {
         idReserva: idReserva
       });
     } catch (error) {
-      toast.error("Error al conectar con la pasarela de pago");
+      showErrorToast(error, toast);
     }
   };
 

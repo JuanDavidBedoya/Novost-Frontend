@@ -4,6 +4,7 @@ import api from '../../api/apiConfig';
 import { Calendar, Clock, Users, ArrowRight } from 'lucide-react';
 import './Reservas.css';
 import { toast } from 'react-toastify';
+import { showErrorToast } from '../../lib/errorHandler';
 
 export default function Reservar() {
   const navigate = useNavigate();
@@ -38,8 +39,7 @@ export default function Reservar() {
       // 2. Redirigimos a Mis Reservas para que vea su reserva recién creada
       navigate('/mis-reservas');
     } catch (error) {
-      const mensaje = error.response?.data?.message || "Error al crear la reserva";
-      toast.error(mensaje);
+      showErrorToast(error, toast);
     } finally {
       setLoading(false);
     }
