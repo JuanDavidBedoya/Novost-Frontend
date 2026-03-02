@@ -116,7 +116,7 @@ const Register = () => {
                 name="cedula"
                 type="text"
                 className={`auth-input ${errors.cedula ? 'input-error' : ''}`}
-                placeholder="Ej: 1234567890"
+                placeholder="Cedula"
                 value={formData.cedula}
                 onChange={handleChange}
                 disabled={loading}
@@ -131,7 +131,7 @@ const Register = () => {
                 name="nombre"
                 type="text"
                 className={`auth-input ${errors.nombre ? 'input-error' : ''}`}
-                placeholder="Ej: Juan Pérez"
+                placeholder="Juan Pérez"
                 value={formData.nombre}
                 onChange={handleChange}
                 disabled={loading}
@@ -146,7 +146,7 @@ const Register = () => {
                 name="telefono"
                 type="tel"
                 className={`auth-input ${errors.telefono ? 'input-error' : ''}`}
-                placeholder="Ej: 3001234567"
+                placeholder="3001234567"
                 value={formData.telefono}
                 onChange={handleChange}
                 disabled={loading}
@@ -161,7 +161,7 @@ const Register = () => {
                 name="email"
                 type="email"
                 className={`auth-input ${errors.email ? 'input-error' : ''}`}
-                placeholder="Ej: correo@ejemplo.com"
+                placeholder="correo@ejemplo.com"
                 value={formData.email}
                 onChange={handleChange}
                 disabled={loading}

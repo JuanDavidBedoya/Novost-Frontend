@@ -307,3 +307,59 @@
   border-radius: 1.5rem;
   overflow: hidden;
 }
+
+/* --- MODO ALTO CONTRASTE --- */
+body.high-contrast-mode .login-page-container,
+body.high-contrast-mode .login-image-section,
+body.high-contrast-mode .login-form-section,
+body.high-contrast-mode .login-form-container {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .login-header h2,
+body.high-contrast-mode .login-header h3,
+body.high-contrast-mode .login-header p,
+body.high-contrast-mode .form-group label {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .form-input,
+body.high-contrast-mode .input-wrapper input {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .form-input::placeholder {
+  color: #CCCCCC !important;
+}
+
+body.high-contrast-mode .submit-button {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .submit-button:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .toggle-password {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .error-message {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .toast-notification {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .forgot-password {
+  color: #FFFFFF !important;
+}

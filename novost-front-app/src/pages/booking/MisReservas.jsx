@@ -45,9 +45,16 @@ export default function MisReservas() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
-      toast.success("¡Pago confirmado con éxito! Tu reserva está lista.");
+      toast.success("¡Pago confirmado con éxito! Tu reserva está lista.\nRecargue la pagina para ver el pago reflejado en el estado de la reserva.");
       navigate('/mis-reservas', { replace: true });
+      
+      // Actualizar inmediatamente
       fetchReservas();
+      
+      // Actualizar nuevamente después de 3 segundos para asegurar datos actualizados
+      setTimeout(() => {
+        fetchReservas();
+      }, 2000);
     }
   }, [location, navigate, fetchReservas]);
 

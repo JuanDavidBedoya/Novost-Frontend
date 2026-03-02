@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
 import restaurantImg from '../../assets/images/Restart.jpg'; 
+import { toast } from 'react-toastify';
+import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -34,10 +36,10 @@ const ResetPassword = () => {
         navigate('/login');
       }, 2000);
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        showToast("Error al restaurar la contraseña");
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error al restaurar la contraseña: ${message}`);
       }
     } finally {
       setLoading(false);

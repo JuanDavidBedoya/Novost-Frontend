@@ -194,3 +194,47 @@
   margin-bottom: 1rem;
   box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
 }
+
+/* --- MODO ALTO CONTRASTE --- */
+body.high-contrast-mode .home-container,
+body.high-contrast-mode .home-hero {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .home-hero h1,
+body.high-contrast-mode .home-hero h1 span,
+body.high-contrast-mode .home-hero p {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .hero-divider {
+  background-color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .grid-card {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .card-title {
+  color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast-mode .card-desc {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+body.high-contrast-mode .card-overlay {
+  background: #000000 !important;
+  opacity: 1 !important;
+}
+
+body.high-contrast-mode .role-badge {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}

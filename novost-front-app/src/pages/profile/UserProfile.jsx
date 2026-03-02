@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api/apiConfig'; 
 import './Profile.css'; 
 import restaurantImg from '../../assets/images/Profile.jpg';
+import { toast } from 'react-toastify';
+import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const UserProfile = () => {
           telefono: response.data.telefono
         });
       } catch (error) {
-        showToast(" Error al cargar los datos del usuario");
+        showErrorToast(error, toast);
       } finally {
         setFetchingData(false);
       }
@@ -70,10 +72,10 @@ const UserProfile = () => {
       });
       showToast(" Perfil actualizado exitosamente");
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        showToast("❌Error al actualizar el perfil");
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`❌Error al actualizar el perfil: ${message}`);
       }
     } finally {
       setLoading(false);

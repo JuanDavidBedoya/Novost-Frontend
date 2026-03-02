@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import './Auth.css'; 
 import restaurantImg from '../../assets/images/Worker.jpg';
+import { toast } from 'react-toastify';
+import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const RegistrarTrabajador = () => {
   const navigate = useNavigate();
@@ -55,10 +57,10 @@ const RegistrarTrabajador = () => {
       setFormData({ cedula: '', nombre: '', telefono: '', email: '', password: '' });
 
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        showToast("Error de conexión con el servidor");
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error de conexión con el servidor: ${message}`);
       }
     } finally {
       setLoading(false);

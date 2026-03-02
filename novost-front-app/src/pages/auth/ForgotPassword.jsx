@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
 import restaurantImg from '../../assets/images/Restart.jpg'; 
+import { toast } from 'react-toastify';
+import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -29,10 +31,10 @@ const ForgotPassword = () => {
       setSuccess(true);
       showToast("Enlace enviado a tu correo");
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        showToast("Error al procesar la solicitud");
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error al procesar la solicitud: ${message}`);
       }
     } finally {
       setLoading(false);

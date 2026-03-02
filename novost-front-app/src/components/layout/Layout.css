@@ -277,7 +277,7 @@ body.text-only-mode .auth-image-section {
 
 /* --- MODO ALTO CONTRASTE (BLANCO Y NEGRO ESTRICTO) --- */
 
-/* 1. Fondos negros absolutos */
+/* 1. Fondos negros absolutos - COBERTURA TOTAL */
 body.high-contrast-mode, 
 body.high-contrast-mode .app-layout,
 body.high-contrast-mode .main-content,
@@ -285,44 +285,112 @@ body.high-contrast-mode .app-header,
 body.high-contrast-mode .app-footer,
 body.high-contrast-mode .grid-card,
 body.high-contrast-mode .auth-container,
+body.high-contrast-mode .auth-page-container,
+body.high-contrast-mode .login-page-container,
 body.high-contrast-mode form,
-body.high-contrast-mode input {
+body.high-contrast-mode input,
+body.high-contrast-mode select,
+body.high-contrast-mode textarea,
+body.high-contrast-mode .novost-page,
+body.high-contrast-mode .reserva-glass-card,
+body.high-contrast-mode .reserva-mini-card,
+body.high-contrast-mode .reservas-list-grid,
+body.high-contrast-mode .home-hero,
+body.high-contrast-mode .auth-form-section,
+body.high-contrast-mode .auth-form-container,
+body.high-contrast-mode .login-form-section,
+body.high-contrast-mode .login-form-container,
+body.high-contrast-mode .card,
+body.high-contrast-mode .modal,
+body.high-contrast-mode .modal-content,
+body.high-contrast-mode .toast-notification,
+body.high-contrast-mode .accessibility-bar,
+body.high-contrast-mode .footer-section,
+body.high-contrast-mode .social-icons,
+body.high-contrast-mode .header-container,
+body.high-contrast-mode .header-nav,
+body.high-contrast-mode .header-actions,
+body.high-contrast-mode .role-badge,
+body.high-contrast-mode .status-chip,
+body.high-contrast-mode .hero-divider {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   box-shadow: none !important;
 }
 
-/* 2. Todos los textos en blanco puro */
+/* 2. Todos los textos en blanco puro - COBERTURA TOTAL */
 body.high-contrast-mode h1, 
 body.high-contrast-mode h2, 
 body.high-contrast-mode h3, 
+body.high-contrast-mode h4, 
+body.high-contrast-mode h5, 
+body.high-contrast-mode h6, 
 body.high-contrast-mode p, 
 body.high-contrast-mode span, 
 body.high-contrast-mode div,
 body.high-contrast-mode a,
-body.high-contrast-mode label {
+body.high-contrast-mode label,
+body.high-contrast-mode li,
+body.high-contrast-mode td,
+body.high-contrast-mode th,
+body.high-contrast-mode .text-gray-400,
+body.high-contrast-mode .text-gray-500,
+body.high-contrast-mode .text-gray-600,
+body.high-contrast-mode .text-gray-700,
+body.high-contrast-mode .text-gray-800,
+body.high-contrast-mode .text-gray-900,
+body.high-contrast-mode .text-purple-500,
+body.high-contrast-mode .text-purple-700,
+body.high-contrast-mode .text-muted,
+body.high-contrast-mode input::placeholder,
+body.high-contrast-mode .error-message {
   color: #FFFFFF !important;
   text-shadow: none !important;
 }
 
 /* 3. Bordes blancos para delimitar componentes */
 body.high-contrast-mode .app-header,
+body.high-contrast-mode .app-footer,
 body.high-contrast-mode .grid-card,
 body.high-contrast-mode input,
+body.high-contrast-mode select,
+body.high-contrast-mode textarea,
 body.high-contrast-mode button,
-body.high-contrast-mode .accessibility-bar {
+body.high-contrast-mode .accessibility-bar,
+body.high-contrast-mode .reserva-glass-card,
+body.high-contrast-mode .reserva-mini-card,
+body.high-contrast-mode .auth-form-container,
+body.high-contrast-mode .login-form-container,
+body.high-contrast-mode .modal,
+body.high-contrast-mode .card,
+body.high-contrast-mode .form-input,
+body.high-contrast-mode .auth-input,
+body.high-contrast-mode .novost-input,
+body.high-contrast-mode .header-container,
+body.high-contrast-mode .footer-section,
+body.high-contrast-mode .social-icons a {
   border: 2px solid #FFFFFF !important;
 }
 
 /* 4. Botones y enlaces en blanco */
-body.high-contrast-mode button:not(.active-mode) {
+body.high-contrast-mode button:not(.active-mode):not(:hover),
+body.high-contrast-mode .btn-icon:not(:hover),
+body.high-contrast-mode .btn-novost:not(:hover),
+body.high-contrast-mode .auth-submit-button:not(:hover),
+body.high-contrast-mode .submit-button:not(:hover),
+body.high-contrast-mode a:not(:hover) {
   color: #FFFFFF !important;
   background-color: transparent !important;
 }
 
 /* 5. Inversión de colores para estados activos (Hover o modo seleccionado) */
 body.high-contrast-mode button:hover,
-body.high-contrast-mode .accessibility-bar button.active-mode {
+body.high-contrast-mode .btn-icon:hover,
+body.high-contrast-mode .btn-novost:hover,
+body.high-contrast-mode .auth-submit-button:hover,
+body.high-contrast-mode .submit-button:hover,
+body.high-contrast-mode .accessibility-bar button.active-mode,
+body.high-contrast-mode a:hover {
   background-color: #FFFFFF !important;
   color: #000000 !important;
 }
@@ -337,8 +405,73 @@ body.high-contrast-mode .acc-tooltip::after {
   border-color: transparent transparent transparent #FFFFFF !important;
 }
 
-/* 7. Truco extra: Si hay imágenes visibles, pasarlas a blanco y negro puro */
+/* 7. Imágenes en blanco y negro */
 body.high-contrast-mode img {
   filter: grayscale(100%) contrast(120%) !important;
+}
+
+/* 8. Inputs con fondo negro y texto blanco */
+body.high-contrast-mode input,
+body.high-contrast-mode select,
+body.high-contrast-mode textarea {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+/* 9. Placeholder en gris claro */
+body.high-contrast-mode input::placeholder,
+body.high-contrast-mode textarea::placeholder {
+  color: #CCCCCC !important;
+}
+
+/* 10. Elementos con fondo blanco (invertir a negro) */
+body.high-contrast-mode .bg-white,
+body.high-contrast-mode .bg-gray-50,
+body.high-contrast-mode .bg-gray-100,
+body.high-contrast-mode .login-bg-image,
+body.high-contrast-mode .auth-bg-image {
+  background-color: #000000 !important;
+}
+
+/* 11. Badges y chips */
+body.high-contrast-mode .role-badge,
+body.high-contrast-mode .status-chip {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* 12. Footer links */
+body.high-contrast-mode .footer-section a:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+/* 13. Tablas */
+body.high-contrast-mode table,
+body.high-contrast-mode th,
+body.high-contrast-mode td {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+}
+
+/* 14. Divisores */
+body.high-contrast-mode hr,
+body.high-contrast-mode .divider,
+body.high-contrast-mode .hero-divider {
+  border-color: #FFFFFF !important;
+}
+
+/* 15. Iconos */
+body.high-contrast-mode svg {
+  fill: #FFFFFF !important;
+}
+
+/* 16. Links de navegación */
+body.high-contrast-mode .header-nav a:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 

@@ -5,6 +5,8 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import api from '../../api/apiConfig'; 
 import './Profile.css'; 
 import restaurantImg from '../../assets/images/Password.jpg';
+import { toast } from 'react-toastify';
+import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -49,10 +51,10 @@ const ChangePassword = () => {
       }, 2000);
 
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        showToast("Ocurrió un error al cambiar la contraseña");
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Ocurrió un error al cambiar la contraseña: ${message}`);
       }
     } finally {
       setLoading(false);

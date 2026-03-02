@@ -237,3 +237,79 @@
   color: #ef4444;
   transform: rotate(90deg);
 }
+
+/* --- MODO ALTO CONTRASTE --- */
+body.high-contrast-mode .novost-page,
+body.high-contrast-mode .reserva-glass-card,
+body.high-contrast-mode .reserva-mini-card,
+body.high-contrast-mode .reservas-list-grid {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .input-label {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .novost-input,
+body.high-contrast-mode select {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .status-chip {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-novost {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-novost:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .btn-cancelar-alt {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-cancelar-alt:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .btn-pagar-alt {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-pagar-alt:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .novost-modal-overlay {
+  background: #000000 !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast-mode .novost-modal-content {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .modal-close-btn {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}

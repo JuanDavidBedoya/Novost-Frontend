@@ -19,7 +19,7 @@ export default function Reservar() {
   // Genera las opciones de hora desde las 12:00 hasta las 23:00
   const generarHorasDisponibles = () => {
     const horas = [];
-    for (let i = 12; i <= 23; i++) {
+    for (let i = 12; i <= 21; i++) {
       horas.push(`${i}:00:00`);
       horas.push(`${i}:30:00`);
     }

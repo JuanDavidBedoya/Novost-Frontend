@@ -208,3 +208,68 @@
   from { opacity: 0; transform: translate(-50%, 20px); }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
+
+/* --- MODO ALTO CONTRASTE (COPIA EN TODOS LOS CSS) --- */
+body.high-contrast-mode .auth-page-container,
+body.high-contrast-mode .auth-image-section,
+body.high-contrast-mode .auth-form-section,
+body.high-contrast-mode .auth-form-container,
+body.high-contrast-mode .auth-tabs,
+body.high-contrast-mode .auth-header,
+body.high-contrast-mode .auth-form {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-tab {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-tab.active {
+  color: #FFFFFF !important;
+  border-bottom: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-header h2,
+body.high-contrast-mode .auth-header p,
+body.high-contrast-mode .form-group label {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-input,
+body.high-contrast-mode .input-wrapper input {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-input::placeholder {
+  color: #CCCCCC !important;
+}
+
+body.high-contrast-mode .auth-submit-button {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-submit-button:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .auth-link-secondary {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .error-message {
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  padding: 0.25rem;
+}
+
+body.high-contrast-mode .toast-notification {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
