@@ -20,19 +20,19 @@ const Home = () => {
   
   const contentByRole = {
     CLIENTE: [
-      { id: 1, title: 'Hacer una Reserva', desc: 'Asegura tu mesa en minutos', path: '/reservar', icon: <CalendarPlus size={28} />, img: calendar }, /*Calendar*/
-      { id: 2, title: 'Mis Reservas', desc: 'Consulta tus citas activas', path: '/mis-reservas', icon: <ClipboardList size={28} />, img: reserva }, /*Reserva*/
-      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/home', icon: <Star size={28} />, img: futura }, /*Futura*/
+      { id: 1, title: 'Hacer una Reserva', desc: 'Asegura tu mesa en minutos', path: '/reservar', icon: <CalendarPlus size={28} />, img: calendar },
+      { id: 2, title: 'Mis Reservas', desc: 'Consulta tus citas activas', path: '/mis-reservas', icon: <ClipboardList size={28} />, img: reserva },
+      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/home', icon: <Star size={28} />, img: futura },
     ],
     ADMINISTRADOR: [
-      { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado}, /*Empleado*/
-      { id: 2, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/admin-home', icon: <BarChart3 size={28} />, img: futura }, /*Futura*/
-      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/admin-home', icon: <Settings size={28} />, img: futura }, /*Futura*/
+      { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
+      { id: 2, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/admin-home', icon: <BarChart3 size={28} />, img: futura },
+      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/admin-home', icon: <Settings size={28} />, img: futura },
     ],
     TRABAJADOR: [
-      { id: 1, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <Clock size={28} />, img: futura }, /*Futura*/
-      { id: 2, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <CheckSquare size={28} />, img: futura }, /*Futura*/
-      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura }, /*Futura*/
+      { id: 1, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <Clock size={28} />, img: futura },
+      { id: 2, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <CheckSquare size={28} />, img: futura },
+      { id: 3, title: 'Función Futura', desc: 'Esta función de momento no se encuentra disponible', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura },
     ]
   };
 

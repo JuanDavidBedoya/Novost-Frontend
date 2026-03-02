@@ -12,7 +12,6 @@ const MySwal = withReactContent(Swal);
 
 export default function MisReservas() {
   const [reservas, setReservas] = useState([]);
-  // Estado de filtros actualizado
   const [filtros, setFiltros] = useState({ fecha: '', hora: '', personas: '' });
   const [modalData, setModalData] = useState({ open: false, clientSecret: '', idReserva: null });
   
@@ -21,7 +20,7 @@ export default function MisReservas() {
 
   const generarHorasDisponibles = () => {
     const horas = [];
-    for (let i = 12; i <= 22; i++) { // Ejemplo: de 12:00 a 22:00
+    for (let i = 12; i <= 22; i++) {
       horas.push(`${i}:00:00`);
       horas.push(`${i}:30:00`);
     }
@@ -30,7 +29,6 @@ export default function MisReservas() {
 
   const fetchReservas = useCallback(async () => {
     try {
-      // Enviamos los 3 filtros al backend
       const { data } = await api.get('/reservas/buscar', { params: filtros });
       setReservas(data);
     } catch (error) {
@@ -45,13 +43,11 @@ export default function MisReservas() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
-      toast.success("¡Pago confirmado con éxito! Tu reserva está lista.\nRecargue la pagina para ver el pago reflejado en el estado de la reserva.");
+      toast.success("¡Pago confirmado con éxito!Recargue la página para ver el pago reflejado.");
       navigate('/mis-reservas', { replace: true });
       
-      // Actualizar inmediatamente
       fetchReservas();
       
-      // Actualizar nuevamente después de 3 segundos para asegurar datos actualizados
       setTimeout(() => {
         fetchReservas();
       }, 2000);
@@ -106,11 +102,9 @@ export default function MisReservas() {
         <div className="hero-divider"></div>
       </div>
 
-      {/* SECCIÓN DE FILTROS ACTUALIZADA */}
       <div className="reserva-glass-card mb-10" style={{padding: '2rem', marginTop: '0'}}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
           
-          {/* Filtro Fecha (Col 3) */}
           <div className="lg:col-span-3">
             <label className="input-label"><Calendar size={16}/> Fecha</label>
             <input 
@@ -122,7 +116,6 @@ export default function MisReservas() {
           </div><br></br>
           
 
-          {/* Filtro Hora (Col 2) */}
           <div className="lg:col-span-3">
             <label className="input-label"><Clock size={16}/> Hora Inicio</label>
             <select
@@ -137,7 +130,6 @@ export default function MisReservas() {
             </select>
           </div><br></br>
 
-          {/* Filtro Personas (Col 2) */}
           <div className="lg:col-span-2">
             <label className="input-label"><Users size={16}/> Personas</label>
             <input 
@@ -150,7 +142,6 @@ export default function MisReservas() {
             />
           </div><br></br>
 
-          {/* GRUPO DE BOTONES ALINEADOS (Col 5) */}
           <div className="lg:col-span-5 flex gap-3">
             <button 
               onClick={fetchReservas} 
@@ -163,7 +154,6 @@ export default function MisReservas() {
             <button 
               onClick={() => {
                 setFiltros({ fecha: '', hora: '', personas: '' });
-                // Forzamos la recarga al limpiar
                 setTimeout(() => fetchReservas(), 100);
               }}
               className="btn-novost flex-1"
@@ -176,7 +166,6 @@ export default function MisReservas() {
         </div>
       </div>
 
-      {/* Grid de Cards (Se mantiene igual) */}
       {reservas.length > 0 ? (
         <div className="reservas-list-grid">
           {reservas.map((res) => (

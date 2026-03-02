@@ -10,13 +10,12 @@ export default function Reservar() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    cedulaUsuario: '', // Esto idealmente vendría de tu contexto de Auth/Login
+    cedulaUsuario: '',
     fecha: '',
     horaInicio: '',
     numPersonas: 1
   });
 
-  // Genera las opciones de hora desde las 12:00 hasta las 23:00
   const generarHorasDisponibles = () => {
     const horas = [];
     for (let i = 12; i <= 21; i++) {
@@ -31,12 +30,10 @@ export default function Reservar() {
     setLoading(true);
 
     try {
-      // 1. Llamada al endpoint de creación que ya tienes en Spring Boot
       const response = await api.post('/reservas', formData);
       
       toast.success("¡Reserva creada con éxito! Ahora puedes proceder al pago.");
       
-      // 2. Redirigimos a Mis Reservas para que vea su reserva recién creada
       navigate('/mis-reservas');
     } catch (error) {
       showErrorToast(error, toast);
@@ -46,7 +43,6 @@ export default function Reservar() {
   };
 
   const handleCedulaChange = (e) => {
-    // Reemplaza cualquier caracter que no sea número por un string vacío
     const value = e.target.value.replace(/\D/g, "");
     setFormData({ ...formData, cedulaUsuario: value });
   };
@@ -62,7 +58,6 @@ export default function Reservar() {
 
       <div className="flex justify-center">
         <form onSubmit={handleSubmit} className="reserva-glass-card max-w-2xl w-full">
-          {/* Grid de Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <label className="input-label">Cédula del Usuario</label>
@@ -107,8 +102,7 @@ export default function Reservar() {
               />
             </div><br></br>
           </div>
-
-          {/* SECCIÓN INFERIOR: RESUMEN A LA DERECHA */}
+          
           <div className="mt-12 flex flex-col items-end border-t border-gray-100 pt-8">
             <div className="text-right mb-6">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">

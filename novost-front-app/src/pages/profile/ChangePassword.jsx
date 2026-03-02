@@ -47,7 +47,7 @@ const ChangePassword = () => {
       
       showToast("Contraseña actualizada exitosamente.");
       setTimeout(() => {
-        navigate('/profile'); // Devolvemos al usuario al perfil
+        navigate('/profile');
       }, 2000);
 
     } catch (error) {

@@ -1,4 +1,3 @@
-/* --- CONTENEDORES --- */
 .novost-page {
   width: 100%;
   max-width: 1100px;
@@ -8,9 +7,9 @@
 }
 
 .select-custom-align {
-    padding-right: 12px !important; /* Ajusta este valor según veas el icono del calendario */
+    padding-right: 12px !important; 
     cursor: pointer;
-    background-position: calc(100% - 12px) center !important; /* Si usas flecha personalizada */
+    background-position: calc(100% - 12px) center !important;
 }
 
 .reserva-glass-card {
@@ -60,7 +59,6 @@
   outline: none;
 }
 
-/* --- LISTA DE RESERVAS (ESTILO GRID) --- */
 .reservas-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -120,8 +118,8 @@
 }
 
 .btn-cancelar-alt {
-    background: #fff1f1 !important; /* Fondo rojizo muy suave */
-    color: #e53e3e !important;    /* Texto rojo */
+    background: #fff1f1 !important; 
+    color: #e53e3e !important; 
     box-shadow: none !important;
     border: 1px solid #fed7d7 !important;
 }
@@ -133,23 +131,19 @@
     transform: translateY(-2px);
 }
 
-/* Limpieza de etiquetas br innecesarias en el grid para evitar saltos extraños */
 .reserva-mini-card br {
     display: none;
 }
 
-/* Asegurar que el contenedor de los botones siempre empuje hacia abajo */
 .reserva-mini-card {
     display: flex;
     flex-direction: column;
-    min-height: 200px; /* Ajusta según el contenido de tus cards */
+    min-height: 200px;
 }
 
-
-/* Estilo Alternativo para el botón de Pagar (por ejemplo, verde o con bordes) */
 .btn-pagar-alt {
-    background: #e8f5e9 !important; /* Fondo verde muy suave */
-    color: #2e7d32 !important;    /* Texto verde oscuro */
+    background: #e8f5e9 !important;
+    color: #2e7d32 !important;
     padding: 1rem 2rem;
     border-radius: 12px;
     font-weight: 800;
@@ -164,10 +158,10 @@
 }
 
 .btn-pagar-alt:hover {
-    background: #2e7d32 !important; /* Cambia a verde sólido */
-    color: white !important;         /* Texto blanco */
+    background: #2e7d32 !important;
+    color: white !important;
     border-color: #2e7d32 !important;
-    transform: translateY(-3px);     /* Efecto de elevación */
+    transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(46, 125, 50, 0.2) !important;
 }
 
@@ -175,15 +169,11 @@
     transform: scale(0.95);
 }
 
-/* =========================================
-   ESTILOS DEL MODAL DE PAGO (GLASSMORPHISM)
-   ========================================= */
-
 .novost-modal-overlay {
   position: fixed;
-  inset: 0; /* Sustituye top, right, bottom, left a 0 */
-  background: rgba(15, 23, 42, 0.6); /* Fondo oscuro semitransparente */
-  backdrop-filter: blur(8px); /* Efecto de cristal / desenfoque */
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,13 +187,12 @@
   to { opacity: 1; backdrop-filter: blur(8px); }
 }
 
-/* Reutilizamos el estilo de tu card principal, pero adaptado para el modal */
 .novost-modal-content {
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  margin-top: 0; /* Anula el margin-top de reserva-glass-card */
+  margin-top: 0;
   padding: 2.5rem;
   animation: slideUpModal 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -213,7 +202,6 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Botón de cerrar (X) flotante dentro de la card */
 .modal-close-btn {
   position: absolute;
   top: 1.5rem;
@@ -238,7 +226,6 @@
   transform: rotate(90deg);
 }
 
-/* --- MODO ALTO CONTRASTE --- */
 body.high-contrast-mode .novost-page,
 body.high-contrast-mode .reserva-glass-card,
 body.high-contrast-mode .reserva-mini-card,

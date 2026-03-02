@@ -4,7 +4,6 @@ const PublicRoute = ({ children }) => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   
   if (usuario) {
-    // Si ya está logueado, lo mandamos a su home según su rol
     const paths = {
       ADMINISTRADOR: '/admin-home',
       TRABAJADOR: '/worker-home',

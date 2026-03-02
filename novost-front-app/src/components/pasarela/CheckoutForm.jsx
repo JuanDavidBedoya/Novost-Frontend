@@ -18,7 +18,6 @@ export default function CheckoutForm({ idReserva }) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Importante: status=success al final
         return_url: `${window.location.origin}/mis-reservas?status=success`,
       },
     });
@@ -34,7 +33,6 @@ export default function CheckoutForm({ idReserva }) {
 
   return (
     <form onSubmit={handleSubmit} className="mt-6">
-      {/* Contenedor sutil para los campos de Stripe */}
       <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6">
          <PaymentElement />
       </div><br></br>
@@ -53,7 +51,6 @@ export default function CheckoutForm({ idReserva }) {
         </div>
       )}
 
-      {/* Sello de confianza */}
       <div className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-widest">
          <ShieldCheck size={16} className="text-green-500" /> Pagos seguros por Stripe
       </div>

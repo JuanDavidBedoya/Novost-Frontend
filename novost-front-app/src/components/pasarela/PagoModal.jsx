@@ -6,16 +6,13 @@ import { X, CreditCard, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 export default function PagoModal({ clientSecret, idReserva, onClose }) {
-  const [tiempoRestante, setTiempoRestante] = useState(120); // 2 minutos en segundos
+  const [tiempoRestante, setTiempoRestante] = useState(120);
   const timerRef = useRef(null);
 
-  // Temporizador de 1 minuto para cerrar la pasarela por inactividad
   useEffect(() => {
-    // Iniciar el temporizador
     timerRef.current = setInterval(() => {
       setTiempoRestante((prev) => {
         if (prev <= 1) {
-          // Tiempo agotado - cerrar pasarela
           clearInterval(timerRef.current);
           toast.warning(" Tiempo de pago expirado. Por favor, intenta nuevamente.");
           onClose();
@@ -25,7 +22,6 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
       });
     }, 2000);
 
-    // Limpiar el temporizador al desmontar el componente
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -33,7 +29,6 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
     };
   }, [onClose]);
 
-  // Formatear tiempo restante en minutos:segundos
   const formatTiempo = (segundos) => {
     const mins = Math.floor(segundos / 60);
     const secs = segundos % 60;
@@ -42,11 +37,10 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
 
   if (!clientSecret) return null;
 
-  // Personalización de la apariencia de Stripe para que combine con Novost
   const appearance = {
     theme: 'stripe',
     variables: {
-      colorPrimary: '#8a2be2', // Morado Novost
+      colorPrimary: '#8a2be2', 
       colorBackground: 'transparent', 
       colorText: '#2c3e50',
       colorDanger: '#e53e3e',
@@ -92,7 +86,6 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
           <p className="text-gray-500 font-medium mt-1">
             Reserva <span className="text-purple-600 font-bold">#{idReserva}</span>
           </p>
-          {/* Indicador de tiempo restante */}
           <div className={`flex items-center justify-center gap-2 mt-3 px-4 py-2 rounded-full ${tiempoRestante <= 10 ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'}`}>
             <Clock size={12} />
             <span className="font-bold"> Tiempo restante: {formatTiempo(tiempoRestante)}</span>

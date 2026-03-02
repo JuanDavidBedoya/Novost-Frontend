@@ -4,14 +4,12 @@ import { ZoomIn, ZoomOut, EyeOff, Type, RefreshCw, Contrast } from 'lucide-react
 const AccessibilityBar = () => {
   const [fontSizeScale, setFontSizeScale] = useState(100);
   const [isTextOnly, setIsTextOnly] = useState(false);
-  const [isHighContrast, setIsHighContrast] = useState(false); // Nuevo estado
+  const [isHighContrast, setIsHighContrast] = useState(false);
 
-  // Efecto para tamaño de letra
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSizeScale}%`;
   }, [fontSizeScale]);
 
-  // Efecto para modo solo texto
   useEffect(() => {
     if (isTextOnly) {
       document.body.classList.add('text-only-mode');
@@ -20,7 +18,6 @@ const AccessibilityBar = () => {
     }
   }, [isTextOnly]);
 
-  // Efecto para modo alto contraste
   useEffect(() => {
     if (isHighContrast) {
       document.body.classList.add('high-contrast-mode');
@@ -32,13 +29,12 @@ const AccessibilityBar = () => {
   const increaseFont = () => setFontSizeScale(prev => Math.min(prev + 10, 170));
   const decreaseFont = () => setFontSizeScale(prev => Math.max(prev - 10, 60));
   const toggleTextOnly = () => setIsTextOnly(prev => !prev);
-  const toggleHighContrast = () => setIsHighContrast(prev => !prev); // Nueva función
+  const toggleHighContrast = () => setIsHighContrast(prev => !prev);
   
-  // Función para volver todo a la normalidad
   const resetDefaults = () => {
     setFontSizeScale(100);
     setIsTextOnly(false);
-    setIsHighContrast(false); // Reseteamos también el contraste
+    setIsHighContrast(false);
   };
 
   return (
@@ -57,7 +53,6 @@ const AccessibilityBar = () => {
         <span className="acc-tooltip">Aumentar Letra</span>
       </div>
 
-      {/* Nuevo botón de Alto Contraste */}
       <div className="acc-item">
         <button 
           onClick={toggleHighContrast} 

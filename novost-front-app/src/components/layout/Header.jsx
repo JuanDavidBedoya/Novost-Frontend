@@ -9,7 +9,6 @@ const Header = () => {
 
     localStorage.clear(); 
     
-    // Redirigir al login
     navigate('/login');
   };
 
