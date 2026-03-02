@@ -43,7 +43,7 @@ export default function MisReservas() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
-      toast.success("¡Pago confirmado con éxito!Recargue la página para ver el pago reflejado.");
+      toast.success("¡Pago confirmado con éxito! Recargue la página para ver el pago reflejado.");
       navigate('/mis-reservas', { replace: true });
       
       fetchReservas();
@@ -104,7 +104,6 @@ export default function MisReservas() {
 
       <div className="reserva-glass-card mb-10" style={{padding: '2rem', marginTop: '0'}}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-          
           <div className="lg:col-span-3">
             <label className="input-label"><Calendar size={16}/> Fecha</label>
             <input 
