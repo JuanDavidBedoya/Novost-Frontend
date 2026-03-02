@@ -13,12 +13,22 @@ import Terminos from './pages/home/Terminos';
 import Layout from './components/layout/Layout';
 import AccessibilityBar from './components/layout/AccessibilityBar';
 import { ToastContainer } from 'react-toastify';
+import useIdleTimeout from './hooks/useIdleTimeout';
+import PublicRoute from './components/routes/PublicRoute';
+import ProtectedRoute from './components/routes/ProtectedRoute';
 import 'react-toastify/dist/ReactToastify.css';
+
+// Aquí activamos la inactividad de 5 minutos
+const SessionManager = ({ children }) => {
+  useIdleTimeout(5); 
+  return children;
+};
 
 function App() {
   return (
     
     <Router>
+      <SessionManager>
        <ToastContainer 
         position="bottom-left"
         autoClose={4000}
@@ -34,23 +44,40 @@ function App() {
       <AccessibilityBar /> 
 
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/restaurar-password" element={<ResetPassword />} />
-        <Route element={<Layout />}>
-          <Route path="/reservar" element={<Reservar />} />
-          <Route path="/mis-reservas" element={<MisReservas />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/admin-home" element={<Home />} />
-          <Route path="/worker-home" element={<Home />} />
-          <Route path="/registrar-trabajador" element={<RegistrarTrabajador />} />
-          <Route path="/terminos" element={<Terminos />} />
-        </Route>
-      </Routes>
+          {/* --- RUTAS PÚBLICAS --- */}
+          {/* Si el usuario está logueado, PublicRoute lo redirigirá a su Home */}
+          <Route path="/" element={<PublicRoute><Navigate to="/login" /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+          <Route path="/restaurar-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+
+          {/* --- RUTAS PRIVADAS (LAYOUT) --- */}
+          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+            
+            {/* Solo CLIENTE */}
+            <Route path="/home" element={<ProtectedRoute allowedRoles={['CLIENTE']}><Home /></ProtectedRoute>} />
+            <Route path="/reservar" element={<ProtectedRoute allowedRoles={['CLIENTE']}><Reservar /></ProtectedRoute>} />
+            <Route path="/mis-reservas" element={<ProtectedRoute allowedRoles={['CLIENTE']}><MisReservas /></ProtectedRoute>} />
+
+            {/* Solo ADMINISTRADOR */}
+            <Route path="/admin-home" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><Home /></ProtectedRoute>} />
+            <Route path="/registrar-trabajador" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><RegistrarTrabajador /></ProtectedRoute>} />
+
+            {/* Solo TRABAJADOR */}
+            <Route path="/worker-home" element={<ProtectedRoute allowedRoles={['TRABAJADOR']}><Home /></ProtectedRoute>} />
+
+            {/* RUTAS COMPARTIDAS (CLIENTE, ADMIN, TRABAJADOR) */}
+            <Route path="/profile" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><UserProfile /></ProtectedRoute>} />
+            <Route path="/change-password" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><ChangePassword /></ProtectedRoute>} />
+            <Route path="/terminos" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><Terminos /></ProtectedRoute>} />
+          
+          </Route>
+
+          {/* Ruta para manejar 404 - Opcional */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </SessionManager>
     </Router>
     
   );

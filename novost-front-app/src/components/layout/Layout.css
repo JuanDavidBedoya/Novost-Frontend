@@ -274,3 +274,71 @@ body.text-only-mode .auth-image-section {
 .reset-btn:hover {
   color: #e74c3c !important;
 }
+
+/* --- MODO ALTO CONTRASTE (BLANCO Y NEGRO ESTRICTO) --- */
+
+/* 1. Fondos negros absolutos */
+body.high-contrast-mode, 
+body.high-contrast-mode .app-layout,
+body.high-contrast-mode .main-content,
+body.high-contrast-mode .app-header,
+body.high-contrast-mode .app-footer,
+body.high-contrast-mode .grid-card,
+body.high-contrast-mode .auth-container,
+body.high-contrast-mode form,
+body.high-contrast-mode input {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+/* 2. Todos los textos en blanco puro */
+body.high-contrast-mode h1, 
+body.high-contrast-mode h2, 
+body.high-contrast-mode h3, 
+body.high-contrast-mode p, 
+body.high-contrast-mode span, 
+body.high-contrast-mode div,
+body.high-contrast-mode a,
+body.high-contrast-mode label {
+  color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+/* 3. Bordes blancos para delimitar componentes */
+body.high-contrast-mode .app-header,
+body.high-contrast-mode .grid-card,
+body.high-contrast-mode input,
+body.high-contrast-mode button,
+body.high-contrast-mode .accessibility-bar {
+  border: 2px solid #FFFFFF !important;
+}
+
+/* 4. Botones y enlaces en blanco */
+body.high-contrast-mode button:not(.active-mode) {
+  color: #FFFFFF !important;
+  background-color: transparent !important;
+}
+
+/* 5. Inversión de colores para estados activos (Hover o modo seleccionado) */
+body.high-contrast-mode button:hover,
+body.high-contrast-mode .accessibility-bar button.active-mode {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+/* 6. Ajuste de tooltips al esquema Blanco/Negro */
+body.high-contrast-mode .acc-tooltip {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+}
+body.high-contrast-mode .acc-tooltip::after {
+  border-color: transparent transparent transparent #FFFFFF !important;
+}
+
+/* 7. Truco extra: Si hay imágenes visibles, pasarlas a blanco y negro puro */
+body.high-contrast-mode img {
+  filter: grayscale(100%) contrast(120%) !important;
+}
+
