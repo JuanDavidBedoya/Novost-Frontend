@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig'; 
 import './Auth.css';
-import restaurantImg from '../../assets/images/Login.jpg'; 
+import restaurantImg from '../../assets/images/Login.jpg';
+import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,8 +50,10 @@ const Login = () => {
       showToast("Correcto " + response.data); 
       setPaso(2); 
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error: ${message}`);
       }
     } finally {
       setLoading(false);
@@ -83,8 +86,10 @@ const Login = () => {
           break;
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error: ${message}`);
       }
     } finally {
       setLoading(false);

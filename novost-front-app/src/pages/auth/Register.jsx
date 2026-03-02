@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import './Auth.css';
 import restaurantImg from '../../assets/images/Login.jpg';
+import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -56,8 +57,10 @@ const Register = () => {
       }, 2000);
 
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
+      const hasFormErrors = handleFormErrors(error, setErrors);
+      if (!hasFormErrors) {
+        const message = getErrorMessage(error);
+        showToast(`Error en el registro: ${message}`);
       }
     } finally {
       setLoading(false);
