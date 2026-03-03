@@ -9,11 +9,22 @@ const GestionarReservas = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(false);
   
+  // Generar horas disponibles desde 12:00 hasta 21:30 con lapsos de 30 minutos
+  const generarHorasDisponibles = () => {
+    const horas = [];
+    for (let i = 12; i <= 21; i++) {
+      horas.push(`${i}:00:00`);
+      horas.push(`${i}:30:00`);
+    }
+    return horas;
+  };
+
   // Estado para los filtros
   const [filtros, setFiltros] = useState({
     fecha: '',
     hora: '',
-    personas: ''
+    personas: '',
+    estado: ''
   });
 
   const fetchReservas = async () => {
@@ -26,7 +37,14 @@ const GestionarReservas = () => {
       if (filtros.personas) params.personas = filtros.personas;
 
       const response = await api.get('/reservas/todas', { params });
-      setReservas(response.data);
+      
+      // Filtrar por estado del lado del cliente si se selecciona uno
+      let reservasFiltradas = response.data;
+      if (filtros.estado) {
+        reservasFiltradas = reservasFiltradas.filter(res => res.estadoReserva === filtros.estado);
+      }
+      
+      setReservas(reservasFiltradas);
     } catch (error) {
       showErrorToast(error, toast);
     } finally {
@@ -51,7 +69,7 @@ const GestionarReservas = () => {
   };
 
   const limpiarFiltros = () => {
-    setFiltros({ fecha: '', hora: '', personas: '' });
+    setFiltros({ fecha: '', hora: '', personas: '', estado: '' });
   };
 
   return (
@@ -81,14 +99,18 @@ const GestionarReservas = () => {
           </div>
           <div className="filtro-group">
             <label htmlFor="hora">Hora</label>
-            <input
-              type="time"
+            <select
               id="hora"
               name="hora"
               value={filtros.hora}
               onChange={handleFilterChange}
               className="filtro-input"
-            />
+            >
+              <option value="">Todas...</option>
+              {generarHorasDisponibles().map((hora) => (
+                <option key={hora} value={hora}>{hora.substring(0, 5)}</option>
+              ))}
+            </select>
           </div>
           <div className="filtro-group">
             <label htmlFor="personas">N° Personas</label>
@@ -97,11 +119,27 @@ const GestionarReservas = () => {
               id="personas"
               name="personas"
               min="1"
+              max="5"
               value={filtros.personas}
               onChange={handleFilterChange}
               className="filtro-input"
               placeholder="#"
             />
+          </div>
+          <div className="filtro-group-checkbox">
+            <label htmlFor="estado">Estado</label>
+            <select
+              id="estado"
+              name="estado"
+              value={filtros.estado}
+              onChange={handleFilterChange}
+              className="filtro-input"
+            >
+              <option value="">Todas</option>
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="PAGADA">Pagada</option>
+              <option value="CANCELADA">Cancelada</option>
+            </select>
           </div>
           <div className="filtro-actions">
             <button onClick={limpiarFiltros} className="btn-limpiar">

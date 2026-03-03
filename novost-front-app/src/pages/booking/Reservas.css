@@ -329,6 +329,110 @@ body.high-contrast-mode .modal-close-btn {
   border: 2px solid #FFFFFF !important;
 }
 
+/* Alto contraste para paneles adicionales */
+body.high-contrast-mode .gestion-reservas-container {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .gestion-header {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .gestion-header h2,
+body.high-contrast-mode .gestion-header p {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .filtros-card {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .filtros-grid {
+  background-color: #000000 !important;
+}
+
+body.high-contrast-mode .filtro-group,
+body.high-contrast-mode .filtro-group label,
+body.high-contrast-mode .filtro-group-checkbox {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .filtro-input {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .filtro-actions {
+  background-color: #000000 !important;
+}
+
+body.high-contrast-mode .btn-limpiar {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-limpiar:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .tabla-container {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .reservas-table,
+body.high-contrast-mode .reservas-table th,
+body.high-contrast-mode .reservas-table td {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .badge {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .loading-text,
+body.high-contrast-mode .no-data {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .disponibilidad-panel {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .disponibilidad-card,
+body.high-contrast-mode .disponibilidad-card.disponible,
+body.high-contrast-mode .disponibilidad-card.no-disponible {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .disponibilidad-icon,
+body.high-contrast-mode .disponibilidad-info,
+body.high-contrast-mode .disponibilidad-numero,
+body.high-contrast-mode .disponibilidad-texto,
+body.high-contrast-mode .disponibilidad-advertencia {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .spinner-border {
+  border-color: #FFFFFF !important;
+  border-top-color: transparent !important;
+}
+
 .gestion-reservas-container {
   padding: 2rem;
   max-width: 1200px;
@@ -379,6 +483,31 @@ body.high-contrast-mode .modal-close-btn {
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   color: #444;
+}
+
+.filtro-group-checkbox {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: auto;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
 }
 
 .filtro-input {
@@ -468,4 +597,117 @@ body.high-contrast-mode .modal-close-btn {
   text-align: center;
   color: #666;
   font-size: 1.1rem;
+}
+
+/* Panel de Disponibilidad de Mesas */
+.disponibilidad-panel {
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #eaeaea;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Alto contraste para disponibilidad - overrides */
+body.high-contrast-mode .disponibilidad-panel {
+  background: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+.disponibilidad-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #8a2be2;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.spinner-border {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e9ecef;
+  border-top: 2px solid #8a2be2;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.disponibilidad-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.disponibilidad-card.disponible {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 1px solid #a5d6a7;
+}
+
+.disponibilidad-card.disponible .disponibilidad-icon {
+  color: #2e7d32;
+}
+
+.disponibilidad-card.disponible .disponibilidad-numero {
+  color: #2e7d32;
+}
+
+.disponibilidad-card.no-disponible {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border: 1px solid #ef9a9a;
+}
+
+.disponibilidad-card.no-disponible .disponibilidad-icon {
+  color: #c62828;
+}
+
+.disponibilidad-card.no-disponible .disponibilidad-numero {
+  color: #c62828;
+}
+
+.disponibilidad-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.disponibilidad-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.disponibilidad-numero {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.disponibilidad-texto {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.disponibilidad-advertencia {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c62828;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
 }
