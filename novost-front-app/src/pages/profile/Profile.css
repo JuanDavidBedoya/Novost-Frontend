@@ -356,3 +356,27 @@ body.high-contrast-mode .toast-notification {
 body.high-contrast-mode .forgot-password {
   color: #FFFFFF !important;
 }
+
+/* Input bloqueado */
+.read-only-input {
+  background-color: #f3f4f6 !important; /* Gris claro */
+  color: #9ca3af !important; /* Texto gris suave */
+  border-color: #e5e7eb !important;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+/* Estado del botón deshabilitado */
+.submit-button:disabled {
+  background-color: #d1d5db; /* Gris de botón desactivado */
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none !important;
+}
+
+/* Opcional: para que se vea más profesional al pasar el mouse */
+.form-input.read-only-input:focus {
+  outline: none;
+  border-color: #e5e7eb;
+  box-shadow: none;
+}

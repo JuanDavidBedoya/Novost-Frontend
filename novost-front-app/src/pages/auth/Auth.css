@@ -271,3 +271,41 @@ body.high-contrast-mode .toast-notification {
   color: #000000 !important;
   border: 2px solid #FFFFFF !important;
 }
+
+/* Estilos para el contenedor del checkbox */
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-dark);
+}
+
+.form-group-checkbox input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.form-group-checkbox label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms-link {
+  color: var(--primary-color);
+  text-decoration: underline; /* Mantiene el subrayado para que sepa que es link */
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Para evitar que cambie de color si ya fue visitado */
+.terms-link:visited {
+  color: var(--primary-color);
+}
+
+.terms-link:hover {
+  color: var(--primary-hover);
+}

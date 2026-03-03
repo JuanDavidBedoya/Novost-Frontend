@@ -50,7 +50,6 @@ export default function Reservar() {
  return (
     <div className="novost-page">
       <div className="home-hero">
-        <div className="role-badge">Reservaciones</div>
         <h1>Haz una <span>Reserva</span></h1>
         <p>Asegura tu lugar en la mejor experiencia culinaria de la ciudad.</p>
         <div className="hero-divider"></div>

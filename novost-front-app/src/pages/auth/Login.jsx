@@ -150,7 +150,8 @@ const Login = () => {
                   <ArrowLeft size={18} style={{ marginRight: '5px' }}/> Volver
                 </button>
                 <h2>Verificación Requerida</h2>
-                <p>Hemos enviado un código a <strong>{email}</strong></p>
+                <p>Hemos enviado un código a <strong>{email}</strong> </p>
+                <p>(Puede ser necesario que revise su bandeja de Spam)</p>
               </>
             )}
           </div>

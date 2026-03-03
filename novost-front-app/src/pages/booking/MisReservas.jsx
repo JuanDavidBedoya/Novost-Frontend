@@ -96,7 +96,6 @@ export default function MisReservas() {
   return (
     <div className="novost-page">
       <div className="home-hero">
-        <div className="role-badge">Panel de Usuario</div>
         <h1>Mis <span>Reservas</span></h1>
         <p>Consulta y gestiona tus próximas experiencias en Novost.</p>
         <div className="hero-divider"></div>

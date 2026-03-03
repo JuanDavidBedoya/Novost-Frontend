@@ -9,13 +9,18 @@ import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/err
 
 const UserProfile = () => {
   const navigate = useNavigate();
-
   const cedulaUsuario = localStorage.getItem('cedula'); 
 
   const [formData, setFormData] = useState({
     cedula: '',
     nombre: '', 
     email: '',
+    telefono: ''
+  });
+
+  // --- NUEVO: Estado para guardar los datos originales ---
+  const [initialData, setInitialData] = useState({
+    nombre: '',
     telefono: ''
   });
 
@@ -32,10 +37,16 @@ const UserProfile = () => {
       }
       try {
         const response = await api.get(`/usuarios/${cedulaUsuario}`);
-        setFormData({
+        const data = {
           cedula: response.data.cedula,
           nombre: response.data.nombre,
           email: response.data.email,
+          telefono: response.data.telefono
+        };
+        setFormData(data);
+        // Guardamos una copia de los datos editables para comparar después
+        setInitialData({
+          nombre: response.data.nombre,
           telefono: response.data.telefono
         });
       } catch (error) {
@@ -55,6 +66,9 @@ const UserProfile = () => {
     }
   };
 
+  // --- LÓGICA: ¿Se ha modificado algo? ---
+  const isModified = formData.nombre !== initialData.nombre || formData.telefono !== initialData.telefono;
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(''), 4000); 
@@ -70,12 +84,17 @@ const UserProfile = () => {
         nombre: formData.nombre,
         telefono: formData.telefono
       });
-      showToast(" Perfil actualizado exitosamente");
+      // Actualizamos initialData para que el botón se vuelva a deshabilitar
+      setInitialData({
+        nombre: formData.nombre,
+        telefono: formData.telefono
+      });
+      showToast("✅ Perfil actualizado exitosamente");
     } catch (error) {
       const hasFormErrors = handleFormErrors(error, setErrors);
       if (!hasFormErrors) {
         const message = getErrorMessage(error);
-        showToast(`❌Error al actualizar el perfil: ${message}`);
+        showToast(`❌ Error al actualizar el perfil: ${message}`);
       }
     } finally {
       setLoading(false);
@@ -139,7 +158,7 @@ const UserProfile = () => {
                   className="form-input read-only-input"
                   value={formData.cedula}
                   readOnly
-                  disabled
+                  tabIndex="-1" // Evita que el usuario entre con la tecla Tab
                 />
               </div>
             </div>
@@ -154,7 +173,7 @@ const UserProfile = () => {
                   className="form-input read-only-input"
                   value={formData.email}
                   readOnly
-                  disabled
+                  tabIndex="-1"
                 />
               </div>
             </div>
@@ -177,7 +196,12 @@ const UserProfile = () => {
 
             {errors.general && <span className="error-message general-error">{errors.general}</span>}
 
-            <button type="submit" className="submit-button" disabled={loading}>
+            {/* BOTÓN: Deshabilitado si está cargando O si NO hay cambios */}
+            <button 
+              type="submit" 
+              className="submit-button" 
+              disabled={loading || !isModified}
+            >
               {loading ? "Guardando..." : "Guardar Cambios"}
             </button>
 

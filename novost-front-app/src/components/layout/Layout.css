@@ -107,6 +107,14 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
+}
+
+/* Cuando el contenido es el Home, quitamos restricciones */
+.main-content:has(> .home-container) {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
 }
 
 .app-footer {

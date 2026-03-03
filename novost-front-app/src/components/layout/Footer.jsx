@@ -1,7 +1,4 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter } from 'lucide-react';
-
 const Footer = () => {
   return (
     <footer className="app-footer">
@@ -18,7 +15,21 @@ const Footer = () => {
 
         <div className="footer-section links">
           <h4>Enlaces Legales</h4>
-          <Link to="/terminos">Términos y Condiciones</Link>
+          <a 
+            href="/autorizacion.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            Autorización de Tratamiento de Datos
+          </a>
+          <br /><br />
+          <a 
+            href="/terminos" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            Términos y Condiciones
+          </a>
         </div>
 
         <div className="footer-section contact">

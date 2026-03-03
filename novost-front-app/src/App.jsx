@@ -16,6 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import useIdleTimeout from './hooks/useIdleTimeout';
 import PublicRoute from './components/routes/PublicRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
+import GestionarReservas from './pages/booking/GestionarReservas';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SessionManager = ({ children }) => {
@@ -48,6 +49,8 @@ function App() {
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
           <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
           <Route path="/restaurar-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+          
+          <Route path="/terminos" element={<Terminos />} />
 
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             
@@ -62,8 +65,8 @@ function App() {
 
             <Route path="/profile" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><UserProfile /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><ChangePassword /></ProtectedRoute>} />
-            <Route path="/terminos" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><Terminos /></ProtectedRoute>} />
-          
+            <Route path="/gestionar-reservas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><GestionarReservas /></ProtectedRoute>} />
+            
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

@@ -1,92 +1,212 @@
+:root {
+  --primary-color: #a03ce6; /* Ajusta este color al de tu marca si es distinto */
+}
+
 .home-container {
   width: 100%;
-  padding: 1rem 0 3rem;
+  min-height: calc(100vh - 200px);
   animation: fadeIn 0.8s ease-out;
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
 }
 
-.home-hero {
+/* Transición hacia el footer */
+.home-container::after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+/* =========================================
+   1. HERO SECTION (Organización)
+   ========================================= */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  min-height: 550px;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+              url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin-bottom: 3.5rem;
-  padding: 0 1rem;
+  color: white;
 }
 
-.home-hero h1 {
-  font-size: 2.5rem;
+.hero-welcome-corner {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  text-align: right;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.2rem;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  animation: fadeIn 1s ease-out;
+}
+
+.welcome-text {
+  margin: 0.5rem 0 0;
+  font-size: 1.1rem;
+}
+
+.welcome-text span {
   font-weight: 800;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.5px;
-}
-
-.home-hero h1 span {
-  color: var(--primary-color);
-}
-
-.home-hero p {
-  color: #666;
-  font-size: 1.15rem;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
+  color: #fff;
 }
 
 .hero-divider {
-  width: 60px;
-  height: 4px;
+  width: 40px;
+  height: 3px;
   background-color: var(--primary-color);
-  margin: 1.5rem auto 0;
+  margin: 0.8rem 0 0 auto;
   border-radius: 2px;
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.hero-title span {
+  color: var(--primary-color);
+}
+
+.hero-description {
+  max-width: 650px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1.1rem 3rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
+}
+
+/* =========================================
+   2. SERVICES SECTION
+   ========================================= */
+.services-intro {
+  padding: 6rem 2rem;
+  background: #fdfdfd;
+}
+
+.section-title-wrapper {
+  text-align: center;
+  margin-bottom: 4.5rem;
+}
+
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.title-underline {
+  width: 70px;
+  height: 4px;
+  background: var(--primary-color);
+  margin: 0.5rem auto 1.8rem;
+  border-radius: 2px;
+}
+
+.services-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-simple-card {
+  padding: 3.5rem 2rem;
+  text-align: center;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+  transition: all 0.4s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.service-simple-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+  border-color: var(--primary-color);
+}
+
+.service-icon-box {
+  color: var(--primary-color);
+  margin-bottom: 1.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* =========================================
+   3. DASHBOARD SECTION (Animaciones del Diseño 2)
+   ========================================= */
+.dashboard-actions {
+  padding: 1rem 2rem 8rem;
+  background-color: #fff;
 }
 
 .image-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-@media (max-width: 900px) {
-  .image-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .image-grid {
-    grid-template-columns: 1fr;
-  }
-  .home-hero h1 {
-    font-size: 2rem;
-  }
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .grid-card {
   position: relative;
   aspect-ratio: 4 / 5; 
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   background-color: #000;
 }
 
 .grid-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.2); 
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(138, 43, 226, 0.25); 
 }
 
 .card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.85; 
-  transition: transform 0.7s ease, opacity 0.4s ease;
+  opacity: 0.88; 
+  transition: transform 0.8s ease, opacity 0.4s ease;
 }
 
 .grid-card:hover .card-image {
-  transform: scale(1.08);
-  opacity: 0.6; 
+  transform: scale(1.12);
+  opacity: 0.65; 
 }
 
 .card-overlay {
@@ -95,28 +215,27 @@
   background: linear-gradient(
     to bottom, 
     rgba(0,0,0,0) 0%, 
-    rgba(0,0,0,0.2) 40%, 
-    rgba(0,0,0,0.85) 100%
+    rgba(0,0,0,0.3) 45%, 
+    rgba(0,0,0,0.9) 100%
   );
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2rem 1.5rem;
-  transition: background 0.4s ease;
+  padding: 2.5rem 2rem;
+  transition: all 0.4s ease;
 }
 
 .grid-card:hover .card-overlay {
-
   background: linear-gradient(
     to bottom, 
     rgba(0,0,0,0) 0%, 
-    rgba(138, 43, 226, 0.1) 40%, 
-    rgba(138, 43, 226, 0.9) 100% 
+    rgba(138, 43, 226, 0.15) 40%, 
+    rgba(138, 43, 226, 0.85) 100% 
   );
 }
 
 .card-content {
-  transform: translateY(15px);
+  transform: translateY(20px);
   transition: transform 0.4s ease;
 }
 
@@ -126,38 +245,36 @@
 
 .card-icon-wrapper {
   color: white;
-  margin-bottom: 0.8rem;
-  opacity: 0.8;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  margin-bottom: 1rem;
+  opacity: 0.85;
+  transition: all 0.3s ease;
 }
 
 .grid-card:hover .card-icon-wrapper {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(-5deg);
 }
 
 .card-title {
   color: white;
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin: 0 0 0.4rem 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .card-desc {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
   margin: 0;
   opacity: 0; 
-  transform: translateY(10px);
-  transition: all 0.4s ease;
+  transform: translateY(15px);
+  transition: all 0.4s ease 0.1s;
 }
 
 .grid-card:hover .card-desc {
   opacity: 1; 
   transform: translateY(0);
-  color: rgba(255, 255, 255, 0.95);
 }
 
 .card-hover-border {
@@ -165,19 +282,22 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 6px;
+  height: 8px;
   background-color: var(--primary-color);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
 .grid-card:hover .card-hover-border {
   transform: scaleX(1);
 }
 
+/* =========================================
+   GENERALES Y RESPONSIVE
+   ========================================= */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -185,56 +305,24 @@
   display: inline-block;
   background-color: var(--primary-color);
   color: white;
-  padding: 0.3rem 1rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 50px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
+  letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
 }
 
-/* --- MODO ALTO CONTRASTE --- */
-body.high-contrast-mode .home-container,
-body.high-contrast-mode .home-hero {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
+@media (max-width: 1024px) {
+  .hero-title { font-size: 3.5rem; }
+  .services-cards-container, .image-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-body.high-contrast-mode .home-hero h1,
-body.high-contrast-mode .home-hero h1 span,
-body.high-contrast-mode .home-hero p {
-  color: #FFFFFF !important;
-}
-
-body.high-contrast-mode .hero-divider {
-  background-color: #FFFFFF !important;
-}
-
-body.high-contrast-mode .grid-card {
-  background-color: #000000 !important;
-  border: 2px solid #FFFFFF !important;
-}
-
-body.high-contrast-mode .card-title {
-  color: #FFFFFF !important;
-  text-shadow: none !important;
-}
-
-body.high-contrast-mode .card-desc {
-  color: #FFFFFF !important;
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-body.high-contrast-mode .card-overlay {
-  background: #000000 !important;
-  opacity: 1 !important;
-}
-
-body.high-contrast-mode .role-badge {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #FFFFFF !important;
+@media (max-width: 768px) {
+  .hero-section { height: auto; padding: 10rem 1.5rem 5rem; }
+  .hero-title { font-size: 2.8rem; }
+  .hero-welcome-corner { top: 1.5rem; right: 1.5rem; left: 1.5rem; text-align: center; }
+  .hero-divider { margin: 0.8rem auto 0; }
+  .services-cards-container, .image-grid { grid-template-columns: 1fr; }
 }

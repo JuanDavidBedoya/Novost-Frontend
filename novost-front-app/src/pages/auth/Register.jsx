@@ -14,7 +14,8 @@ const Register = () => {
     nombre: '',
     telefono: '',
     email: '',
-    password: '' 
+    password: '',
+    acceptedTerms: false
   });
   
   const [errors, setErrors] = useState({});
@@ -23,8 +24,12 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    // Si el tipo es checkbox, usamos 'checked', de lo contrario 'value'
+    const finalValue = type === 'checkbox' ? checked : value;
+    
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
+    
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -37,6 +42,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.acceptedTerms) return;
     setLoading(true);
     setErrors({}); 
     
@@ -196,9 +202,32 @@ const Register = () => {
               {errors.contrasena && <span className="error-message">{errors.contrasena}</span>}
             </div>
 
+            {/* --- SECCIÓN DE TÉRMINOS Y CONDICIONES --- */}
+            <div className="form-group-checkbox">
+              <input
+                type="checkbox"
+                id="acceptedTerms"
+                name="acceptedTerms"
+                checked={formData.acceptedTerms}
+                onChange={handleChange}
+                disabled={loading}
+              />
+              <label htmlFor="acceptedTerms">
+                Acepto los{' '}
+                <a 
+                  href="/terminos" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="terms-link"
+                >
+                  Términos y Condiciones
+                </a>
+              </label>
+            </div>
+
             {errors.general && <span className="error-message general-error">{errors.general}</span>}
 
-            <button type="submit" className="auth-submit-button" disabled={loading}>
+            <button type="submit" className="auth-submit-button" disabled={loading || !formData.acceptedTerms}>
               {loading ? "Procesando..." : "Registrarse"}
             </button>
 
