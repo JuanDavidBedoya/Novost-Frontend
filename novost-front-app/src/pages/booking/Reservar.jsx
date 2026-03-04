@@ -28,7 +28,6 @@ export default function Reservar() {
   };
 
   const obtenerDisponibilidad = useCallback(async () => {
-    // Solo buscar disponibilidad si hay fecha
     if (!formData.fecha) {
       setDisponibilidad({ cargando: false, mesas: 0 });
       return;
@@ -39,12 +38,10 @@ export default function Reservar() {
     try {
       const params = { fecha: formData.fecha };
       
-      // Solo agregar hora si está seleccionada (no vacía)
       if (formData.horaInicio && formData.horaInicio !== '') {
         params.hora = formData.horaInicio;
       }
       
-      // Solo agregar personas si está seleccionado y es mayor a 0
       if (formData.numPersonas && parseInt(formData.numPersonas) > 0) {
         params.personas = parseInt(formData.numPersonas);
       }
@@ -57,7 +54,6 @@ export default function Reservar() {
     }
   }, [formData.fecha, formData.horaInicio, formData.numPersonas]);
 
-  // Consultar disponibilidad cuando cambien los datos relevantes
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       obtenerDisponibilidad();
@@ -69,7 +65,6 @@ export default function Reservar() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validar que el número de personas sea mayor a 0
     const numPersonas = parseInt(formData.numPersonas);
     if (!numPersonas || numPersonas <= 0) {
       toast.error("Debe seleccionar al menos 1 comensal para crear una reserva.");
@@ -135,7 +130,6 @@ export default function Reservar() {
             </div><br></br>
           </div>
 
-          {/* Panel de Disponibilidad de Mesas */}
           {formData.fecha && (
             <div className="disponibilidad-panel mt-6">
               <div className="flex items-center gap-3 mb-2">

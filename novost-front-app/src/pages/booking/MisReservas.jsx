@@ -18,7 +18,6 @@ export default function MisReservas() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Generar horas desde 12:00 hasta 21:30
   const generarHorasDisponibles = () => {
     const horas = [];
     for (let i = 12; i <= 21; i++) {
@@ -33,7 +32,6 @@ export default function MisReservas() {
     try {
       const { data } = await api.get('/reservas/buscar', { params: filtros });
       
-      // Filtrar por estado del lado del cliente si se selecciona uno
       let reservasFiltradas = data;
       if (filtros.estado) {
         reservasFiltradas = reservasFiltradas.filter(res => res.estadoReserva === filtros.estado);

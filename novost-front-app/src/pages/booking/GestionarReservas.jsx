@@ -3,13 +3,12 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import { toast } from 'react-toastify';
 import { showErrorToast } from '../../lib/errorHandler';
-import './Reservas.css'; // Crearemos este archivo ahora
+import './Reservas.css';
 
 const GestionarReservas = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(false);
   
-  // Generar horas disponibles desde 12:00 hasta 21:30 con lapsos de 30 minutos
   const generarHorasDisponibles = () => {
     const horas = [];
     for (let i = 12; i <= 21; i++) {
@@ -19,7 +18,6 @@ const GestionarReservas = () => {
     return horas;
   };
 
-  // Estado para los filtros
   const [filtros, setFiltros] = useState({
     fecha: '',
     hora: '',
@@ -30,7 +28,6 @@ const GestionarReservas = () => {
   const fetchReservas = async () => {
     setLoading(true);
     try {
-      // Construimos los parámetros solo con los que tienen valor
       const params = {};
       if (filtros.fecha) params.fecha = filtros.fecha;
       if (filtros.hora) params.hora = filtros.hora;
@@ -38,7 +35,6 @@ const GestionarReservas = () => {
 
       const response = await api.get('/reservas/todas', { params });
       
-      // Filtrar por estado del lado del cliente si se selecciona uno
       let reservasFiltradas = response.data;
       if (filtros.estado) {
         reservasFiltradas = reservasFiltradas.filter(res => res.estadoReserva === filtros.estado);
@@ -52,15 +48,12 @@ const GestionarReservas = () => {
     }
   };
 
-  // Cargar al inicio y cada vez que cambien los filtros
   useEffect(() => {
-    // Agregamos un pequeño retraso (debounce) para no saturar la API si el usuario tipea rápido
     const delayDebounceFn = setTimeout(() => {
       fetchReservas();
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros]);
 
   const handleFilterChange = (e) => {
@@ -83,7 +76,6 @@ const GestionarReservas = () => {
         <p>Visualiza y filtra todas las reservas actuales del sistema</p>
       </div>
 
-      {/* Sección de Filtros */}
       <div className="filtros-card">
         <div className="filtros-grid">
           <div className="filtro-group">
@@ -149,7 +141,6 @@ const GestionarReservas = () => {
         </div>
       </div>
 
-      {/* Tabla de Resultados */}
       <div className="tabla-container">
         {loading && <p className="loading-text">Buscando reservas...</p>}
         
