@@ -12,7 +12,7 @@ const MySwal = withReactContent(Swal);
 
 export default function MisReservas() {
   const [reservas, setReservas] = useState([]);
-  const [filtros, setFiltros] = useState({ fecha: '', hora: '', personas: '' });
+  const [filtros, setFiltros] = useState({ fecha: '', hora: '', personas: '', estado: '' });
   const [modalData, setModalData] = useState({ open: false, clientSecret: '', idReserva: null });
   
   const location = useLocation();
@@ -20,17 +20,24 @@ export default function MisReservas() {
 
   const generarHorasDisponibles = () => {
     const horas = [];
-    for (let i = 12; i <= 22; i++) {
+    for (let i = 12; i <= 21; i++) {
       horas.push(`${i}:00:00`);
       horas.push(`${i}:30:00`);
     }
+    horas.push('21:30:00');
     return horas;
   };
 
   const fetchReservas = useCallback(async () => {
     try {
       const { data } = await api.get('/reservas/buscar', { params: filtros });
-      setReservas(data);
+      
+      let reservasFiltradas = data;
+      if (filtros.estado) {
+        reservasFiltradas = reservasFiltradas.filter(res => res.estadoReserva === filtros.estado);
+      }
+      
+      setReservas(reservasFiltradas);
     } catch (error) {
       console.error("Error buscando reservas", error);
     }
@@ -93,74 +100,78 @@ export default function MisReservas() {
     }
   };
 
+  const limpiarFiltros = () => {
+    setFiltros({ fecha: '', hora: '', personas: '', estado: '' });
+  };
+
   return (
     <div className="novost-page">
       <div className="home-hero">
         <h1>Mis <span>Reservas</span></h1>
         <p>Consulta y gestiona tus próximas experiencias en Novost.</p>
-        <div className="hero-divider"></div>
       </div>
 
-      <div className="reserva-glass-card mb-10" style={{padding: '2rem', marginTop: '0'}}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-          <div className="lg:col-span-3">
-            <label className="input-label"><Calendar size={16}/> Fecha</label>
+      <div className="filtros-card" style={{marginTop: '0', borderRadius: '24px', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)'}}>
+        <div className="filtros-grid">
+          <div className="filtro-group">
+            <label htmlFor="fecha"><Calendar size={16}/> Fecha</label>
             <input 
               type="date" 
-              className="novost-input" 
+              id="fecha"
+              className="filtro-input" 
               value={filtros.fecha}
               onChange={(e) => setFiltros({...filtros, fecha: e.target.value})} 
             />
-          </div><br></br>
+          </div>
           
-
-          <div className="lg:col-span-3">
-            <label className="input-label"><Clock size={16}/> Hora Inicio</label>
+          <div className="filtro-group">
+            <label htmlFor="hora"><Clock size={16}/> Hora</label>
             <select
-              className="novost-input select-custom-align"
+              id="hora"
+              className="filtro-input"
               value={filtros.hora}
               onChange={(e) => setFiltros({...filtros, hora: e.target.value})}
             >
-              <option value="">Seleccione...</option>
+              <option value="">Todas...</option>
               {generarHorasDisponibles().map((hora) => (
-                <option key={hora} value={hora}>{hora.substring(0,5)} HS</option>
+                <option key={hora} value={hora}>{hora.substring(0, 5)}</option>
               ))}
             </select>
-          </div><br></br>
+          </div>
 
-          <div className="lg:col-span-2">
-            <label className="input-label"><Users size={16}/> Personas</label>
+          <div className="filtro-group">
+            <label htmlFor="personas"><Users size={16}/> Personas</label>
             <input 
               type="number" 
+              id="personas"
               min="1"
-              placeholder="Cant."
-              className="novost-input" 
+              max="5"
+              className="filtro-input" 
               value={filtros.personas}
               onChange={(e) => setFiltros({...filtros, personas: e.target.value})} 
             />
-          </div><br></br>
-
-          <div className="lg:col-span-5 flex gap-3">
-            <button 
-              onClick={fetchReservas} 
-              className="btn-novost flex-1" 
-              style={{ padding: '0.85rem', whiteSpace: 'nowrap' }}
-            >
-              <Search size={18}/> Aplicar Filtros
-            </button><br></br>
-
-            <button 
-              onClick={() => {
-                setFiltros({ fecha: '', hora: '', personas: '' });
-                setTimeout(() => fetchReservas(), 100);
-              }}
-              className="btn-novost flex-1"
-              style={{ padding: '0.85rem', whiteSpace: 'nowrap' }}
-            >
-              ✕ Limpiar
-            </button>
           </div>
 
+          <div className="filtro-group">
+            <label htmlFor="estado">Estado</label>
+            <select
+              id="estado"
+              className="filtro-input"
+              value={filtros.estado}
+              onChange={(e) => setFiltros({...filtros, estado: e.target.value})}
+            >
+              <option value="">Todas</option>
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="PAGADA">Pagada</option>
+              <option value="CANCELADA">Cancelada</option>
+            </select>
+          </div>
+
+          <div className="filtro-actions">
+            <button onClick={limpiarFiltros} className="btn-limpiar">
+              Limpiar Filtros
+            </button>
+          </div>
         </div>
       </div>
 
@@ -170,14 +181,15 @@ export default function MisReservas() {
             <div key={res.idReserva} className="reserva-mini-card">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Mesa #{res.numeroMesa}</span>
                   <h3 className="text-xl font-black text-gray-800">{res.fecha}</h3>
+                  
                 </div>
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Mesa #{res.numeroMesa} </span>
                 <span className={`status-chip status-${res.estadoReserva}`}>
                   {res.estadoReserva}
                 </span>
               </div>
-
+              
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-gray-600 font-semibold bg-gray-50 p-2 rounded-lg">
                   <Clock size={16} className="text-purple-500"/>

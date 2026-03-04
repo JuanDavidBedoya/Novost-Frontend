@@ -3,30 +3,44 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import { toast } from 'react-toastify';
 import { showErrorToast } from '../../lib/errorHandler';
-import './Reservas.css'; // Crearemos este archivo ahora
+import './Reservas.css';
 
 const GestionarReservas = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(false);
   
-  // Estado para los filtros
+  const generarHorasDisponibles = () => {
+    const horas = [];
+    for (let i = 12; i <= 21; i++) {
+      horas.push(`${i}:00:00`);
+      horas.push(`${i}:30:00`);
+    }
+    return horas;
+  };
+
   const [filtros, setFiltros] = useState({
     fecha: '',
     hora: '',
-    personas: ''
+    personas: '',
+    estado: ''
   });
 
   const fetchReservas = async () => {
     setLoading(true);
     try {
-      // Construimos los parámetros solo con los que tienen valor
       const params = {};
       if (filtros.fecha) params.fecha = filtros.fecha;
       if (filtros.hora) params.hora = filtros.hora;
       if (filtros.personas) params.personas = filtros.personas;
 
       const response = await api.get('/reservas/todas', { params });
-      setReservas(response.data);
+      
+      let reservasFiltradas = response.data;
+      if (filtros.estado) {
+        reservasFiltradas = reservasFiltradas.filter(res => res.estadoReserva === filtros.estado);
+      }
+      
+      setReservas(reservasFiltradas);
     } catch (error) {
       showErrorToast(error, toast);
     } finally {
@@ -34,15 +48,12 @@ const GestionarReservas = () => {
     }
   };
 
-  // Cargar al inicio y cada vez que cambien los filtros
   useEffect(() => {
-    // Agregamos un pequeño retraso (debounce) para no saturar la API si el usuario tipea rápido
     const delayDebounceFn = setTimeout(() => {
       fetchReservas();
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros]);
 
   const handleFilterChange = (e) => {
@@ -51,7 +62,7 @@ const GestionarReservas = () => {
   };
 
   const limpiarFiltros = () => {
-    setFiltros({ fecha: '', hora: '', personas: '' });
+    setFiltros({ fecha: '', hora: '', personas: '', estado: '' });
   };
 
   return (
@@ -65,7 +76,6 @@ const GestionarReservas = () => {
         <p>Visualiza y filtra todas las reservas actuales del sistema</p>
       </div>
 
-      {/* Sección de Filtros */}
       <div className="filtros-card">
         <div className="filtros-grid">
           <div className="filtro-group">
@@ -81,14 +91,18 @@ const GestionarReservas = () => {
           </div>
           <div className="filtro-group">
             <label htmlFor="hora">Hora</label>
-            <input
-              type="time"
+            <select
               id="hora"
               name="hora"
               value={filtros.hora}
               onChange={handleFilterChange}
               className="filtro-input"
-            />
+            >
+              <option value="">Todas...</option>
+              {generarHorasDisponibles().map((hora) => (
+                <option key={hora} value={hora}>{hora.substring(0, 5)}</option>
+              ))}
+            </select>
           </div>
           <div className="filtro-group">
             <label htmlFor="personas">N° Personas</label>
@@ -97,11 +111,27 @@ const GestionarReservas = () => {
               id="personas"
               name="personas"
               min="1"
+              max="5"
               value={filtros.personas}
               onChange={handleFilterChange}
               className="filtro-input"
               placeholder="#"
             />
+          </div>
+          <div className="filtro-group-checkbox">
+            <label htmlFor="estado">Estado</label>
+            <select
+              id="estado"
+              name="estado"
+              value={filtros.estado}
+              onChange={handleFilterChange}
+              className="filtro-input"
+            >
+              <option value="">Todas</option>
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="PAGADA">Pagada</option>
+              <option value="CANCELADA">Cancelada</option>
+            </select>
           </div>
           <div className="filtro-actions">
             <button onClick={limpiarFiltros} className="btn-limpiar">
@@ -111,7 +141,6 @@ const GestionarReservas = () => {
         </div>
       </div>
 
-      {/* Tabla de Resultados */}
       <div className="tabla-container">
         {loading && <p className="loading-text">Buscando reservas...</p>}
         

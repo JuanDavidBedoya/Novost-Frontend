@@ -409,6 +409,19 @@ body.high-contrast-mode img {
   filter: grayscale(100%) contrast(120%) !important;
 }
 
+body.high-contrast-mode img,
+body.high-contrast-mode picture,
+body.high-contrast-mode video,
+body.high-contrast-mode canvas,
+body.high-contrast-mode svg,
+body.high-contrast-mode .bg-image,
+body.high-contrast-mode .background-image,
+body.high-contrast-mode [class*="bg-"],
+body.high-contrast-mode [style*="background"] {
+  filter: grayscale(100%) contrast(150%) brightness(0.8) !important;
+  opacity: 0.8 !important;
+}
+
 body.high-contrast-mode input,
 body.high-contrast-mode select,
 body.high-contrast-mode textarea {
@@ -460,8 +473,132 @@ body.high-contrast-mode svg {
   fill: #FFFFFF !important;
 }
 
+body.high-contrast-mode, 
+body.high-contrast-mode html {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .app-layout,
+body.high-contrast-mode .app-header,
+body.high-contrast-mode .main-content,
+body.high-contrast-mode .app-footer {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
 body.high-contrast-mode .header-nav a:hover {
   background-color: #FFFFFF !important;
   color: #000000 !important;
+}
+
+/* Elementos adicionales de reservas */
+body.high-contrast-mode .disponibilidad-panel,
+body.high-contrast-mode .disponibilidad-card,
+body.high-contrast-mode .disponibilidad-loading,
+body.high-contrast-mode .disponibilidad-icon,
+body.high-contrast-mode .disponibilidad-info,
+body.high-contrast-mode .disponibilidad-numero,
+body.high-contrast-mode .disponibilidad-texto,
+body.high-contrast-mode .disponibilidad-advertencia,
+body.high-contrast-mode .disponible,
+body.high-contrast-mode .no-disponible,
+body.high-contrast-mode .section-title-wrapper,
+body.high-contrast-mode .section-title,
+body.high-contrast-mode .section-subtitle,
+body.high-contrast-mode .title-underline,
+body.high-contrast-mode .home-container,
+body.high-contrast-mode .services-intro,
+body.high-contrast-mode .dashboard-actions,
+body.high-contrast-mode .services-grid,
+body.high-contrast-mode .service-card,
+body.high-contrast-mode .services-cards-container,
+body.high-contrast-mode .service-simple-card,
+body.high-contrast-mode .filtros-card,
+body.high-contrast-mode .filtros-grid,
+body.high-contrast-mode .filtro-group,
+body.high-contrast-mode .filtro-input,
+body.high-contrast-mode .filtro-actions,
+body.high-contrast-mode .filtro-group-checkbox,
+body.high-contrast-mode .hero-section {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .disponibilidad-card.disponible {
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .disponibilidad-card.no-disponible {
+  border: 2px solid #FFFFFF !important;
+}
+
+/* Paneles de filtros */
+body.high-contrast-mode .filter-panel,
+body.high-contrast-mode .filters-container {
+  background-color: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+/* Iconos SVG en modo alto contraste */
+body.high-contrast-mode svg {
+  fill: #FFFFFF !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+body.high-contrast-mode button svg,
+body.high-contrast-mode a svg {
+  fill: #FFFFFF !important;
+}
+
+/* Badges, chips, labels y tags */
+body.high-contrast-mode .badge,
+body.high-contrast-mode .chip,
+body.high-contrast-mode .label,
+body.high-contrast-mode .tag,
+body.high-contrast-mode .info-box,
+body.high-contrast-mode .alert-box {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Imágenes con filtro de alto contraste mejorado */
+body.high-contrast-mode img,
+picture,
+canvas,
+.bg-image,
+.background-image {
+  filter: grayscale(100%) contrast(150%) brightness(0.7) !important;
+  opacity: 0.7 !important;
+}
+
+/* Videos */
+body.high-contrast-mode video {
+  filter: grayscale(100%) contrast(150%) !important;
+}
+
+/* Iconos en botones */
+body.high-contrast-mode .btn-icon,
+body.high-contrast-mode button[class*="btn-"] svg,
+body.high-contrast-mode a[class*="btn-"] svg {
+  fill: #FFFFFF !important;
+}
+
+/* Spinners y loaders */
+body.high-contrast-mode .spinner,
+body.high-contrast-mode .loader,
+body.high-contrast-mode .spinner-border {
+  border-color: #FFFFFF !important;
+  border-top-color: transparent !important;
+}
+
+/* Tooltips personalizados */
+body.high-contrast-mode [class*="tooltip"] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
 }
 
