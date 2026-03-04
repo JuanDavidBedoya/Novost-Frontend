@@ -25,7 +25,6 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    // Si el tipo es checkbox, usamos 'checked', de lo contrario 'value'
     const finalValue = type === 'checkbox' ? checked : value;
     
     setFormData(prev => ({ ...prev, [name]: finalValue }));
@@ -202,7 +201,6 @@ const Register = () => {
               {errors.contrasena && <span className="error-message">{errors.contrasena}</span>}
             </div>
 
-            {/* --- SECCIÓN DE TÉRMINOS Y CONDICIONES --- */}
             <div className="form-group-checkbox">
               <input
                 type="checkbox"
