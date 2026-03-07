@@ -32,7 +32,7 @@
   justify-content: center;
   text-align: center;
   color: white;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #000000 0%, #292929 50%, #313131 100%);
   overflow: hidden;
 }
 
@@ -359,4 +359,66 @@
   .hero-welcome-corner { top: 1.5rem; right: 1.5rem; left: 1.5rem; text-align: center; }
   .hero-divider { margin: 0.8rem auto 0; }
   .services-cards-container, .image-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   ALTO CONTRASTE - TÉRMINOS
+   ========================================= */
+.terminos-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.terminos-date {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.terminos-divider {
+  margin: 1.5rem 0;
+  border-color: #eee;
+}
+
+.terminos-section {
+  line-height: 1.8;
+  color: #555;
+}
+
+body.high-contrast-mode .terminos-container {
+  background-color: #000 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1) !important;
+}
+
+body.high-contrast-mode .terminos-container h1 {
+  color: #fff !important;
+}
+
+body.high-contrast-mode .terminos-container h2 {
+  color: #fff !important;
+}
+
+body.high-contrast-mode .terminos-container p {
+  color: #ddd !important;
+}
+
+body.high-contrast-mode .terminos-container .terminos-date {
+  color: #bbb !important;
+}
+
+body.high-contrast-mode .terminos-container .terminos-section {
+  color: #ddd !important;
+}
+
+body.high-contrast-mode .terminos-container hr {
+  border-color: #555 !important;
+}
+
+body.high-contrast-mode .terminos-container ul {
+  color: #ddd !important;
 }

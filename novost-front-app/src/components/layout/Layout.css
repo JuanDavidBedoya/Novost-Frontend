@@ -174,6 +174,45 @@
   font-size: 0.85rem;
 }
 
+.accessibility-container {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+}
+
+/* Botón de accesibilidad cuando está cerrado */
+.accessibility-toggle-btn {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--primary-color, #8a2be2);
+  color: white;
+  border: none;
+  padding: 0.8rem 0.6rem;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  font-family: 'Inter', system-ui, sans-serif;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.accessibility-toggle-btn:hover {
+  background-color: #7b24d1;
+  padding-right: 0.8rem;
+}
+
+/* Barra de accesibilidad cuando está abierta */
 .accessibility-bar {
   position: fixed;
   right: 0;
@@ -190,6 +229,41 @@
   border: 1px solid #eaeaea;
   border-right: none;
   font-family: 'Inter', system-ui, sans-serif; 
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.acc-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.acc-close-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color, #8a2be2);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.acc-close-btn:hover {
+  background-color: #f0f0f0;
 }
 
 .accessibility-bar button {
@@ -273,7 +347,8 @@ body.text-only-mode .auth-image-section {
   border-color: transparent transparent transparent #333;
 }
 
-.acc-item:hover .acc-tooltip {
+.acc-item:hover .acc-tooltip,
+.acc-header:hover .acc-tooltip {
   opacity: 1;
   visibility: visible;
   right: 110%;
@@ -317,7 +392,8 @@ body.high-contrast-mode .header-nav,
 body.high-contrast-mode .header-actions,
 body.high-contrast-mode .role-badge,
 body.high-contrast-mode .status-chip,
-body.high-contrast-mode .hero-divider {
+body.high-contrast-mode .hero-divider,
+body.high-contrast-mode .terminos-container {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   box-shadow: none !important;
@@ -347,7 +423,11 @@ body.high-contrast-mode .text-purple-500,
 body.high-contrast-mode .text-purple-700,
 body.high-contrast-mode .text-muted,
 body.high-contrast-mode input::placeholder,
-body.high-contrast-mode .error-message {
+body.high-contrast-mode .error-message,
+body.high-contrast-mode .terminos-container h1,
+body.high-contrast-mode .terminos-container h2,
+body.high-contrast-mode .terminos-container p,
+body.high-contrast-mode .terminos-container li {
   color: #FFFFFF !important;
   text-shadow: none !important;
 }

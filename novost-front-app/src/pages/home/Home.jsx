@@ -12,6 +12,7 @@ import futura from '../../assets/images/Error.jpg';
 import calendar from '../../assets/images/Calendar.jpg'; 
 import empleado from '../../assets/images/Empleado.jpg'; 
 import reserva from '../../assets/images/Reserva.jpg'; 
+import inventario from '../../assets/images/Inventario.jpg'; 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -28,12 +29,12 @@ const Home = () => {
     ADMINISTRADOR: [
       { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
       { id: 2, title: 'Ver Reservas', desc: 'Gestión total del restaurante', path: '/gestionar-reservas', icon: <BarChart3 size={28} />, img: reserva },
-      { id: 3, title: 'Ajustes', desc: 'Configuración del sistema', path: '/admin-home', icon: <Settings size={28} />, img: futura },
+      { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/admin-home', icon: <Settings size={28} />, img: futura },
     ],
     TRABAJADOR: [
       { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },
-      { id: 2, title: 'Tareas', desc: 'Checklist de actividades', path: '/worker-home', icon: <CheckSquare size={28} />, img: futura },
-      { id: 3, title: 'Servicio', desc: 'Gestión de mesas', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura },
+      { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante ', path: '/worker-home', icon: <CheckSquare size={28} />, img: inventario },
+      { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura },
     ]
   };
 

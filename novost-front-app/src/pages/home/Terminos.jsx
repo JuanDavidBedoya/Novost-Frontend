@@ -4,27 +4,19 @@ import { useNavigate } from 'react-router-dom';
 const Terminos = () => {
   const navigate = useNavigate();
   return (
-    <div style={{ 
-      padding: '2rem', 
-      maxWidth: '900px', 
-      margin: '0 auto', 
-      background: '#fff', 
-      borderRadius: '8px', 
-      boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-      fontFamily: "'Inter', system-ui, -apple-system, sans-serif"
-    }}>
+    <div className="terminos-container">
       <Helmet>
         <title>Términos y Condiciones - Novost</title>
       </Helmet>
 
       <h1>Términos y Condiciones</h1>
-      <p style={{ color: '#777', fontSize: '0.9rem' }}>
+      <p className="terminos-date">
         Última actualización: {new Date().getFullYear()}
       </p>
 
-      <hr style={{ margin: '1.5rem 0', borderColor: '#eee' }} />
+      <hr className="terminos-divider" />
 
-      <section style={{ lineHeight: '1.8', color: '#555' }}>
+      <section className="terminos-section">
 
         <h2>1. Aceptación de los Términos</h2>
         <p>
