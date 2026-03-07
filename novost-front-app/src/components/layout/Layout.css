@@ -393,7 +393,8 @@ body.high-contrast-mode .header-actions,
 body.high-contrast-mode .role-badge,
 body.high-contrast-mode .status-chip,
 body.high-contrast-mode .hero-divider,
-body.high-contrast-mode .terminos-container {
+body.high-contrast-mode .terminos-container,
+body.high-contrast-mode .stock-code-page {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   box-shadow: none !important;

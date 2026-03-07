@@ -240,3 +240,107 @@
   color: var(--stock-text-muted);
   font-size: 0.875rem;
 }
+
+/* ============================================ */
+/* ALTO CONTRASTE - Stock Code Page */
+/* ============================================ */
+body.high-contrast-mode .auth-image-section,
+body.high-contrast-mode .auth-form-section,
+body.high-contrast-mode .auth-form-container,
+body.high-contrast-mode .auth-tabs,
+body.high-contrast-mode .auth-header,
+body.high-contrast-mode .auth-form {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-tab {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-tab.active {
+  color: #FFFFFF !important;
+  border-bottom: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-header h2,
+body.high-contrast-mode .auth-header p,
+body.high-contrast-mode .form-group label {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-input,
+body.high-contrast-mode .input-wrapper input {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-input::placeholder {
+  color: #CCCCCC !important;
+}
+
+body.high-contrast-mode .auth-submit-button {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .auth-submit-button:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .auth-link-secondary {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .error-message {
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  padding: 0.25rem;
+}
+
+body.high-contrast-mode .toast-notification {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+/* Estilos para el contenedor del checkbox */
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-dark);
+}
+
+.form-group-checkbox input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.form-group-checkbox label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms-link {
+  color: var(--primary-color);
+  text-decoration: underline; /* Mantiene el subrayado para que sepa que es link */
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Para evitar que cambie de color si ya fue visitado */
+.terms-link:visited {
+  color: var(--primary-color);
+}
+
+.terms-link:hover {
+  color: var(--primary-hover);
+}

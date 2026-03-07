@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ArrowLeft, Package } from 'lucide-react';
 import './stock.css';
-import stockImage from '../../assets/images/Inventario.jpg';
+import inventario from '../../assets/images/Inventario.jpg';
 
 const StockCode = () => {
   const [code, setCode] = useState('');
@@ -44,7 +44,7 @@ const StockCode = () => {
       {/* Sección de imagen (visible en desktop) */}
       <div className="stock-code-image-section">
         <img 
-          src={stockImage} 
+          src={inventario} 
           alt="Control de Stock" 
           className="stock-code-bg-image"
         />
