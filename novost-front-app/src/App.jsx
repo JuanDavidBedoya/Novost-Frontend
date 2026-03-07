@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import ForgotPassword from './pages/auth/ForgotPassword'; 
@@ -17,10 +18,22 @@ import useIdleTimeout from './hooks/useIdleTimeout';
 import PublicRoute from './components/routes/PublicRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import GestionarReservas from './pages/booking/GestionarReservas';
-import Stock from './pages/stock/Stock';
 import StockCode from './pages/stock/StockCode';
 import StockRoute from './pages/stock/StockRoute';
 import 'react-toastify/dist/ReactToastify.css';
+
+ReactGA.initialize("G-B5NHNCTWWW");
+
+const RouteTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Registra la visita cada vez que el usuario cambia de página
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
+
+  return null;
+};
 
 const SessionManager = ({ children }) => {
   useIdleTimeout(5); 
@@ -31,6 +44,7 @@ function App() {
   return (
     
     <Router>
+      <RouteTracker />
       <SessionManager>
        <ToastContainer 
         position="bottom-left"
