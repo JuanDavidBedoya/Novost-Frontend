@@ -29,11 +29,11 @@ const Home = () => {
     ADMINISTRADOR: [
       { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
       { id: 2, title: 'Ver Reservas', desc: 'Gestión total del restaurante', path: '/gestionar-reservas', icon: <BarChart3 size={28} />, img: reserva },
-      { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/admin-home', icon: <Settings size={28} />, img: futura },
+      { id: 3, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante', path: '/stock-code', icon: <Settings size={28} />, img: inventario },
     ],
     TRABAJADOR: [
       { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },
-      { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante ', path: '/worker-home', icon: <CheckSquare size={28} />, img: inventario },
+      { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante ', path: '/stock-code', icon: <CheckSquare size={28} />, img: inventario },
       { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura },
     ]
   };
@@ -60,9 +60,6 @@ const Home = () => {
             En Novost, transformamos cada cena en un recuerdo inolvidable con alta cocina 
             y un ambiente diseñado exclusivamente para tu comodidad.
           </p>
-          <div className="hero-actions">
-            <button className="btn-primary" onClick={() => navigate('/reservar')}>Reservar Ahora</button>
-          </div>
         </div>
       </section>
 
@@ -90,7 +87,7 @@ const Home = () => {
           <div className="service-simple-card">
             <div className="service-icon-box"><Star size={32} /></div>
             <h3>Eventos Privados</h3>
-            <p>Espacioes excelentes para cenas.</p>
+            <p>Espacios excelentes para cenas.</p>
           </div>
         </div>
       </section>

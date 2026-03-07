@@ -17,6 +17,9 @@ import useIdleTimeout from './hooks/useIdleTimeout';
 import PublicRoute from './components/routes/PublicRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import GestionarReservas from './pages/booking/GestionarReservas';
+import Stock from './pages/stock/Stock';
+import StockCode from './pages/stock/StockCode';
+import StockRoute from './pages/stock/StockRoute';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SessionManager = ({ children }) => {
@@ -66,6 +69,8 @@ function App() {
             <Route path="/profile" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><UserProfile /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><ChangePassword /></ProtectedRoute>} />
             <Route path="/gestionar-reservas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><GestionarReservas /></ProtectedRoute>} />
+            <Route path="/stock-code" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockCode /></ProtectedRoute>} />
+            <Route path="/stock" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockRoute /></ProtectedRoute>} />
             
           </Route>
 

@@ -31,8 +31,7 @@ const Terminos = () => {
         <p>
           Novost es una plataforma digital que permite a los usuarios consultar información 
           del restaurante, registrarse, gestionar su perfil y realizar reservas en línea. 
-          La Plataforma podrá incluir servicios adicionales como pagos electrónicos, 
-          promociones especiales, eventos privados y programas de fidelización.
+          La Plataforma podrá incluir servicios adicionales como pagos electrónicos.
         </p>
         <p>
           Nos reservamos el derecho de modificar, suspender o eliminar cualquier funcionalidad 
@@ -107,9 +106,9 @@ const Terminos = () => {
           respetuosa. Queda prohibido:
         </p>
         <ul>
-          Realizar reservas fraudulentas o masivas.
-          Intentar vulnerar la seguridad del sistema.
-          Introducir virus o cualquier código malicioso
+          Realizar reservas fraudulentas o masivas - 
+          Intentar vulnerar la seguridad del sistema - 
+          Introducir virus o cualquier código malicioso - 
           Utilizar la plataforma con fines ilícitos.
         </ul>
 

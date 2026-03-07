@@ -1,0 +1,242 @@
+/* Stock Page Styles */
+.stock-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stock-container h1 {
+  color: #333;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* StockCode Page Styles */
+:root {
+  --stock-primary: #8a2be2;
+  --stock-primary-hover: #7b24d1;
+  --stock-text-dark: #1f2937;
+  --stock-text-muted: #6b7280;
+  --stock-bg-light: #f9fafb;
+  --stock-border: #e5e7eb;
+  --stock-white: #ffffff;
+}
+
+.stock-code-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+}
+
+.stock-code-image-section {
+  display: none;
+  position: relative;
+  flex: 1;
+  background-color: #000;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .stock-code-image-section {
+    display: flex;
+  }
+}
+
+.stock-code-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.stock-code-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+  z-index: 2;
+}
+
+.stock-code-branding {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  z-index: 3;
+  color: var(--stock-white);
+}
+
+.stock-code-branding h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.stock-code-branding p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.stock-code-form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.stock-code-form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.stock-code-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--stock-text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.stock-code-back:hover {
+  color: var(--stock-primary);
+}
+
+.stock-code-header {
+  margin-bottom: 2rem;
+}
+
+.stock-code-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--stock-text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.stock-code-header p {
+  color: var(--stock-text-muted);
+  font-size: 0.9375rem;
+}
+
+.stock-code-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stock-code-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stock-code-input-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--stock-text-dark);
+}
+
+.stock-code-input-wrapper {
+  position: relative;
+}
+
+.stock-code-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--stock-border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--stock-text-dark);
+  background-color: var(--stock-white);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.stock-code-input:focus {
+  outline: none;
+  border-color: var(--stock-primary);
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
+
+.stock-code-input::placeholder {
+  color: #9ca3af;
+}
+
+.stock-code-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.stock-code-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.stock-code-btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.stock-code-btn-cancel {
+  background-color: var(--stock-white);
+  color: var(--stock-text-dark);
+  border: 1px solid var(--stock-border) !important;
+}
+
+.stock-code-btn-cancel:hover {
+  background-color: var(--stock-bg-light);
+  border-color: #d1d5db;
+}
+
+.stock-code-btn-access {
+  background-color: var(--stock-primary);
+  color: var(--stock-white);
+}
+
+.stock-code-btn-access:hover {
+  background-color: var(--stock-primary-hover);
+}
+
+.stock-code-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.stock-code-divider::before,
+.stock-code-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--stock-border);
+}
+
+.stock-code-divider span {
+  color: var(--stock-text-muted);
+  font-size: 0.875rem;
+}
