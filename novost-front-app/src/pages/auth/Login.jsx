@@ -6,6 +6,7 @@ import api from '../../api/apiConfig';
 import './Auth.css';
 import restaurantImg from '../../assets/images/Login.jpg';
 import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
+import ga4 from 'react-ga4'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Login = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [paso, setPaso] = useState(1); 
+
+  const [startTime, setStartTime] = useState(null);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -45,11 +48,29 @@ const Login = () => {
     setLoading(true);
     setErrors({});
 
+    ga4.event('login_attempt', { method: 'email_password' });
+    // Inicia cronómetro para RNF-02 (Fiabilidad)
+    const requestStart = performance.now();
+
     try {
       const response = await api.post('/auth/login', { email, password });
+      const requestEnd = performance.now();
+      const duration = (requestEnd - requestStart) / 1000; // Segundos
+
+      ga4.event('2fa_interface_load', { 
+        duration_seconds: duration,
+        status: 'success'
+      });
       showToast("Correcto " + response.data); 
       setPaso(2); 
     } catch (error) {
+      const message = getErrorMessage(error);
+      
+      // RNF-04 (Mantenibilidad): Registrar el error exacto
+      ga4.event('login_failed', { 
+        error_reason: message || 'unknown_error',
+        browser: navigator.userAgent // Ayuda a RNF-01
+      });
       const hasFormErrors = handleFormErrors(error, setErrors);
       if (!hasFormErrors) {
         const message = getErrorMessage(error);
@@ -68,6 +89,11 @@ const Login = () => {
     try {
       const response = await api.post('/auth/verificar-login', { email, codigo: codigoVerificacion });
       const { token, user } = response.data; 
+
+      ga4.event('login_success', { 
+        user_role: user.rol,
+        browser: navigator.userAgent 
+      });
       
       localStorage.setItem('token', token);
       localStorage.setItem('cedula', user.cedula);
@@ -86,6 +112,11 @@ const Login = () => {
           break;
       }
     } catch (error) {
+
+      ga4.event('2fa_failed', { 
+         error_reason: getErrorMessage(error) 
+       });
+       
       const hasFormErrors = handleFormErrors(error, setErrors);
       if (!hasFormErrors) {
         const message = getErrorMessage(error);
