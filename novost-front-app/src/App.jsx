@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
