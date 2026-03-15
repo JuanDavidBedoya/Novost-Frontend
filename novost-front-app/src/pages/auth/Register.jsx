@@ -6,6 +6,7 @@ import api from '../../api/apiConfig';
 import './Auth.css';
 import restaurantImg from '../../assets/images/Login.jpg';
 import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,6 +44,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.acceptedTerms) return;
+
+    if (!captchaToken) {
+      setErrors({ general: "Por favor, marca la casilla de 'No soy un robot'" });
+      return;
+    }
+
     setLoading(true);
     setErrors({}); 
     
@@ -51,7 +59,8 @@ const Register = () => {
         nombre: formData.nombre,
         telefono: formData.telefono,
         email: formData.email,
-        contrasena: formData.password
+        contrasena: formData.password,
+        captchaToken: captchaToken
       };
 
       await api.post('/auth/registrar', payload);
@@ -221,6 +230,14 @@ const Register = () => {
                   Términos y Condiciones
                 </a>
               </label>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+              <ReCAPTCHA
+                sitekey="6LdTfYssAAAAAMZ3NtOhYqHHz8IrqrfhlUjgdDwN" // Reemplaza con tu Site Key de Google
+                onChange={(token) => setCaptchaToken(token)}
+                onExpired={() => setCaptchaToken(null)}
+              />
             </div>
 
             {errors.general && <span className="error-message general-error">{errors.general}</span>}
