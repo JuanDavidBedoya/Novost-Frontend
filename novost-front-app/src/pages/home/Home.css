@@ -111,7 +111,10 @@
 }
 
 .hero-title span {
-  color: var(--primary-color);
+  background: linear-gradient(135deg, #b492ce 0%, #760fc0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-description {

@@ -117,6 +117,13 @@
   margin: 0;
 }
 
+/* Cuando el contenido es el Dashboard, quitamos restricciones */
+.main-content:has(> .dashboard-container) {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
 .app-footer {
   background-color: #2c2c2c;
   color: #fff;
@@ -394,7 +401,16 @@ body.high-contrast-mode .role-badge,
 body.high-contrast-mode .status-chip,
 body.high-contrast-mode .hero-divider,
 body.high-contrast-mode .terminos-container,
-body.high-contrast-mode .stock-code-page {
+body.high-contrast-mode .stock-code-page,
+body.high-contrast-mode .dashboard-container,
+body.high-contrast-mode .dashboard-hero,
+body.high-contrast-mode .kpi-section,
+body.high-contrast-mode .kpi-card,
+body.high-contrast-mode .kpi-info,
+body.high-contrast-mode .chart-card,
+body.high-contrast-mode .charts-section,
+body.high-contrast-mode .charts-section-header,
+body.high-contrast-mode .chart-wrapper {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   box-shadow: none !important;
@@ -529,6 +545,101 @@ body.high-contrast-mode .status-chip {
   background-color: #000000 !important;
   border: 2px solid #FFFFFF !important;
   color: #FFFFFF !important;
+}
+
+/* Dashboard alto contraste */
+body.high-contrast-mode .dashboard-container,
+body.high-contrast-mode .dashboard-hero,
+body.high-contrast-mode .kpi-section,
+body.high-contrast-mode .kpi-card,
+body.high-contrast-mode .kpi-info,
+body.high-contrast-mode .kpi-icon,
+body.high-contrast-mode .chart-card,
+body.high-contrast-mode .charts-section,
+body.high-contrast-mode .charts-section-header,
+body.high-contrast-mode .chart-wrapper,
+body.high-contrast-mode .chart-tooltip,
+body.high-contrast-mode .hero-welcome-corner,
+body.high-contrast-mode .hero-main-content {
+  background-color: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .kpi-info h3,
+body.high-contrast-mode .charts-section-header h2,
+body.high-contrast-mode .chart-card h3,
+body.high-contrast-mode .hero-title,
+body.high-contrast-mode .hero-description,
+body.high-contrast-mode .welcome-text,
+body.high-contrast-mode .welcome-text span {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .hero-title span {
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: none !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .kpi-info p,
+body.high-contrast-mode .charts-section-header span {
+  color: #CCCCCC !important;
+}
+
+body.high-contrast-mode .back-button {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .back-button:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .charts-section-header span {
+  background-color: #000000 !important;
+  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Dashboard tabs alto contraste */
+body.high-contrast-mode .dashboard-tabs {
+  background-color: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .dashboard-tab.active {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .dashboard-tab.inactive {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .reservas-section,
+body.high-contrast-mode .reservas-placeholder {
+  background-color: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .reservas-placeholder h3,
+body.high-contrast-mode .reservas-placeholder p {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-ir-reservas {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .hero-divider {
+  background: #FFFFFF !important;
 }
 
 body.high-contrast-mode .footer-section a:hover {

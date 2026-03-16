@@ -21,6 +21,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import GestionarReservas from './pages/booking/GestionarReservas';
 import StockCode from './pages/stock/StockCode';
 import StockRoute from './pages/stock/StockRoute';
+import Dashboard from './pages/dashboard/Dashboard';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactGA.initialize("G-B5NHNCTWWW");
@@ -78,6 +79,7 @@ function App() {
 
             <Route path="/admin-home" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><Home /></ProtectedRoute>} />
             <Route path="/registrar-trabajador" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><RegistrarTrabajador /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><Dashboard /></ProtectedRoute>} />
 
             <Route path="/worker-home" element={<ProtectedRoute allowedRoles={['TRABAJADOR']}><Home /></ProtectedRoute>} />
 

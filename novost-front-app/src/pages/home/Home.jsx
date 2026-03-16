@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { 
@@ -13,6 +12,7 @@ import calendar from '../../assets/images/Calendar.jpg';
 import empleado from '../../assets/images/Empleado.jpg'; 
 import reserva from '../../assets/images/Reserva.jpg'; 
 import inventario from '../../assets/images/Inventario.jpg'; 
+import dash from '../../assets/images/Dash.jpg';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -30,6 +30,7 @@ const Home = () => {
       { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
       { id: 2, title: 'Ver Reservas', desc: 'Gestión total del restaurante', path: '/gestionar-reservas', icon: <BarChart3 size={28} />, img: reserva },
       { id: 3, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante', path: '/stock-code', icon: <Settings size={28} />, img: inventario },
+      { id: 4, title: 'Dashboard', desc: 'Ver la información general y estadísticas', path: '/dashboard', icon: <Settings size={28} />, img: dash },
     ],
     TRABAJADOR: [
       { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },
@@ -46,7 +47,7 @@ const Home = () => {
         <title>Novost - Panel de {rol}</title>
       </Helmet>
 
-      {/* --- SECCIÓN 1: HERO (Organización y Saludo) --- */}
+      {}
       <section className="hero-section">
         <div className="hero-welcome-corner">
           <div className="role-badge">{rol}</div>
@@ -63,7 +64,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* --- SECCIÓN 2: SERVICIOS (Descripción del negocio) --- */}
+      {}
       <section className="services-intro">
         <div className="section-title-wrapper">
           <h2 className="section-title">Nuestros Servicios</h2>
@@ -92,7 +93,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* --- SECCIÓN 3: DASHBOARD (Con las animaciones avanzadas) --- */}
+      {}
       <section className="dashboard-actions">
         <div className="section-title-wrapper">
           <h2 className="section-title">¿Qué deseas hacer hoy?</h2>
