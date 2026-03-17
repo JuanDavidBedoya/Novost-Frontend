@@ -22,6 +22,7 @@ import GestionarReservas from './pages/booking/GestionarReservas';
 import StockCode from './pages/stock/StockCode';
 import StockRoute from './pages/stock/StockRoute';
 import Dashboard from './pages/dashboard/Dashboard';
+import useTokenExpiration from './hooks/useTokenExpiration';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactGA.initialize("G-B5NHNCTWWW");
@@ -39,6 +40,7 @@ const RouteTracker = () => {
 
 const SessionManager = ({ children }) => {
   useIdleTimeout(10); 
+  useTokenExpiration();
   return children;
 };
 
