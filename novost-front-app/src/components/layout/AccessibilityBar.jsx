@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ZoomIn, ZoomOut, EyeOff, Type, RefreshCw, Contrast, User } from 'lucide-react';
+import { ZoomIn, ZoomOut, EyeOff, Type, RefreshCw, Contrast, PersonStanding } from 'lucide-react';
 
 const AccessibilityBar = () => {
   const [fontSizeScale, setFontSizeScale] = useState(100);
@@ -46,15 +46,14 @@ const AccessibilityBar = () => {
     <div className="accessibility-container" aria-label="Herramientas de accesibilidad">
       {/* Botón de accesibilidad cuando está cerrado */}
       {!isOpen && (
-        <button 
-          className="accessibility-toggle-btn"
-          onClick={toggleBar}
-          aria-label="Abrir opciones de accesibilidad"
-        >
-          <User size={24} />
-          <span>Accesibilidad</span>
-        </button>
-      )}
+       <button
+         className="accessibility-toggle-btn"
+         onClick={toggleBar}
+         aria-label="Abrir opciones de accesibilidad"
+       >
+         <PersonStanding size={30} style={{ color: 'white' }} />
+       </button>
+     )}
 
       {/* Barra completa de accesibilidad cuando está abierto */}
       {isOpen && (
@@ -64,23 +63,23 @@ const AccessibilityBar = () => {
               className="acc-close-btn"
               onClick={toggleBar}
               aria-label="Cerrar opciones de accesibilidad">
-              <User size={20} />
+              <PersonStanding size={24} style={{ color: 'white' }} />
             </button>
             <span className="acc-tooltip">Cerrar Accesibilidad</span>
           </div>
           
           <div className="acc-item">
             <button onClick={decreaseFont} aria-label="Reducir tamaño de letra">
-              <ZoomOut size={24} />
-            </button>
-            <span className="acc-tooltip">Reducir Letra</span>
+             <ZoomOut size={24} style={{ color: 'white' }} />
+           </button>
+           <span className="acc-tooltip">Reducir Letra</span>
           </div>
           
           <div className="acc-item">
             <button onClick={increaseFont} aria-label="Aumentar tamaño de letra">
-              <ZoomIn size={24} />
-            </button>
-            <span className="acc-tooltip">Aumentar Letra</span>
+             <ZoomIn size={24} style={{ color: 'white' }} />
+           </button>
+           <span className="acc-tooltip">Aumentar Letra</span>
           </div>
 
           <div className="acc-item">
@@ -89,9 +88,9 @@ const AccessibilityBar = () => {
               className={isHighContrast ? "active-mode" : ""}
               aria-label="Alternar alto contraste"
             >
-              <Contrast size={24} />
-            </button>
-            <span className="acc-tooltip">Alto Contraste</span>
+             <Contrast size={24} style={{ color: 'white' }} />
+           </button>
+           <span className="acc-tooltip">Alto Contraste</span>
           </div>
           
           <div className="acc-item">
@@ -100,16 +99,16 @@ const AccessibilityBar = () => {
               className={isTextOnly ? "active-mode" : ""}
               aria-label="Alternar modo solo texto"
             >
-              {isTextOnly ? <Type size={24} /> : <EyeOff size={24} />}
-            </button>
-            <span className="acc-tooltip">Solo Texto</span>
+             {isTextOnly ? <Type size={24} style={{ color: 'white' }} /> : <EyeOff size={24} style={{ color: 'white' }} />}
+           </button>
+           <span className="acc-tooltip">Solo Texto</span>
           </div>
 
           <div className="acc-item">
             <button onClick={resetDefaults} className="reset-btn" aria-label="Reestablecer predeterminados">
-              <RefreshCw size={24} />
-            </button>
-            <span className="acc-tooltip">Reestablecer predeterminados</span>
+             <RefreshCw size={24} style={{ color: 'white' }} />
+           </button>
+           <span className="acc-tooltip">Reestablecer predeterminados</span>
           </div>
         </div>
       )}

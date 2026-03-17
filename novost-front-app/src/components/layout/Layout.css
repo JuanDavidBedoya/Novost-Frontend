@@ -195,7 +195,7 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  background-color: var(--primary-color, #8a2be2);
+  background-color: blue;
   color: white;
   border: none;
   padding: 0.8rem 0.6rem;
@@ -215,7 +215,7 @@
 }
 
 .accessibility-toggle-btn:hover {
-  background-color: #7b24d1;
+  background-color: blue;
   padding-right: 0.8rem;
 }
 
@@ -225,7 +225,7 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  background-color: white;
+  background-color: blue;
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -276,7 +276,7 @@
 .accessibility-bar button {
   background: none;
   border: none;
-  color: #555;
+  color: white;
   cursor: pointer;
   padding: 0.6rem;
   border-radius: 8px;
@@ -288,7 +288,7 @@
 }
 
 .accessibility-bar button:hover {
-  background-color: #f0f0f0;
+  background-color: #4ab5f8;
   color: var(--primary-color, #8a2be2);
   transform: scale(1.1);
 }
