@@ -38,7 +38,7 @@ const RouteTracker = () => {
 };
 
 const SessionManager = ({ children }) => {
-  useIdleTimeout(5); 
+  useIdleTimeout(10); 
   return children;
 };
 

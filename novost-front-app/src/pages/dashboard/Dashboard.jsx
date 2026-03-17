@@ -307,7 +307,7 @@ const Dashboard = () => {
           <div className="reservas-placeholder">
             <BarChart3 size={64} />
             <h3>Sección de Reservas</h3>
-            <p>Aquí se mostrará la información de reservas del restaurante.</p>
+            <p>Aquí se mostrará la información de reservas del restaurante. Las gráficas se agregaran próximamente.</p>
             <button 
               className="btn-ir-reservas"
               onClick={() => navigate('/gestionar-reservas')}

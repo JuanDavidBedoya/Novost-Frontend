@@ -28,9 +28,8 @@ const Home = () => {
     ],
     ADMINISTRADOR: [
       { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
-      { id: 2, title: 'Ver Reservas', desc: 'Gestión total del restaurante', path: '/gestionar-reservas', icon: <BarChart3 size={28} />, img: reserva },
-      { id: 3, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante', path: '/stock-code', icon: <Settings size={28} />, img: inventario },
-      { id: 4, title: 'Dashboard', desc: 'Ver la información general y estadísticas', path: '/dashboard', icon: <Settings size={28} />, img: dash },
+      { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante', path: '/stock-code', icon: <Settings size={28} />, img: inventario },
+      { id: 3, title: 'Dashboard', desc: 'Ver la información general y estadísticas', path: '/dashboard', icon: <BarChart3 size={28} />, img: dash },
     ],
     TRABAJADOR: [
       { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },

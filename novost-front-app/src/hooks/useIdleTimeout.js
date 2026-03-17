@@ -1,9 +1,10 @@
 import { useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2'; 
 
-const useIdleTimeout = (timeoutMinutes = 5) => {
+const useIdleTimeout = (timeoutMinutes = 10) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = useCallback(() => {
 
@@ -29,6 +30,19 @@ const useIdleTimeout = (timeoutMinutes = 5) => {
   }, [navigate]);
 
   useEffect(() => {
+
+    const excludedRoutes = [
+      '/login', 
+      '/register', 
+      '/forgot-password', 
+      '/restaurar-password', 
+      '/terminos',
+      '/' 
+    ];
+    // Si la ruta actual está en la lista de excluidas, abortamos y no creamos el temporizador
+    if (excludedRoutes.includes(location.pathname)) {
+      return;
+    }
     let timer;
 
     const resetTimer = () => {
@@ -48,7 +62,7 @@ const useIdleTimeout = (timeoutMinutes = 5) => {
       if (timer) clearTimeout(timer);
       events.forEach(event => document.removeEventListener(event, resetTimer));
     };
-  }, [handleLogout, timeoutMinutes]);
+  }, [handleLogout, timeoutMinutes, location.pathname]);
 };
 
 export default useIdleTimeout;
