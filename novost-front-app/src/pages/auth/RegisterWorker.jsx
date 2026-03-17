@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
-import './Auth.css'; 
+import './Auth.css';
 import restaurantImg from '../../assets/images/Worker.jpg';
-import { toast } from 'react-toastify';
-import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
+import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const RegistrarTrabajador = () => {
   const navigate = useNavigate();
@@ -15,8 +15,9 @@ const RegistrarTrabajador = () => {
     nombre: '',
     telefono: '',
     email: '',
-    password: '' 
+    password: ''
   });
+  const [captchaToken, setCaptchaToken] = useState(null);
   
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -39,23 +40,26 @@ const RegistrarTrabajador = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrors({}); 
+    setErrors({});
     
+    const mockCaptchaToken = "valid_mock_token_for_worker_registration";
+  
     try {
       const payload = {
         cedula: formData.cedula,
         nombre: formData.nombre,
         telefono: formData.telefono,
         email: formData.email,
-        contrasena: formData.password
+        contrasena: formData.password,
+        captchaToken: mockCaptchaToken
       };
-
+  
       await api.post('/auth/registrar-trabajador', payload);
       
       showToast("Trabajador registrado exitosamente.");
       
       setFormData({ cedula: '', nombre: '', telefono: '', email: '', password: '' });
-
+  
     } catch (error) {
       const hasFormErrors = handleFormErrors(error, setErrors);
       if (!hasFormErrors) {
@@ -190,8 +194,8 @@ const RegistrarTrabajador = () => {
             </div>
 
             {errors.general && <span className="error-message general-error">{errors.general}</span>}
-
-            <button type="submit" className="auth-submit-button" disabled={loading}>
+            
+                        <button type="submit" className="auth-submit-button" disabled={loading}>
               {loading ? "Registrando..." : "Crear Perfil de Trabajador"}
             </button>
           </form>
