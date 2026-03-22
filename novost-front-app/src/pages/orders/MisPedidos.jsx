@@ -99,7 +99,7 @@ function PedidoCard({ pedido }) {
           <div className="pedido-total-label">Total con IVA</div>
           <div className="pedido-total-valor">
             {formatMoneda(pedido.total)}
-            <span>COP</span>
+            <span>USD</span>
           </div>
           <div className="pedido-subtotal-hint">
             Subtotal: {formatMoneda(pedido.subtotal)}
