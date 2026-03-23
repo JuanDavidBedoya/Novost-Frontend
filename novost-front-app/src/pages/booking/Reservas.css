@@ -120,10 +120,24 @@
   display: inline-block;
 }
 
+.status-chip {
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  display: inline-block;
+}
+
 .estado-pendiente { background: #fff8e1; color: #ffa000; border: 2px solid #ffe082; }
 .estado-pagada { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; }
 .estado-cancelada { background: #ffebee; color: #c62828; border: 2px solid #ffcdd2; }
 .estado-finalizada { background: #e0f7fa; color: #006064; border: 2px solid #b2ebf2; }
+
+.status-PENDIENTE { background: #fff8e1; color: #ffa000; border: 2px solid #ffe082; }
+.status-PAGADA { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; }
+.status-CANCELADA { background: #ffebee; color: #c62828; border: 2px solid #ffcdd2; }
+.status-FINALIZADA { background: #e0f7fa; color: #006064; border: 2px solid #b2ebf2; }
 
 /* Botón Estilo Novost */
 .btn-novost {
