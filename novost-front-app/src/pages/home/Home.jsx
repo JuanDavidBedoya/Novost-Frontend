@@ -13,6 +13,8 @@ import empleado from '../../assets/images/Empleado.jpg';
 import reserva from '../../assets/images/Reserva.jpg'; 
 import inventario from '../../assets/images/Inventario.jpg'; 
 import dash from '../../assets/images/Dash.jpg';
+import menu from '../../assets/images/Menu.jpg';
+import lista from '../../assets/images/Lista.jpg';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,7 +26,8 @@ const Home = () => {
     CLIENTE: [
       { id: 1, title: 'Hacer una Reserva', desc: 'Asegura tu mesa en minutos', path: '/reservar', icon: <CalendarPlus size={28} />, img: calendar },
       { id: 2, title: 'Mis Reservas', desc: 'Consulta tus citas activas', path: '/mis-reservas', icon: <ClipboardList size={28} />, img: reserva },
-      { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/home', icon: <Star size={28} />, img: futura },
+      { id: 3, title: 'Consulta Nuestro Menú', desc: 'Realiza tu pedido aquí', path: '/menu', icon: <Star size={28} />, img: menu },
+      { id: 4, title: 'Mis Pedidos', desc: 'Consulta tu historial de Pedidos', path: '/pedidos', icon: <Clock size={28} />, img: lista },
     ],
     ADMINISTRADOR: [
       { id: 1, title: 'Nuevo Trabajador', desc: 'Registrar un nuevo empleado', path: '/registrar-trabajador', icon: <Users size={28} />, img: empleado},
@@ -34,7 +37,7 @@ const Home = () => {
     TRABAJADOR: [
       { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },
       { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante ', path: '/stock-code', icon: <CheckSquare size={28} />, img: inventario },
-      { id: 3, title: 'Próximamente', desc: 'Nuevas sorpresas para ti', path: '/worker-home', icon: <UtensilsCrossed size={28} />, img: futura },
+      { id: 3, title: 'Gestionar Pedidos', desc: 'Listado de las Reservas Realizadas por los Usuarios', path: '/gestionar-pedidos', icon: <CalendarPlus size={28} />, img: lista },
     ]
   };
 

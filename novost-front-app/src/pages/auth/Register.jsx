@@ -22,6 +22,7 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [toastReactivada, setToastReactivada] = useState(false);
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null); 
 
@@ -36,9 +37,10 @@ const Register = () => {
     }
   };
 
-  const showToast = (message) => {
+  const showToast = (message, reactivada = false) => {
     setToastMessage(message);
-    setTimeout(() => setToastMessage(''), 4000); 
+    setToastReactivada(reactivada);
+    setTimeout(() => setToastMessage(''), 4000);
   };
 
   const handleSubmit = async (e) => {
@@ -63,12 +65,16 @@ const Register = () => {
         captchaToken: captchaToken
       };
 
-      await api.post('/auth/registrar', payload);
-      
-      showToast("Registro exitoso. Redirigiendo a Iniciar Sesión...");
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      const response = await api.post('/auth/registrar', payload);
+ 
+      // 202 = cuenta reactivada | 200 = registro nuevo
+      if (response.status === 202) {
+        showToast('🎊 ¡Tu cuenta ha sido reactivada exitosamente! Redirigiendo...', true);
+      } else {
+        showToast('Registro exitoso. Redirigiendo a Iniciar Sesión...');
+      }
+ 
+      setTimeout(() => navigate('/login'), 2500);
 
     } catch (error) {
       const hasFormErrors = handleFormErrors(error, setErrors);
@@ -262,7 +268,7 @@ const Register = () => {
         </div>
 
         {toastMessage && (
-          <div className="toast-notification">
+          <div className={`toast-notification${toastReactivada ? ' toast-reactivada' : ''}`}>
             {toastMessage}
           </div>
         )}

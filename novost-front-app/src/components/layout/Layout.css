@@ -124,6 +124,13 @@
   margin: 0;
 }
 
+/* Cuando el contenido es el MenuPedido (pedidos), quitamos restricciones */
+.main-content:has(> .menu-container) {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
 .app-footer {
   background-color: #2c2c2c;
   color: #fff;
@@ -183,7 +190,7 @@
 
 .accessibility-container {
   position: fixed;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   z-index: 9999;
@@ -192,14 +199,14 @@
 /* Botón de accesibilidad cuando está cerrado */
 .accessibility-toggle-btn {
   position: fixed;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   background-color: blue;
   color: white;
   border: none;
   padding: 0.8rem 0.6rem;
-  border-radius: 12px 0 0 12px;
+  border-radius: 0 12px 12px 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -207,7 +214,7 @@
   gap: 0.3rem;
   font-size: 0.7rem;
   font-weight: 600;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   font-family: 'Inter', system-ui, sans-serif;
   writing-mode: vertical-rl;
@@ -222,19 +229,19 @@
 /* Barra de accesibilidad cuando está abierta */
 .accessibility-bar {
   position: fixed;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   background-color: blue;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 0.5rem;
-  border-radius: 12px 0 0 12px;
+  border-radius: 0 12px 12px 0;
   z-index: 9999; 
   border: 1px solid #eaeaea;
-  border-right: none;
+  border-left: none;
   font-family: 'Inter', system-ui, sans-serif; 
   animation: slideIn 0.3s ease;
 }
@@ -242,7 +249,7 @@
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(20px);
+    transform: translateY(-50%) translateX(-20px);
   }
   to {
     opacity: 1;
