@@ -7,11 +7,12 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Calendar, Clock, DollarSign,
-  Loader, BarChart3, UtensilsCrossed, Tag, Users, ShoppingBag
+  Loader, BarChart3, UtensilsCrossed, Tag, Users, ShoppingBag, Package
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import api from '../../api/apiConfig';
+import InventarioResumen from './InventarioResumen';
 
 // ── Paleta de colores para las gráficas de platos ────────────────────────────
 const COLORES_PLATOS = [
@@ -157,6 +158,10 @@ const Dashboard = () => {
         <button className={`dashboard-tab ${pestañaActiva === 'clientes' ? 'active' : 'inactive'}`}
           onClick={() => setPestañaActiva('clientes')}>
           <Users size={18} /> Análisis de Clientes
+        </button>
+        <button className={`dashboard-tab ${pestañaActiva === 'inventario' ? 'active' : 'inactive'}`}
+          onClick={() => setPestañaActiva('inventario')}>
+          <Package size={18} /> Inventario
         </button>
       </div>
 
@@ -658,6 +663,13 @@ const Dashboard = () => {
               </div>
             </>
           )}
+        </section>
+      )}
+
+      {/* ── Pestaña INVENTARIO ── */}
+      {pestañaActiva === 'inventario' && (
+        <section className="charts-section">
+          <InventarioResumen />
         </section>
       )}
 

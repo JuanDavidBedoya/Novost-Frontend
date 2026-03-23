@@ -631,3 +631,192 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(160, 60, 230, 0.4);
 }
+
+/* ─── INVENTARIO RESUMEN STYLES ─────────────────────────────────────────── */
+.inventario-resumen {
+  padding: 2rem;
+}
+
+.stock-value-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0;
+}
+
+.stock-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stock-unit {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stock-minimo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stock-minimo-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #fee2e2;
+  box-shadow: var(--shadow-sm);
+}
+
+.stock-minimo-item .producto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stock-minimo-item .producto-nombre {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.stock-minimo-item .producto-categoria {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stock-minimo-item .producto-stock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  justify-self: end;
+}
+
+.stock-minimo-item .stock-actual {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.stock-minimo-item .stock-separador {
+  color: var(--text-muted);
+}
+
+.stock-minimo-item .stock-minimo {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.stock-minimo-item .stock-unidad {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 0.25rem;
+}
+
+.stock-bar-container {
+  grid-column: 1 / -1;
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stock-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.mas-utilizados-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mas-utilizado-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.mas-utilizado-item .ranking-badge {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.mas-utilizado-item .producto-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mas-utilizado-item .producto-nombre {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mas-utilizado-item .producto-categoria {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.mas-utilizado-item .producto-stock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.mas-utilizado-item .stock-actual {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.mas-utilizado-item .stock-unidad {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.consumo-badge {
+  padding: 0.35rem 0.75rem;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.dashboard-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: var(--error);
+}
+
+.dashboard-error h2 {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
