@@ -164,6 +164,7 @@ export default function MisReservas() {
               <option value="PENDIENTE">Pendiente</option>
               <option value="PAGADA">Pagada</option>
               <option value="CANCELADA">Cancelada</option>
+              <option value="FINALIZADA">Finalizada</option>
             </select>
           </div>
 

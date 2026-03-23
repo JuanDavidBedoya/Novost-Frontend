@@ -3,11 +3,16 @@ import { Helmet } from 'react-helmet';
 import api from '../../api/apiConfig';
 import { toast } from 'react-toastify';
 import { showErrorToast } from '../../lib/errorHandler';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import './Reservas.css';
+
+const MySwal = withReactContent(Swal);
 
 const GestionarReservas = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [finalizandoId, setFinalizandoId] = useState(null);
   
   const generarHorasDisponibles = () => {
     const horas = [];
@@ -63,6 +68,42 @@ const GestionarReservas = () => {
 
   const limpiarFiltros = () => {
     setFiltros({ fecha: '', hora: '', personas: '', estado: '' });
+  };
+
+  const finalizarReserva = async (idReserva) => {
+    const result = await MySwal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción finalizará la reserva. Una vez finalizada, no se podrá revertir.",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#8a2be2', 
+      cancelButtonColor: '#999b9e', 
+      confirmButtonText: 'Sí, finalizar reserva',
+      cancelButtonText: 'No, mantenerla',
+      reverseButtons: true,
+      background: '#ffffff',
+      borderRadius: '24px',
+      customClass: {
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      }
+    });
+
+    if (result.isConfirmed) {
+      setFinalizandoId(idReserva);
+      try {
+        await api.post(`/reservas/${idReserva}/finalizar`);
+        toast.success('Reserva finalizada correctamente');
+        
+        setReservas(prev => prev.map(res => 
+          res.idReserva === idReserva ? { ...res, estadoReserva: 'FINALIZADA' } : res
+        ));
+      } catch (error) {
+        showErrorToast(error, toast);
+      } finally {
+        setFinalizandoId(null);
+      }
+    }
   };
 
   return (
@@ -131,6 +172,7 @@ const GestionarReservas = () => {
               <option value="PENDIENTE">Pendiente</option>
               <option value="PAGADA">Pagada</option>
               <option value="CANCELADA">Cancelada</option>
+              <option value="FINALIZADA">Finalizada</option>
             </select>
           </div>
           <div className="filtro-actions">
@@ -157,6 +199,7 @@ const GestionarReservas = () => {
                 <th>Hora</th>
                 <th>Personas</th>
                 <th>Estado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -176,6 +219,17 @@ const GestionarReservas = () => {
                     <span className={`badge estado-${res.estadoReserva?.toLowerCase()}`}>
                       {res.estadoReserva}
                     </span>
+                  </td>
+                  <td>
+                    {res.estadoReserva === 'PAGADA' && (
+                      <button 
+                        className="btn-finalizar"
+                        onClick={() => finalizarReserva(res.idReserva)}
+                        disabled={finalizandoId === res.idReserva}
+                      >
+                        {finalizandoId === res.idReserva ? 'Finalizando...' : 'Finalizar'}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
