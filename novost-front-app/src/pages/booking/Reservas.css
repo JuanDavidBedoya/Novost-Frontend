@@ -111,17 +111,33 @@
   box-shadow: 0 15px 30px rgba(138, 43, 226, 0.15);
 }
 
+.badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
 .status-chip {
   padding: 0.3rem 0.8rem;
   border-radius: 50px;
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 1px;
+  display: inline-block;
 }
 
-.status-PENDIENTE { background: #fff8e1; color: #ffa000; }
-.status-PAGADA { background: #e8f5e9; color: #2e7d32; }
-.status-CANCELADA { background: #ffebee; color: #c62828; }
+.estado-pendiente { background: #fff8e1; color: #ffa000; border: 2px solid #ffe082; }
+.estado-pagada { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; }
+.estado-cancelada { background: #ffebee; color: #c62828; border: 2px solid #ffcdd2; }
+.estado-finalizada { background: #e0f7fa; color: #006064; border: 2px solid #b2ebf2; }
+
+.status-PENDIENTE { background: #fff8e1; color: #ffa000; border: 2px solid #ffe082; }
+.status-PAGADA { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; }
+.status-CANCELADA { background: #ffebee; color: #c62828; border: 2px solid #ffcdd2; }
+.status-FINALIZADA { background: #e0f7fa; color: #006064; border: 2px solid #b2ebf2; }
 
 /* Botón Estilo Novost */
 .btn-novost {
@@ -273,7 +289,7 @@ body.high-contrast-mode select {
   border: 2px solid #FFFFFF !important;
 }
 
-body.high-contrast-mode .status-chip {
+body.high-contrast-mode .badge {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   border: 2px solid #FFFFFF !important;
@@ -428,9 +444,120 @@ body.high-contrast-mode .disponibilidad-advertencia {
   color: #FFFFFF !important;
 }
 
+body.high-contrast-mode .btn-finalizar {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .btn-finalizar:hover:not(:disabled) {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .swal2-popup {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .swal2-title {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .swal2-text {
+  color: #CCCCCC !important;
+}
+
+body.high-contrast-mode .swal-confirm-btn {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .swal-confirm-btn:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+body.high-contrast-mode .swal-cancel-btn {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
 body.high-contrast-mode .spinner-border {
   border-color: #FFFFFF !important;
   border-top-color: transparent !important;
+}
+
+.btn-finalizar {
+  background: #8a2be2;
+  color: white;
+  border: 2px solid #7b26cf;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+  background: #7b26cf;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.4);
+}
+
+.btn-finalizar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* SweetAlert2 Custom Styles */
+.swal2-popup {
+  font-family: 'Segoe UI', system-ui, sans-serif !important;
+  border-radius: 20px !important;
+  padding: 2rem !important;
+}
+
+.swal2-title {
+  color: #2c3e50 !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+.swal2-text {
+  color: #666 !important;
+  font-size: 1rem !important;
+}
+
+.swal-confirm-btn {
+  background: #8a2be2 !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.8rem 2rem !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal-confirm-btn:hover {
+  background: #7b26cf !important;
+  transform: scale(1.02) !important;
+}
+
+.swal-cancel-btn {
+  background: #f5f5f5 !important;
+  color: #666 !important;
+  border: 2px solid #e0e0e0 !important;
+  padding: 0.8rem 2rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+.swal-cancel-btn:hover {
+  background: #e8e8e8 !important;
+  border-color: #ccc !important;
 }
 
 .gestion-reservas-container {
