@@ -6,7 +6,11 @@ import api from '../../api/apiConfig';
 import './Auth.css';
 import restaurantImg from '../../assets/images/Login.jpg';
 import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import ReCAPTCHA from "react-google-recaptcha";
+
+const MySwal = withReactContent(Swal);
 
 const Register = () => {
   const navigate = useNavigate();
@@ -69,7 +73,18 @@ const Register = () => {
  
       // 202 = cuenta reactivada | 200 = registro nuevo
       if (response.status === 202) {
-        showToast('🎊 ¡Tu cuenta ha sido reactivada exitosamente! Redirigiendo...', true);
+        await MySwal.fire({
+          title: '¡Cuenta Recuperada!',
+          text: 'Tu cuenta ha sido reactivada exitosamente. ¡Nos alegra tenerte de vuelta!',
+          icon: 'success',
+          confirmButtonColor: '#7E22CE', // Tu color morado
+          confirmButtonText: 'Ir a Iniciar Sesión',
+          timer: 4000, // Opcional: se cierra solo después de 4 segundos
+          timerProgressBar: true
+        });
+        
+        // Redirigimos inmediatamente después de que se cierra la alerta
+        navigate('/login');
       } else {
         showToast('Registro exitoso. Redirigiendo a Iniciar Sesión...');
       }

@@ -15,6 +15,15 @@ import './orders.css';
 
 const MySwal = withReactContent(Swal);
 
+const obtenerImagen = (id) => {
+  try {
+    // Busca el archivo por su ID (ej: 1.jpg, 2.jpg)
+    return new URL(`../../assets/images/Menu/${id}.jpg`, import.meta.url).href;
+  } catch (error) {
+    return '/imagen-por-defecto.jpg'; 
+  }
+};
+
 const MenuPedido = () => {
 
   const [modalPago, setModalPago] = useState({
@@ -321,7 +330,17 @@ const MenuPedido = () => {
             ) : (
               carrito.map((item) => (
                 <div className="carrito-item" key={item.id}>
-                  <div className="carrito-item-img"></div>
+                  <div className="carrito-item-img">
+                    <img 
+                      src={obtenerImagen(item.id)} 
+                      alt={item.nombre} 
+                      className="img-miniatura"
+                      onError={(e) => {
+                        e.target.onerror = null; 
+                        e.target.src = '../../assets/images/Error.jpg'; 
+                      }}
+                    />
+                  </div>
                   <div className="carrito-item-info">
                     <h4>{item.nombre}</h4>
                     <span>{formatCurrency(item.precio * item.cantidad)}</span>
@@ -411,8 +430,17 @@ const MenuPedido = () => {
               className={`plato-card ${!plato.disponible ? 'no-disponible' : ''}`}
               key={plato.id}
             >
-              <div className="plato-img-placeholder">
-                <span className="img-text">Img: {plato.nombre}</span>
+              <div className="plato-img-wrapper">
+                <img 
+                  src={obtenerImagen(plato.id)} 
+                  alt={`Plato de ${plato.nombre}`} 
+                  className="plato-img-real"
+                  // Este onError es un salvavidas por si la ruta falla en el navegador
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = '../../assets/images/Error.jpg'; // Pon aquí tu logo o imagen de placeholder
+                  }}
+                />
               </div>
               <div className="plato-info">
                 <h3>{plato.nombre}</h3>

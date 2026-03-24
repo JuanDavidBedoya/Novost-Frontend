@@ -114,8 +114,7 @@ const Terminos = () => {
 
         <h2>10. Propiedad Intelectual</h2>
         <p>
-          Todos los contenidos del sitio web, incluyendo textos, imágenes, logotipos, 
-          diseños, código fuente y elementos gráficos, son propiedad de Novost o cuentan 
+          El ódigo fuente es propiedad de Novost o cuenta
           con licencia para su uso. Queda prohibida su reproducción total o parcial 
           sin autorización previa y por escrito.
         </p>
