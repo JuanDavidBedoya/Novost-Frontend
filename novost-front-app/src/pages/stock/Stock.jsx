@@ -38,7 +38,6 @@ const Stock = () => {
   const [formData, setFormData] = useState({
     nombreAlimento: '',
     tipoMedida: 'KILO',
-    unidad: '',
     stockActual: '',
     stockMinimo: ''
   });
@@ -92,7 +91,6 @@ const Stock = () => {
       setFormData({
         nombreAlimento: producto.nombreAlimento,
         tipoMedida: producto.tipoMedida,
-        unidad: producto.unidad || '',
         stockActual: producto.stockActual,
         stockMinimo: producto.stockMinimo
       });
@@ -102,7 +100,6 @@ const Stock = () => {
       setFormData({
         nombreAlimento: '',
         tipoMedida: 'KILO',
-        unidad: '',
         stockActual: '',
         stockMinimo: ''
       });
@@ -117,7 +114,6 @@ const Stock = () => {
     setFormData({
       nombreAlimento: '',
       tipoMedida: 'KILO',
-      unidad: '',
       stockActual: '',
       stockMinimo: ''
     });
@@ -129,7 +125,6 @@ const Stock = () => {
       const payload = {
         nombreAlimento: formData.nombreAlimento,
         tipoMedida: formData.tipoMedida,
-        unidad: formData.unidad ? parseInt(formData.unidad) : null,
         stockActual: parseFloat(formData.stockActual),
         stockMinimo: parseFloat(formData.stockMinimo)
       };
@@ -199,9 +194,6 @@ const Stock = () => {
   };
 
   const getUnidadDisplay = (producto) => {
-    if (producto.tipoMedida === 'UNIDAD' && producto.unidad) {
-      return `${producto.stockActual} / ${producto.unidad}`;
-    }
     return producto.stockActual;
   };
 
@@ -471,21 +463,6 @@ const Stock = () => {
                     <option value="UNIDAD">Unidad (und)</option>
                   </select>
                 </div>
-                
-                {formData.tipoMedida === 'UNIDAD' && (
-                  <div className="stock-form-group">
-                    <label>Unidades por Empaque</label>
-                    <input
-                      type="number"
-                      name="unidad"
-                      value={formData.unidad}
-                      onChange={handleInputChange}
-                      placeholder="Ej: 12"
-                      min="1"
-                      className="stock-input"
-                    />
-                  </div>
-                )}
               </div>
               
               <div className="stock-form-row">
