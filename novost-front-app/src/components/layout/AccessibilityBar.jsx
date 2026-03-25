@@ -44,29 +44,32 @@ const AccessibilityBar = () => {
 
   return (
     <div className="accessibility-container" aria-label="Herramientas de accesibilidad">
-      {/* Botón de accesibilidad cuando está cerrado */}
-      {!isOpen && (
-       <button
-         className="accessibility-toggle-btn"
-         onClick={toggleBar}
-         aria-label="Abrir opciones de accesibilidad"
-       >
-         <PersonStanding size={30} style={{ color: 'white' }} />
-       </button>
-     )}
+       {/* Botón de accesibilidad cuando está cerrado */}
+       {!isOpen && (
+        <div className="acc-item">
+          <button
+            className="accessibility-toggle-btn"
+            onClick={toggleBar}
+            aria-label="Abrir opciones de accesibilidad"
+          >
+            <PersonStanding size={30} style={{ color: 'white' }} />
+          </button>
+          <span className="acc-tooltip">Accesibilidad</span>
+        </div>
+      )}
 
       {/* Barra completa de accesibilidad cuando está abierto */}
       {isOpen && (
         <div className="accessibility-bar">
-          <div className="acc-header">
-            <button 
-              className="acc-close-btn"
-              onClick={toggleBar}
-              aria-label="Cerrar opciones de accesibilidad">
-              <PersonStanding size={24} style={{ color: 'white' }} />
-            </button>
-            <span className="acc-tooltip">Cerrar Accesibilidad</span>
-          </div>
+           <div className="acc-item">
+             <button 
+               className="acc-close-btn"
+               onClick={toggleBar}
+               aria-label="Cerrar opciones de accesibilidad">
+               <PersonStanding size={24} style={{ color: 'white' }} />
+             </button>
+             <span className="acc-tooltip">Cerrar Accesibilidad</span>
+           </div>
           
           <div className="acc-item">
             <button onClick={decreaseFont} aria-label="Reducir tamaño de letra">
