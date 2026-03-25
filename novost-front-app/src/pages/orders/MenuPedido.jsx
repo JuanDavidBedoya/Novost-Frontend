@@ -15,14 +15,8 @@ import './orders.css';
 
 const MySwal = withReactContent(Swal);
 
-const obtenerImagen = (id) => {
-  try {
-    // Busca el archivo por su ID (ej: 1.jpg, 2.jpg)
-    return new URL(`../../assets/images/Menu/${id}.jpg`, import.meta.url).href;
-  } catch (error) {
-    return '/imagen-por-defecto.jpg'; 
-  }
-};
+// ✅ Imagen por defecto si el plato no tiene URL asignada
+const IMAGEN_DEFAULT = '/imagen-por-defecto.jpg';
 
 const MenuPedido = () => {
 
@@ -37,10 +31,10 @@ const MenuPedido = () => {
 
   const [categoriaActiva, setCategoriaActiva] = useState('Entradas');
   const [platos, setPlatos] = useState([]);
-  const [mesas, setMesas] = useState([]);           // ← mesas reales del backend
+  const [mesas, setMesas] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mesa, setMesa] = useState('');             // ← ahora guarda el idMesa
+  const [mesa, setMesa] = useState('');
   const [observaciones, setObservaciones] = useState('');
   const [fechaHora, setFechaHora] = useState(new Date());
 
@@ -51,7 +45,6 @@ const MenuPedido = () => {
     { id: 'Bebidas', icono: <Wine size={18} /> }
   ];
 
-  // Redirigir al home si Stripe retorna con status=success
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
@@ -60,13 +53,11 @@ const MenuPedido = () => {
     }
   }, [location, navigate]);
 
-  // Reloj
   useEffect(() => {
     const timer = setInterval(() => setFechaHora(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Cargar menú y mesas en paralelo
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,6 +69,7 @@ const MenuPedido = () => {
           api.get('/mesas')
         ]);
 
+        // ✅ imagenUrl viene ahora desde el backend
         const mapearPlatos = (datosBackend, nombreCategoria) =>
           datosBackend.map(plato => ({
             id: plato.idPlato,
@@ -85,7 +77,8 @@ const MenuPedido = () => {
             descripcion: plato.descripcion,
             precio: plato.precioPlato,
             categoria: nombreCategoria,
-            disponible: plato.disponible
+            disponible: plato.disponible,
+            imagenUrl: plato.imagenUrl || IMAGEN_DEFAULT // ✅
           }));
 
         setPlatos([
@@ -112,10 +105,10 @@ const MenuPedido = () => {
   const agregarAlPedido = (plato) => {
     setErrores(prev => ({ ...prev, carrito: '' }));
     setCarrito(prev => {
-      const existente = prev.find(item => item.id === plato.id);
+      const existente = prev.find(p => p.id === plato.id);
       if (existente) {
-        return prev.map(item =>
-          item.id === plato.id ? { ...item, cantidad: item.cantidad + 1 } : item
+        return prev.map(p =>
+          p.id === plato.id ? { ...p, cantidad: p.cantidad + 1 } : p
         );
       }
       return [...prev, { ...plato, cantidad: 1 }];
@@ -125,21 +118,21 @@ const MenuPedido = () => {
   const decrementarCantidad = (id) => {
     setCarrito(prev =>
       prev
-        .map(item => item.id === id ? { ...item, cantidad: item.cantidad - 1 } : item)
-        .filter(item => item.cantidad > 0)
+        .map(p => p.id === id ? { ...p, cantidad: p.cantidad - 1 } : p)
+        .filter(p => p.cantidad > 0)
     );
   };
 
   const incrementarCantidad = (id) => {
     setCarrito(prev =>
-      prev.map(item => item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item)
+      prev.map(p => p.id === id ? { ...p, cantidad: p.cantidad + 1 } : p)
     );
   };
 
   const IMPUESTO_IVA = 0.19;
 
   const calcularSubtotal = () =>
-    carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
   const calcularTotal = () => {
     const sub = calcularSubtotal();
@@ -164,7 +157,6 @@ const MenuPedido = () => {
       nuevosErrores.carrito = 'Agrega al menos un plato antes de confirmar el pedido.';
       hayErrores = true;
     }
-
     if (!mesa) {
       nuevosErrores.mesa = 'Selecciona una mesa para continuar.';
       hayErrores = true;
@@ -177,18 +169,16 @@ const MenuPedido = () => {
   const confirmarPedido = async (metodoPago) => {
     if (validar()) return;
 
-    // mesa ya contiene el idMesa real seleccionado del dropdown
     const pedidoPayload = {
       idMesa: parseInt(mesa),
       observaciones: observaciones || null,
       metodoPago: metodoPago,
-      detalles: carrito.map(item => ({
-        idPlato: item.id,
-        cantidad: item.cantidad
+      detalles: carrito.map(p => ({
+        idPlato: p.id,
+        cantidad: p.cantidad
       }))
     };
 
-    // ── PAGO EN CAJA ─────────────────────────────────────────────────────────
     if (metodoPago === 'CAJA') {
       try {
         const response = await api.post('/pedidos', pedidoPayload);
@@ -226,16 +216,13 @@ const MenuPedido = () => {
       return;
     }
 
-    // ── PAGO EN LÍNEA ────────────────────────────────────────────────────────
     try {
       const intentoRes = await api.post('/pagos/pedido/crear-intento-previo', pedidoPayload);
-
       setModalPago({
         open: true,
         clientSecret: intentoRes.data.clientSecret,
         pedidoPayload
       });
-
     } catch (error) {
       console.error('Error al preparar el pago:', error);
       const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
@@ -286,7 +273,6 @@ const MenuPedido = () => {
             </div>
           </div>
 
-          {/* ── Selector de mesa ── */}
           <div className="mesa-input-group">
             <label>Mesa N°</label>
             <div className="mesa-select-wrapper">
@@ -301,7 +287,7 @@ const MenuPedido = () => {
                 <option value="">— Selecciona una mesa —</option>
                 {mesas.map((m) => (
                   <option key={m.idMesa} value={m.idMesa}>
-                    Mesa: {m.numeroMesa} 
+                    Mesa: {m.numeroMesa}
                   </option>
                 ))}
               </select>
@@ -328,35 +314,36 @@ const MenuPedido = () => {
                 )}
               </>
             ) : (
-              carrito.map((item) => (
-                <div className="carrito-item" key={item.id}>
+              // ✅ Variable renombrada a "cartItem" para evitar conflicto con el scope exterior
+              carrito.map((cartItem) => (
+                <div className="carrito-item" key={cartItem.id}>
                   <div className="carrito-item-img">
-                    <img 
-                      src={obtenerImagen(item.id)} 
-                      alt={item.nombre} 
+                    <img
+                      src={cartItem.imagenUrl || IMAGEN_DEFAULT}
+                      alt={cartItem.nombre}
                       className="img-miniatura"
                       onError={(e) => {
-                        e.target.onerror = null; 
-                        e.target.src = '../../assets/images/Error.jpg'; 
+                        e.target.onerror = null;
+                        e.target.src = IMAGEN_DEFAULT;
                       }}
                     />
                   </div>
                   <div className="carrito-item-info">
-                    <h4>{item.nombre}</h4>
-                    <span>{formatCurrency(item.precio * item.cantidad)}</span>
+                    <h4>{cartItem.nombre}</h4>
+                    <span>{formatCurrency(cartItem.precio * cartItem.cantidad)}</span>
                   </div>
                   <div className="cantidad-controls">
                     <button
                       className="btn-cantidad"
-                      onClick={() => decrementarCantidad(item.id)}
+                      onClick={() => decrementarCantidad(cartItem.id)}
                       title="Disminuir cantidad"
                     >
                       <Minus size={14} strokeWidth={3} />
                     </button>
-                    <span className="cantidad-valor">{item.cantidad}</span>
+                    <span className="cantidad-valor">{cartItem.cantidad}</span>
                     <button
                       className="btn-cantidad"
-                      onClick={() => incrementarCantidad(item.id)}
+                      onClick={() => incrementarCantidad(cartItem.id)}
                       title="Aumentar cantidad"
                     >
                       <Plus size={14} strokeWidth={3} />
@@ -400,7 +387,6 @@ const MenuPedido = () => {
               <CreditCard size={18} /> Pagar en Línea
             </button>
           </div>
-
         </div>
       </div>
 
@@ -431,14 +417,14 @@ const MenuPedido = () => {
               key={plato.id}
             >
               <div className="plato-img-wrapper">
-                <img 
-                  src={obtenerImagen(plato.id)} 
-                  alt={`Plato de ${plato.nombre}`} 
+                {/* ✅ Usa imagenUrl directamente desde el backend */}
+                <img
+                  src={plato.imagenUrl || IMAGEN_DEFAULT}
+                  alt={`Plato de ${plato.nombre}`}
                   className="plato-img-real"
-                  // Este onError es un salvavidas por si la ruta falla en el navegador
                   onError={(e) => {
-                    e.target.onerror = null; 
-                    e.target.src = '../../assets/images/Error.jpg'; // Pon aquí tu logo o imagen de placeholder
+                    e.target.onerror = null;
+                    e.target.src = IMAGEN_DEFAULT;
                   }}
                 />
               </div>
@@ -447,15 +433,13 @@ const MenuPedido = () => {
                 <p>{plato.descripcion}</p>
                 <div className="plato-footer">
                   <span className="plato-precio">{formatCurrency(plato.precio)}</span>
-                  <span title={!plato.disponible ? 'Plato no disponible' : ''}>
-                    <button
-                      className="btn-agregar"
-                      disabled={!plato.disponible}
-                      onClick={() => plato.disponible && agregarAlPedido(plato)}
-                    >
-                      {plato.disponible ? 'Agregar' : 'No disponible'}
-                    </button>
-                  </span>
+                  <button
+                    className="btn-agregar"
+                    disabled={!plato.disponible}
+                    onClick={() => plato.disponible && agregarAlPedido(plato)}
+                  >
+                    {plato.disponible ? 'Agregar' : 'No disponible'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -463,7 +447,6 @@ const MenuPedido = () => {
         </div>
       </div>
 
-      {/* Modal de pago en línea con Stripe */}
       {modalPago.open && (
         <PagoModalPedido
           clientSecret={modalPago.clientSecret}
