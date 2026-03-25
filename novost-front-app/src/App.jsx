@@ -29,6 +29,7 @@ import ReservaCode from './pages/booking/ReservaCode';
 import ReservaRoute from './pages/booking/ReservaRoute';
 import PedidoCode from './pages/orders/PedidoCode';
 import PedidoRoute from './pages/orders/PedidoRoute';
+import GestionMenu from './pages/menu/GestionMenu';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactGA.initialize("G-B5NHNCTWWW");
@@ -91,6 +92,7 @@ function App() {
             <Route path="/admin-home" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><Home /></ProtectedRoute>} />
             <Route path="/registrar-trabajador" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><RegistrarTrabajador /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><Dashboard /></ProtectedRoute>} />
+            <Route path="/gestion-menu" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR']}><GestionMenu /></ProtectedRoute>} />
 
             <Route path="/worker-home" element={<ProtectedRoute allowedRoles={['TRABAJADOR']}><Home /></ProtectedRoute>} />
 
