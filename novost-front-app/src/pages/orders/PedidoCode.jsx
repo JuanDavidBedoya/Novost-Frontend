@@ -1,38 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ArrowLeft, Package } from 'lucide-react';
-import './stock.css';
-import inventario from '../../assets/images/Inventario.jpg';
+import { ArrowLeft, ClipboardList } from 'lucide-react';
+import reserva from '../../assets/images/Reserva.jpg'; 
 
-const StockCode = () => {
+const PedidoCode = () => {
   const [code, setCode] = useState('');
   const navigate = useNavigate();
-  const CORRECT_CODE = '12345';
+  const CORRECT_CODE = '15243'; // Cambia al código real
 
   useEffect(() => {
-    // Verificar si el usuario ya tiene acceso al stock
-    const hasStockAccess = sessionStorage.getItem('stockAccess') === 'true';
-    if (hasStockAccess) {
-      navigate('/stock', { replace: true });
+    const hasPedidoAccess = sessionStorage.getItem('pedidoAccess') === 'true';
+    if (hasPedidoAccess) {
+      // ✅ replace:true evita que /gestionar-pedidos-code quede en el historial
+      navigate('/gestionar-pedidos', { replace: true });
     }
   }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (code === CORRECT_CODE) {
-      // Guardar en sessionStorage que el usuario tiene acceso
-      sessionStorage.setItem('stockAccess', 'true');
-      navigate('/stock', { replace: true });
+      sessionStorage.setItem('pedidoAccess', 'true');
+      navigate('/gestionar-pedidos', { replace: true });
     } else {
       toast.error('Código incorrecto. Intente de nuevo.');
       setCode('');
     }
-  };
-
-  const handleCancel = () => {
-    navigate('/worker-home');
   };
 
   const handleBack = () => {
@@ -41,62 +34,61 @@ const StockCode = () => {
 
   return (
     <div className="stock-code-page">
-      {/* Sección de imagen (visible en desktop) */}
       <div className="stock-code-image-section">
-        <img 
-          src={inventario} 
-          alt="Control de Stock" 
+        <img
+          src={reserva}
+          alt="Gestión de Pedidos"
           className="stock-code-bg-image"
         />
         <div className="stock-code-overlay"></div>
         <div className="stock-code-branding">
           <h1>Novost</h1>
-          <p>Control de Inventario</p>
+          <p>Gestión de Pedidos</p>
         </div>
       </div>
 
       {/* Sección del formulario */}
       <div className="stock-code-form-section">
         <div className="stock-code-form-container">
-          <a onClick={handleBack} className="stock-code-back">
+          <a onClick={handleBack} className="stock-code-back" style={{ cursor: 'pointer' }}>
             <ArrowLeft size={18} />
             <span>Volver</span>
           </a>
 
           <div className="stock-code-header">
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               marginBottom: '1rem'
             }}>
-              <Package size={48} color="#8a2be2" />
+              <ClipboardList size={48} color="#8a2be2" />
             </div>
-            <h2>Control de Stock</h2>
-            <p>Ingrese el código de acceso para continuar</p>
+            <h2>Gestión de Pedidos</h2>
+            <p>Ingrese el código de seguridad para continuar</p>
           </div>
-          
+
           <form className="stock-code-form" onSubmit={handleSubmit}>
             <div className="stock-code-input-group">
-              <label htmlFor="stockCode">Código de Acceso</label>
+              <label htmlFor="pedidoCode">Código de Acceso</label>
               <div className="stock-code-input-wrapper">
                 <input
-                  id="stockCode"
+                  id="pedidoCode"
                   type="password"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  placeholder="Ingrese su código"
+                  placeholder="Ingrese el PIN"
                   className="stock-code-input"
                   required
                   autoComplete="off"
                 />
               </div>
             </div>
-            
+
             <div className="stock-code-actions">
               <button
                 type="button"
-                onClick={handleCancel}
+                onClick={handleBack}
                 className="stock-code-btn stock-code-btn-cancel"
               >
                 Cancelar
@@ -115,4 +107,4 @@ const StockCode = () => {
   );
 };
 
-export default StockCode;
+export default PedidoCode;

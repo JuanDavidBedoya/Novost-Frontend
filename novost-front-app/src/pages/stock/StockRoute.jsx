@@ -10,7 +10,7 @@ const StockRoute = () => {
     const hasStockAccess = sessionStorage.getItem('stockAccess') === 'true';
     if (!hasStockAccess) {
       // Si no tiene acceso, redirigir a la página de código
-      navigate('/stock-code');
+      navigate('/stock-code', { replace: true });
     }
   }, [navigate]);
 

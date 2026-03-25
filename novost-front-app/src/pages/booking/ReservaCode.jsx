@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ArrowLeft, Package } from 'lucide-react';
-import './stock.css';
-import inventario from '../../assets/images/Inventario.jpg';
+import { ArrowLeft, CalendarCheck } from 'lucide-react'; 
+import '../stock/stock.css'; 
+import reservasImg from '../../assets/images/Reserva.jpg'; 
 
-const StockCode = () => {
+const ReservaCode = () => {
   const [code, setCode] = useState('');
   const navigate = useNavigate();
-  const CORRECT_CODE = '12345';
+  const CORRECT_CODE = '54321'; //PIN para reservas
 
   useEffect(() => {
-    // Verificar si el usuario ya tiene acceso al stock
-    const hasStockAccess = sessionStorage.getItem('stockAccess') === 'true';
-    if (hasStockAccess) {
-      navigate('/stock', { replace: true });
+    // Verificar si el usuario ya tiene acceso a las reservas
+    const hasReservaAccess = sessionStorage.getItem('reservaAccess') === 'true';
+    if (hasReservaAccess) {
+      navigate('/gestionar-reservas', { replace: true });
     }
   }, [navigate]);
 
@@ -23,8 +23,8 @@ const StockCode = () => {
     
     if (code === CORRECT_CODE) {
       // Guardar en sessionStorage que el usuario tiene acceso
-      sessionStorage.setItem('stockAccess', 'true');
-      navigate('/stock', { replace: true });
+      sessionStorage.setItem('reservaAccess', 'true');
+      navigate('/gestionar-reservas', { replace: true });
     } else {
       toast.error('Código incorrecto. Intente de nuevo.');
       setCode('');
@@ -32,7 +32,8 @@ const StockCode = () => {
   };
 
   const handleCancel = () => {
-    navigate('/worker-home');
+    // Redirige según sea necesario, asumo worker-home como en stock
+    navigate('/worker-home'); 
   };
 
   const handleBack = () => {
@@ -41,24 +42,24 @@ const StockCode = () => {
 
   return (
     <div className="stock-code-page">
-      {/* Sección de imagen (visible en desktop) */}
+      {/* Sección de imagen */}
       <div className="stock-code-image-section">
         <img 
-          src={inventario} 
-          alt="Control de Stock" 
+          src={reservasImg} 
+          alt="Gestión de Reservas" 
           className="stock-code-bg-image"
         />
         <div className="stock-code-overlay"></div>
         <div className="stock-code-branding">
           <h1>Novost</h1>
-          <p>Control de Inventario</p>
+          <p>Gestión de Reservas</p>
         </div>
       </div>
 
       {/* Sección del formulario */}
       <div className="stock-code-form-section">
         <div className="stock-code-form-container">
-          <a onClick={handleBack} className="stock-code-back">
+          <a onClick={handleBack} className="stock-code-back" style={{ cursor: 'pointer' }}>
             <ArrowLeft size={18} />
             <span>Volver</span>
           </a>
@@ -70,22 +71,22 @@ const StockCode = () => {
               justifyContent: 'center',
               marginBottom: '1rem'
             }}>
-              <Package size={48} color="#8a2be2" />
+              <CalendarCheck size={48} color="#8a2be2" />
             </div>
-            <h2>Control de Stock</h2>
-            <p>Ingrese el código de acceso para continuar</p>
+            <h2>Gestión de Reservas</h2>
+            <p>Ingrese el código de seguridad para continuar</p>
           </div>
           
           <form className="stock-code-form" onSubmit={handleSubmit}>
             <div className="stock-code-input-group">
-              <label htmlFor="stockCode">Código de Acceso</label>
+              <label htmlFor="reservaCode">Código de Acceso</label>
               <div className="stock-code-input-wrapper">
                 <input
-                  id="stockCode"
+                  id="reservaCode"
                   type="password"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  placeholder="Ingrese su código"
+                  placeholder="Ingrese el PIN"
                   className="stock-code-input"
                   required
                   autoComplete="off"
@@ -115,4 +116,4 @@ const StockCode = () => {
   );
 };
 
-export default StockCode;
+export default ReservaCode;

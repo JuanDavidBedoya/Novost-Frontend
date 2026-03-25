@@ -18,15 +18,17 @@ import { ToastContainer } from 'react-toastify';
 import useIdleTimeout from './hooks/useIdleTimeout';
 import PublicRoute from './components/routes/PublicRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
-import GestionarReservas from './pages/booking/GestionarReservas';
 import StockCode from './pages/stock/StockCode';
 import StockRoute from './pages/stock/StockRoute';
 import Dashboard from './pages/dashboard/Dashboard';
 import Menu from './pages/orders/MenuPedido';
 import Pedidos from './pages/orders/MisPedidos';
-import GestionarPedidos from './pages/orders/GesitionPedidos';
 import useTokenExpiration from './hooks/useTokenExpiration';
 import ScrollToTop from './components/layout/ScrollToTop';
+import ReservaCode from './pages/booking/ReservaCode';
+import ReservaRoute from './pages/booking/ReservaRoute';
+import PedidoCode from './pages/orders/PedidoCode';
+import PedidoRoute from './pages/orders/PedidoRoute';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactGA.initialize("G-B5NHNCTWWW");
@@ -94,8 +96,13 @@ function App() {
 
             <Route path="/profile" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><UserProfile /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute allowedRoles={['CLIENTE', 'ADMINISTRADOR', 'TRABAJADOR']}><ChangePassword /></ProtectedRoute>} />
-            <Route path="/gestionar-reservas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><GestionarReservas /></ProtectedRoute>} />
-            <Route path="/gestionar-pedidos" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><GestionarPedidos /></ProtectedRoute>} />
+
+            <Route path="/gestionar-reservas-code" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><ReservaCode /></ProtectedRoute>} />
+            <Route path="/gestionar-reservas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><ReservaRoute /></ProtectedRoute>} />
+
+            <Route path="/gestionar-pedidos-code" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><PedidoCode /></ProtectedRoute>} />
+            <Route path="/gestionar-pedidos"      element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><PedidoRoute /></ProtectedRoute>} />
+
             <Route path="/stock-code" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockCode /></ProtectedRoute>} />
             <Route path="/stock" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockRoute /></ProtectedRoute>} />
             
