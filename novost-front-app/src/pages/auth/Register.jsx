@@ -255,7 +255,7 @@ const Register = () => {
 
             <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
               <ReCAPTCHA
-                sitekey="6LdTfYssAAAAAMZ3NtOhYqHHz8IrqrfhlUjgdDwN" // Reemplaza con tu Site Key de Google
+                sitekey="6LfsnZgsAAAAAPVTqYco4J8vsip_PS03bjJ9aIC6" // Reemplaza con tu Site Key de Google
                 onChange={(token) => setCaptchaToken(token)}
                 onExpired={() => setCaptchaToken(null)}
               />
