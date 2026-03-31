@@ -34,9 +34,9 @@ const Home = () => {
       { id: 3, title: 'Dashboard', desc: 'Ver la información general y estadísticas', path: '/dashboard', icon: <BarChart3 size={28} />, img: dash },
     ],
     TRABAJADOR: [
-      { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/reserva-code', icon: <Clock size={28} />, img: reserva },
+      { id: 1, title: 'Ver Reservas', desc: 'Listado de clientes hoy', path: '/gestionar-reservas', icon: <Clock size={28} />, img: reserva },
       { id: 2, title: 'Inventario', desc: 'Administrar el Inventario Actual del Restaurante ', path: '/stock-code', icon: <CheckSquare size={28} />, img: inventario },
-      { id: 3, title: 'Gestionar Pedidos', desc: 'Listado de las Reservas Realizadas por los Usuarios', path: '/pedido-code', icon: <CalendarPlus size={28} />, img: lista },
+      { id: 3, title: 'Gestionar Pedidos', desc: 'Listado de las Reservas Realizadas por los Usuarios', path: '/gestionar-pedidos', icon: <CalendarPlus size={28} />, img: lista },
     ]
   };
 

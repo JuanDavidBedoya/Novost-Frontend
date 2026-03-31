@@ -11,12 +11,50 @@ import { toast } from 'react-toastify';
 import PagoModalPedido from '../../components/pasarela/PagoModalPedido';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import defecto from '../../assets/images/Error.jpg';
 import './orders.css';
 
 const MySwal = withReactContent(Swal);
 
-// ✅ Imagen por defecto si el plato no tiene URL asignada
-const IMAGEN_DEFAULT = '/imagen-por-defecto.jpg';
+// ── [RNF-03] Reporte de carga de imágenes Cloudinary ─────────────────────────
+const reportarImagenEvento = async (idPlato, imagenUrl, resultado) => {
+  try {
+    await api.post('/metricas/imagen-evento', {
+      idPlato: String(idPlato),
+      imagenUrl,
+      navegador: navigator.userAgent,
+      dispositivo: window.innerWidth <= 768 ? 'movil' : 'pc',
+      resultado // "exito" o "fallo"
+    });
+  } catch {
+    // No interrumpe la experiencia del usuario si falla el reporte
+  }
+};
+
+// ── [RNF-15] Reporte de tiempo de redireccionamiento ─────────────────────────
+const reportarRedirectEvento = async (duracionSegundos) => {
+  try {
+    await api.post('/metricas/redirect-evento', {
+      duracionSegundos,
+      origen: 'menu',
+      destino: 'pedidos'
+    });
+  } catch {
+    // No interrumpe la experiencia del usuario si falla el reporte
+  }
+};
+
+// ── [RNF-11] Reporte de fallos visibles en pantalla al crear pedido ───────────
+const reportarPedidoFallo = async (tipoError, motivo) => {
+  try {
+    await api.post('/metricas/pedido-fallo-evento', { tipoError, motivo });
+  } catch {
+    // No interrumpe la experiencia del usuario si falla el reporte
+  }
+};
+
+// Imagen por defecto si el plato no tiene URL asignada
+const IMAGEN_DEFAULT = defecto;
 
 const MenuPedido = () => {
 
@@ -30,34 +68,100 @@ const MenuPedido = () => {
   const navigate = useNavigate();
 
   const [categoriaActiva, setCategoriaActiva] = useState('Entradas');
-  const [platos, setPlatos] = useState([]);
-  const [mesas, setMesas] = useState([]);
-  const [carrito, setCarrito] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [mesa, setMesa] = useState('');
+  const [platos, setPlatos]     = useState([]);
+  const [mesas, setMesas]       = useState([]);
+  const [carrito, setCarrito]   = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [mesa, setMesa]         = useState('');
   const [observaciones, setObservaciones] = useState('');
   const [fechaHora, setFechaHora] = useState(new Date());
 
   const categorias = [
     { id: 'Entradas', icono: <Coffee size={18} /> },
-    { id: 'Fuertes', icono: <Utensils size={18} /> },
-    { id: 'Postres', icono: <CakeSlice size={18} /> },
-    { id: 'Bebidas', icono: <Wine size={18} /> }
+    { id: 'Fuertes',  icono: <Utensils size={18} /> },
+    { id: 'Postres',  icono: <CakeSlice size={18} /> },
+    { id: 'Bebidas',  icono: <Wine size={18} /> }
   ];
 
+  // ── [RNF-15] Detecta redirección desde Stripe ────────────────────────────────
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
       toast.success("¡Pago confirmado con éxito!");
-      navigate('/', { replace: true });
+      const inicio = performance.now();
+      navigate('/pedidos', { replace: true });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const duracionMs = performance.now() - inicio;
+          const duracionSegundos = +(duracionMs / 1000).toFixed(4);
+          console.log(`[RNF-15] Redirección (status=success): ${duracionMs.toFixed(2)} ms`);
+          reportarRedirectEvento(duracionSegundos);
+        });
+      });
     }
   }, [location, navigate]);
 
+  // ── Reloj ────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const timer = setInterval(() => setFechaHora(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
+  // ── [RNF-19] Polling: detecta cambios de disponibilidad en tiempo real ───────
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      try {
+        const [resEntradas, resFuertes, resPostres, resBebidas] = await Promise.all([
+          api.get('/platos/entradas'),
+          api.get('/platos/fuertes'),
+          api.get('/platos/postres'),
+          api.get('/platos/bebidas'),
+        ]);
+
+        const nuevosPlatos = [
+          ...resEntradas.data.map(p => ({ ...p, categoria: 'Entradas' })),
+          ...resFuertes.data.map(p =>  ({ ...p, categoria: 'Fuertes' })),
+          ...resPostres.data.map(p =>  ({ ...p, categoria: 'Postres' })),
+          ...resBebidas.data.map(p =>  ({ ...p, categoria: 'Bebidas' })),
+        ];
+
+        setPlatos(prev => {
+          nuevosPlatos.forEach(async (nuevo) => {
+            const anterior = prev.find(p => p.id === nuevo.idPlato);
+            if (anterior && anterior.disponible !== nuevo.disponible) {
+              try {
+                const res = await api.get(`/platos/${nuevo.idPlato}/ultimo-cambio`);
+                const timestampToggle = res.data.timestampMs;
+                const ahora = Date.now();
+                const duracionSegundos = +((ahora - timestampToggle) / 1000).toFixed(4);
+                const etiqueta = duracionSegundos > 3.0 ? 'Lento' : 'OK';
+                console.log(`[RNF-19] Plato ${nuevo.idPlato} propagado en ${duracionSegundos}s → ${etiqueta}`);
+                api.post('/metricas/propagacion-evento', {
+                  idPlato: nuevo.idPlato,
+                  duracionSegundos,
+                  accion: nuevo.disponible ? 'habilitar' : 'deshabilitar'
+                }).catch(() => {});
+              } catch { /* no interrumpir */ }
+            }
+          });
+
+          return nuevosPlatos.map(p => ({
+            id:         p.idPlato,
+            nombre:     p.nombrePlato,
+            descripcion:p.descripcion,
+            precio:     p.precioPlato,
+            categoria:  p.categoria,
+            disponible: p.disponible,
+            imagenUrl:  p.imagenUrl || IMAGEN_DEFAULT
+          }));
+        });
+      } catch { /* no interrumpir la experiencia */ }
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // ── Carga inicial de platos y mesas ─────────────────────────────────────────
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,23 +173,22 @@ const MenuPedido = () => {
           api.get('/mesas')
         ]);
 
-        // ✅ imagenUrl viene ahora desde el backend
         const mapearPlatos = (datosBackend, nombreCategoria) =>
           datosBackend.map(plato => ({
-            id: plato.idPlato,
-            nombre: plato.nombrePlato,
+            id:          plato.idPlato,
+            nombre:      plato.nombrePlato,
             descripcion: plato.descripcion,
-            precio: plato.precioPlato,
-            categoria: nombreCategoria,
-            disponible: plato.disponible,
-            imagenUrl: plato.imagenUrl || IMAGEN_DEFAULT // ✅
+            precio:      plato.precioPlato,
+            categoria:   nombreCategoria,
+            disponible:  plato.disponible,
+            imagenUrl:   plato.imagenUrl || IMAGEN_DEFAULT
           }));
 
         setPlatos([
           ...mapearPlatos(resEntradas.data, 'Entradas'),
-          ...mapearPlatos(resFuertes.data, 'Fuertes'),
-          ...mapearPlatos(resPostres.data, 'Postres'),
-          ...mapearPlatos(resBebidas.data, 'Bebidas')
+          ...mapearPlatos(resFuertes.data,  'Fuertes'),
+          ...mapearPlatos(resPostres.data,  'Postres'),
+          ...mapearPlatos(resBebidas.data,  'Bebidas')
         ]);
 
         setMesas(resMesas.data);
@@ -102,6 +205,7 @@ const MenuPedido = () => {
 
   const platosFiltrados = platos.filter(p => p.categoria === categoriaActiva);
 
+  // ── Carrito ──────────────────────────────────────────────────────────────────
   const agregarAlPedido = (plato) => {
     setErrores(prev => ({ ...prev, carrito: '' }));
     setCarrito(prev => {
@@ -129,6 +233,7 @@ const MenuPedido = () => {
     );
   };
 
+  // ── Totales ──────────────────────────────────────────────────────────────────
   const IMPUESTO_IVA = 0.19;
 
   const calcularSubtotal = () =>
@@ -149,36 +254,38 @@ const MenuPedido = () => {
     setErrores({ mesa: '', carrito: '' });
   };
 
-  const validar = () => {
+  // ── Confirmar pedido ─────────────────────────────────────────────────────────
+  const confirmarPedido = async (metodoPago) => {
+
+    // ── [RNF-11] Validación con reporte de errores visibles ─────────────────
     const nuevosErrores = { mesa: '', carrito: '' };
     let hayErrores = false;
 
     if (carrito.length === 0) {
       nuevosErrores.carrito = 'Agrega al menos un plato antes de confirmar el pedido.';
       hayErrores = true;
+      reportarPedidoFallo('CARRITO_VACIO', nuevosErrores.carrito);
     }
     if (!mesa) {
       nuevosErrores.mesa = 'Selecciona una mesa para continuar.';
       hayErrores = true;
+      reportarPedidoFallo('MESA_NO_SELECCIONADA', nuevosErrores.mesa);
     }
 
     setErrores(nuevosErrores);
-    return hayErrores;
-  };
-
-  const confirmarPedido = async (metodoPago) => {
-    if (validar()) return;
+    if (hayErrores) return;
 
     const pedidoPayload = {
-      idMesa: parseInt(mesa),
+      idMesa:       parseInt(mesa),
       observaciones: observaciones || null,
-      metodoPago: metodoPago,
+      metodoPago,
       detalles: carrito.map(p => ({
-        idPlato: p.id,
+        idPlato:  p.id,
         cantidad: p.cantidad
       }))
     };
 
+    // ── Pago en Caja ─────────────────────────────────────────────────────────
     if (metodoPago === 'CAJA') {
       try {
         const response = await api.post('/pedidos', pedidoPayload);
@@ -206,16 +313,30 @@ const MenuPedido = () => {
         });
 
         limpiarFormulario();
-        navigate('/');
+
+        // ── [RNF-15] Mide tiempo de redirección tras pago en caja ────────────
+        const inicio = performance.now();
+        navigate('/pedidos');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const duracionMs = performance.now() - inicio;
+            const duracionSegundos = +(duracionMs / 1000).toFixed(4);
+            console.log(`[RNF-15] Redirección (CAJA): ${duracionMs.toFixed(2)} ms`);
+            reportarRedirectEvento(duracionSegundos);
+          });
+        });
 
       } catch (error) {
         console.error('Error al procesar el pedido:', error);
         const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
+        // ── [RNF-11] Reporta error del servidor ──────────────────────────────
+        reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
         toast.error(`No se pudo registrar el pedido: ${mensajeBackend}`);
       }
       return;
     }
 
+    // ── Pago en Línea ────────────────────────────────────────────────────────
     try {
       const intentoRes = await api.post('/pagos/pedido/crear-intento-previo', pedidoPayload);
       setModalPago({
@@ -226,6 +347,8 @@ const MenuPedido = () => {
     } catch (error) {
       console.error('Error al preparar el pago:', error);
       const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
+      // ── [RNF-11] Reporta error del servidor en pago en línea ─────────────
+      reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
       toast.error(`No se pudo iniciar el pago: ${mensajeBackend}`);
     }
   };
@@ -238,13 +361,24 @@ const MenuPedido = () => {
   const handlePagoExitoso = () => {
     limpiarFormulario();
     setModalPago({ open: false, clientSecret: '', pedidoPayload: null });
-    navigate('/');
+
+    // ── [RNF-15] Mide tiempo de redirección tras pago en línea ───────────────
+    const inicio = performance.now();
+    navigate('/pedidos');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const duracionMs = performance.now() - inicio;
+        const duracionSegundos = +(duracionMs / 1000).toFixed(4);
+        console.log(`[RNF-15] Redirección (pago en línea): ${duracionMs.toFixed(2)} ms`);
+        reportarRedirectEvento(duracionSegundos);
+      });
+    });
   };
 
   if (loading) {
     return (
       <div className="dashboard-loading">
-        <h2>Cargando menú desde el servidor...</h2>
+        <h2>Cargando menú...</h2>
       </div>
     );
   }
@@ -255,7 +389,7 @@ const MenuPedido = () => {
         <title>Novost — Toma de Pedidos</title>
       </Helmet>
 
-      {/* 1. RESUMEN DEL PEDIDO (IZQUIERDA) */}
+      {/* ── 1. RESUMEN DEL PEDIDO (IZQUIERDA) ── */}
       <div className="seccion-resumen">
         <div className="resumen-card">
           <div className="resumen-header">
@@ -273,6 +407,7 @@ const MenuPedido = () => {
             </div>
           </div>
 
+          {/* Selector de mesa */}
           <div className="mesa-input-group">
             <label>Mesa N°</label>
             <div className="mesa-select-wrapper">
@@ -301,7 +436,7 @@ const MenuPedido = () => {
             )}
           </div>
 
-          {/* ── Carrito ── */}
+          {/* Carrito */}
           <div className="carrito-lista">
             {carrito.length === 0 ? (
               <>
@@ -314,17 +449,23 @@ const MenuPedido = () => {
                 )}
               </>
             ) : (
-              // ✅ Variable renombrada a "cartItem" para evitar conflicto con el scope exterior
               carrito.map((cartItem) => (
                 <div className="carrito-item" key={cartItem.id}>
                   <div className="carrito-item-img">
+                    {/* [RNF-03] Reporte de imagen en miniatura del carrito */}
                     <img
                       src={cartItem.imagenUrl || IMAGEN_DEFAULT}
                       alt={cartItem.nombre}
                       className="img-miniatura"
+                      onLoad={() =>
+                        cartItem.imagenUrl &&
+                        reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'exito')
+                      }
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = IMAGEN_DEFAULT;
+                        cartItem.imagenUrl &&
+                          reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'fallo');
                       }}
                     />
                   </div>
@@ -390,7 +531,7 @@ const MenuPedido = () => {
         </div>
       </div>
 
-      {/* 2. MENÚ DE PLATOS (DERECHA) */}
+      {/* ── 2. MENÚ DE PLATOS (DERECHA) ── */}
       <div className="seccion-platos">
         <div className="menu-header">
           <h1>Menú de Pedidos</h1>
@@ -417,14 +558,20 @@ const MenuPedido = () => {
               key={plato.id}
             >
               <div className="plato-img-wrapper">
-                {/* ✅ Usa imagenUrl directamente desde el backend */}
+                {/* [RNF-03] Reporte de imagen en la card del plato */}
                 <img
                   src={plato.imagenUrl || IMAGEN_DEFAULT}
                   alt={`Plato de ${plato.nombre}`}
                   className="plato-img-real"
+                  onLoad={() =>
+                    plato.imagenUrl &&
+                    reportarImagenEvento(plato.id, plato.imagenUrl, 'exito')
+                  }
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = IMAGEN_DEFAULT;
+                    plato.imagenUrl &&
+                      reportarImagenEvento(plato.id, plato.imagenUrl, 'fallo');
                   }}
                 />
               </div>
@@ -447,6 +594,7 @@ const MenuPedido = () => {
         </div>
       </div>
 
+      {/* Modal de pago en línea con Stripe */}
       {modalPago.open && (
         <PagoModalPedido
           clientSecret={modalPago.clientSecret}
