@@ -2,8 +2,7 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 
-// ✅ Sin props requeridas — el éxito se maneja vía return_url
-export default function CheckoutFormPedido() {
+export default function CheckoutFormPedido({ idPedido }) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
@@ -18,14 +17,15 @@ export default function CheckoutFormPedido() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // ✅ Redirige siempre a /pedidos con status=success
-        // MisPedidos detecta este parámetro y refresca la lista
-        return_url: `${window.location.origin}/pedidos?status=success`,
+        // Redirige a la pantalla de pedidos con status de éxito
+        return_url: `${window.location.origin}/pedidos?status=success&idPedido=${idPedido}`,
       },
     });
 
     if (error) {
       setMessage(error.message);
+    } else {
+      setMessage("Pago procesado con éxito.");
     }
 
     setIsProcessing(false);

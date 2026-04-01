@@ -7,10 +7,11 @@ import { toast } from 'react-toastify';
 
 /**
  * Props:
- *   clientSecret — secret de Stripe para el PaymentIntent
- *   onClose      — llamado cuando el usuario cierra sin pagar (X o timeout)
+ *   clientSecret   — secret de Stripe para el PaymentIntent
+ *   onClose        — llamado cuando el usuario cierra sin pagar (X o timeout)
+ *   onPagoExitoso  — llamado por CheckoutFormPedido cuando Stripe confirma el pago
  */
-export default function PagoModalPedido({ clientSecret, onClose }) {
+export default function PagoModalPedido({ clientSecret, onClose, onPagoExitoso }) {
   const [tiempoRestante, setTiempoRestante] = useState(120);
   const timerRef = useRef(null);
 
@@ -68,7 +69,11 @@ export default function PagoModalPedido({ clientSecret, onClose }) {
     <div className="novost-modal-overlay">
       <div className="reserva-glass-card novost-modal-content">
 
-        <button onClick={onClose} className="modal-close-btn" title="Cerrar ventana">
+        <button
+          onClick={onClose}
+          className="modal-close-btn"
+          title="Cerrar ventana"
+        >
           <X size={24} />
         </button>
 
@@ -88,9 +93,12 @@ export default function PagoModalPedido({ clientSecret, onClose }) {
           </div>
         </div><br />
 
-        {/* ✅ CheckoutFormPedido ya no necesita props — éxito vía return_url */}
+        {/* 
+          Le pasamos onPagoExitoso a CheckoutFormPedido para que lo llame 
+          cuando Stripe confirme el pago correctamente.
+        */}
         <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
-          <CheckoutFormPedido />
+          <CheckoutFormPedido onPagoExitoso={onPagoExitoso} />
         </Elements>
 
       </div>

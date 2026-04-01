@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../api/apiConfig';
 import { toast } from 'react-toastify';
 import { Calendar, Hash, ShoppingBag, AlertCircle, UtensilsCrossed, CreditCard } from 'lucide-react';
-import PagoModalPedido from '../orders/PagoModalPedido';
+import PagoModalPedido from '../../components/pasarela/PagoModalPedido';
 import './Orders.css';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -43,7 +43,6 @@ function PedidoSkeleton() {
 }
 
 // ─── Tarjeta de pedido ────────────────────────────────────────────────────────
-// ✅ Recibe onPagarLinea para el botón de pago en línea
 function PedidoCard({ pedido, onPagarLinea }) {
   const estado = pedido.estadoPedido ?? 'RECIBIDO';
 
@@ -87,12 +86,12 @@ function PedidoCard({ pedido, onPagarLinea }) {
         )}
       </div>
 
-      {/* ✅ Aviso + botón de pago en línea — solo estado RECIBIDO */}
+      {/* Aviso + botón de pago en línea — solo estado RECIBIDO */}
       {estado === 'RECIBIDO' && (
         <>
           <div className="pedido-aviso-caja">
             <AlertCircle size={16} />
-            <span>Acércate a caja para pagar tu pedido</span>
+            <span>Acércate a caja para pagar tu pedido o paga en línea.</span>
           </div>
           <button
             onClick={() => onPagarLinea(pedido.idPedido)}
@@ -137,22 +136,22 @@ function PedidoCard({ pedido, onPagarLinea }) {
 
 // ─── Página principal ─────────────────────────────────────────────────────────
 export default function MisPedidos() {
-  const navigate   = useNavigate();
-  const location   = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [pedidos, setPedidos]   = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [filtros, setFiltros]   = useState({ fecha: '', estado: '' });
-  const [refreshKey, setRefreshKey] = useState(0); // ✅ Fuerza refetch tras pago
+  const [pedidos, setPedidos]       = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [filtros, setFiltros]       = useState({ fecha: '', estado: '' });
+  const [refreshKey, setRefreshKey] = useState(0);
   const [modalPago, setModalPago]   = useState({ open: false, clientSecret: '' });
 
-  // ✅ Detecta redirección de Stripe con ?status=success
+  // ✅ Detecta redirección de Stripe con ?status=success (caso 3D Secure u otros)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('status') === 'success') {
       toast.success('¡Pago confirmado exitosamente! Tu pedido ha sido actualizado.');
-      setRefreshKey(k => k + 1); // Dispara refetch de la lista
-      navigate('/pedidos', { replace: true }); // Limpia la URL
+      setRefreshKey(k => k + 1);
+      navigate('/pedidos', { replace: true });
     }
   }, [location.search, navigate]);
 
@@ -171,11 +170,21 @@ export default function MisPedidos() {
     } finally {
       setLoading(false);
     }
-  }, [filtros, refreshKey]); // ✅ refreshKey como dependencia
+  }, [filtros, refreshKey]);
 
   useEffect(() => {
     fetchPedidos();
   }, [fetchPedidos]);
+
+  // ✅ Recarga de datos 1.5 segundos después de entrar a la interfaz
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRefreshKey(k => k + 1); 
+      console.log("Recarga automática de 1.5 segundos completada");
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // ✅ Abre el modal de pago para un pedido en estado RECIBIDO
   const handlePagarLinea = async (idPedido) => {
@@ -187,8 +196,21 @@ export default function MisPedidos() {
     }
   };
 
+  // ✅ Pago exitoso sin redirección: cierra el modal y hace refresh de 1500ms
+  const handlePagoExitoso = () => {
+    setModalPago({ open: false, clientSecret: '' });
+    toast.success('¡Pago confirmado exitosamente! Tu pedido ha sido actualizado.');
+    setTimeout(() => {
+      setRefreshKey(k => k + 1);
+    }, 1500);
+  };
+
+  // ✅ Cierre sin pago: solo cierra el modal y hace refresh de 1500ms
   const handleCerrarModal = () => {
     setModalPago({ open: false, clientSecret: '' });
+    setTimeout(() => {
+      setRefreshKey(k => k + 1);
+    }, 1500);
   };
 
   const limpiarFiltros = () => setFiltros({ fecha: '', estado: '' });
@@ -253,7 +275,7 @@ export default function MisPedidos() {
             <PedidoCard
               key={p.idPedido}
               pedido={p}
-              onPagarLinea={handlePagarLinea} // ✅
+              onPagarLinea={handlePagarLinea}
             />
           ))}
         </div>
@@ -264,11 +286,12 @@ export default function MisPedidos() {
         </div>
       )}
 
-      {/* ✅ Modal de pago en línea */}
+      {/* Modal de pago en línea */}
       {modalPago.open && (
         <PagoModalPedido
           clientSecret={modalPago.clientSecret}
           onClose={handleCerrarModal}
+          onSuccess={handlePagoExitoso}
         />
       )}
     </div>
