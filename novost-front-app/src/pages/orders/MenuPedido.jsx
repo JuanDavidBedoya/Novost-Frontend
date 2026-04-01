@@ -59,7 +59,7 @@ const IMAGEN_DEFAULT = defecto;
 const MenuPedido = () => {
 
   const [modalPago, setModalPago] = useState({
-    open: false, clientSecret: '', pedidoPayload: null
+    open: false, clientSecret: ''
   });
 
   const [errores, setErrores] = useState({ mesa: '', carrito: '' });
@@ -338,24 +338,42 @@ const MenuPedido = () => {
 
     // ── Pago en Línea ────────────────────────────────────────────────────────
     try {
-      const intentoRes = await api.post('/pagos/pedido/crear-intento-previo', pedidoPayload);
+    // ✅ PASO 1 — Crear el pedido primero
+    const responsePedido = await api.post('/pedidos', pedidoPayload);
+    const pedidoCreado = responsePedido.data;
+
+    limpiarFormulario();
+
+    // ✅ PASO 2 — Crear intento de pago para el pedido ya existente
+    try {
+      const intentoRes = await api.post('/pagos/pedido/crear-intento-existente', {
+        idPedido: pedidoCreado.idPedido
+      });
+
       setModalPago({
         open: true,
-        clientSecret: intentoRes.data.clientSecret,
-        pedidoPayload
+        clientSecret: intentoRes.data.clientSecret
       });
-    } catch (error) {
-      console.error('Error al preparar el pago:', error);
-      const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
-      // ── [RNF-11] Reporta error del servidor en pago en línea ─────────────
-      reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
-      toast.error(`No se pudo iniciar el pago: ${mensajeBackend}`);
+
+    } catch {
+      // Si falla el intento de pago, el pedido existe en RECIBIDO
+      // El usuario puede completar el pago desde /pedidos
+      toast.info('Tu pedido fue creado. Puedes completar el pago desde Mis Pedidos.');
+      navigate('/pedidos');
     }
+
+  } catch (error) {
+    console.error('Error al procesar el pedido:', error);
+    const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
+    reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
+    toast.error(`No se pudo registrar el pedido: ${mensajeBackend}`);
+  }
   };
 
   const handleCerrarModal = () => {
-    setModalPago({ open: false, clientSecret: '', pedidoPayload: null });
-    toast.info('Pago cancelado. Tu pedido sigue guardado, puedes intentarlo de nuevo.');
+    setModalPago({ open: false, clientSecret: '' });
+    toast.info('Pago pendiente. Puedes completarlo desde Mis Pedidos.');
+    navigate('/pedidos');
   };
 
   const handlePagoExitoso = () => {
@@ -599,7 +617,6 @@ const MenuPedido = () => {
         <PagoModalPedido
           clientSecret={modalPago.clientSecret}
           onClose={handleCerrarModal}
-          onPagoExitoso={handlePagoExitoso}
         />
       )}
     </div>

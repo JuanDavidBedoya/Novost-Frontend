@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../api/apiConfig';
-import { Calendar, Hash, ShoppingBag, AlertCircle, UtensilsCrossed } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { Calendar, Hash, ShoppingBag, AlertCircle, UtensilsCrossed, CreditCard } from 'lucide-react';
+import PagoModalPedido from '../orders/PagoModalPedido';
 import './Orders.css';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
 const formatFecha = (fecha) => {
   if (!fecha) return '—';
   const [year, month, day] = fecha.split('-').map(Number);
@@ -13,21 +15,21 @@ const formatFecha = (fecha) => {
     day: '2-digit', month: 'long', year: 'numeric'
   });
 };
- 
+
 const formatHora = (hora) => {
   if (!hora) return '—';
   const [h, m] = hora.split(':');
   return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
 };
 
-
 const formatMoneda = (valor) =>
-  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(valor ?? 0);
+  new Intl.NumberFormat('es-CO', {
+    style: 'currency', currency: 'COP', minimumFractionDigits: 0
+  }).format(valor ?? 0);
 
 const ESTADOS = ['RECIBIDO', 'PAGADO', 'ENTREGADO'];
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
-
 function PedidoSkeleton() {
   return (
     <div className="pedido-skeleton">
@@ -41,8 +43,8 @@ function PedidoSkeleton() {
 }
 
 // ─── Tarjeta de pedido ────────────────────────────────────────────────────────
-
-function PedidoCard({ pedido }) {
+// ✅ Recibe onPagarLinea para el botón de pago en línea
+function PedidoCard({ pedido, onPagarLinea }) {
   const estado = pedido.estadoPedido ?? 'RECIBIDO';
 
   return (
@@ -85,12 +87,35 @@ function PedidoCard({ pedido }) {
         )}
       </div>
 
-      {/* Aviso caja — solo estado RECIBIDO */}
+      {/* ✅ Aviso + botón de pago en línea — solo estado RECIBIDO */}
       {estado === 'RECIBIDO' && (
-        <div className="pedido-aviso-caja">
-          <AlertCircle size={16} />
-          <span>Acércate a caja para pagar tu pedido</span>
-        </div>
+        <>
+          <div className="pedido-aviso-caja">
+            <AlertCircle size={16} />
+            <span>Acércate a caja para pagar tu pedido</span>
+          </div>
+          <button
+            onClick={() => onPagarLinea(pedido.idPedido)}
+            style={{
+              width: '100%',
+              marginTop: '0.75rem',
+              padding: '0.65rem',
+              background: 'linear-gradient(135deg, #8a2be2, #B452FF)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '9999px',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.4rem'
+            }}
+          >
+            <CreditCard size={15} /> Pagar en Línea
+          </button>
+        </>
       )}
 
       {/* Footer totales */}
@@ -111,18 +136,32 @@ function PedidoCard({ pedido }) {
 }
 
 // ─── Página principal ─────────────────────────────────────────────────────────
-
 export default function MisPedidos() {
-  const [pedidos, setPedidos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filtros, setFiltros] = useState({ fecha: '', estado: '' });
+  const navigate   = useNavigate();
+  const location   = useLocation();
+
+  const [pedidos, setPedidos]   = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [filtros, setFiltros]   = useState({ fecha: '', estado: '' });
+  const [refreshKey, setRefreshKey] = useState(0); // ✅ Fuerza refetch tras pago
+  const [modalPago, setModalPago]   = useState({ open: false, clientSecret: '' });
+
+  // ✅ Detecta redirección de Stripe con ?status=success
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('status') === 'success') {
+      toast.success('¡Pago confirmado exitosamente! Tu pedido ha sido actualizado.');
+      setRefreshKey(k => k + 1); // Dispara refetch de la lista
+      navigate('/pedidos', { replace: true }); // Limpia la URL
+    }
+  }, [location.search, navigate]);
 
   const fetchPedidos = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
-      if (filtros.fecha)   params.fecha   = filtros.fecha;
-      if (filtros.estado)  params.estado  = filtros.estado;
+      if (filtros.fecha)  params.fecha  = filtros.fecha;
+      if (filtros.estado) params.estado = filtros.estado;
 
       const { data } = await api.get('/pedidos/mis-pedidos', { params });
       setPedidos(data);
@@ -132,11 +171,25 @@ export default function MisPedidos() {
     } finally {
       setLoading(false);
     }
-  }, [filtros]);
+  }, [filtros, refreshKey]); // ✅ refreshKey como dependencia
 
   useEffect(() => {
     fetchPedidos();
   }, [fetchPedidos]);
+
+  // ✅ Abre el modal de pago para un pedido en estado RECIBIDO
+  const handlePagarLinea = async (idPedido) => {
+    try {
+      const res = await api.post('/pagos/pedido/crear-intento-existente', { idPedido });
+      setModalPago({ open: true, clientSecret: res.data.clientSecret });
+    } catch {
+      toast.error('No se pudo iniciar el pago. Intenta de nuevo.');
+    }
+  };
+
+  const handleCerrarModal = () => {
+    setModalPago({ open: false, clientSecret: '' });
+  };
 
   const limpiarFiltros = () => setFiltros({ fecha: '', estado: '' });
 
@@ -197,7 +250,11 @@ export default function MisPedidos() {
       ) : pedidos.length > 0 ? (
         <div className="pedidos-list-grid">
           {pedidos.map((p) => (
-            <PedidoCard key={p.idPedido} pedido={p} />
+            <PedidoCard
+              key={p.idPedido}
+              pedido={p}
+              onPagarLinea={handlePagarLinea} // ✅
+            />
           ))}
         </div>
       ) : (
@@ -205,6 +262,14 @@ export default function MisPedidos() {
           <div className="pedidos-empty-icon">🍽️</div>
           <p>No se encontraron pedidos con los filtros seleccionados.</p>
         </div>
+      )}
+
+      {/* ✅ Modal de pago en línea */}
+      {modalPago.open && (
+        <PagoModalPedido
+          clientSecret={modalPago.clientSecret}
+          onClose={handleCerrarModal}
+        />
       )}
     </div>
   );
