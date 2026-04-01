@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react'; // ← agrega useRef
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
@@ -14,6 +14,7 @@ const MySwal = withReactContent(Swal);
 
 const Register = () => {
   const navigate = useNavigate();
+  const captchaRef = useRef(null);
   const [formData, setFormData] = useState({
     cedula: '',
     nombre: '',
@@ -92,13 +93,18 @@ const Register = () => {
       setTimeout(() => navigate('/login'), 2500);
 
     } catch (error) {
-      const hasFormErrors = handleFormErrors(error, setErrors);
+      captchaRef.current?.reset();
+      setCaptchaToken(null);
+      const hasFormErrors = handleFormErrors(error, (backendErrors) => {
+        setErrors(prev => ({ ...prev, ...backendErrors })); 
+      });
       if (!hasFormErrors) {
         const message = getErrorMessage(error);
+        setErrors(prev => ({ ...prev, general: message }));
         showToast(`Error en el registro: ${message}`);
       }
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
@@ -255,7 +261,8 @@ const Register = () => {
 
             <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
               <ReCAPTCHA
-                sitekey="6LfsnZgsAAAAAPVTqYco4J8vsip_PS03bjJ9aIC6" // Reemplaza con tu Site Key de Google
+              ref={captchaRef} 
+                sitekey="6LfsnZgsAAAAAPVTqYco4J8vsip_PS03bjJ9aIC6" 
                 onChange={(token) => setCaptchaToken(token)}
                 onExpired={() => setCaptchaToken(null)}
               />
