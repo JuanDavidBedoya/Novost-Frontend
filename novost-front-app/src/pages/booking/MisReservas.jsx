@@ -214,7 +214,7 @@ export default function MisReservas() {
                   </button>
                 )}
 
-                {res.estadoReserva !== 'CANCELADA' && (
+                {res.estadoReserva !== 'CANCELADA' && res.estadoReserva !== 'FINALIZADA' && (
                   <button 
                     onClick={() => handleCancelar(res.idReserva)} 
                     className="btn-novost btn-cancelar-alt"
