@@ -99,6 +99,11 @@ const Terminos = () => {
           o eliminación de datos mediante solicitud formal a través de los canales 
           oficiales de contacto.
         </p>
+        <p>
+          Si el usuario desactiva su cuenta y cancela los servicios con nuestar plataforma perderá el acceso a la 
+          información que tenía dentro de su cuentya y el acceso a la misma. Para volver a contar con nuestros servicios
+          deberá crear una nueva cuenta pasados 30 días de la desactivación de la anterior. 
+        </p>
 
         <h2>9. Uso Adecuado de la Plataforma</h2>
         <p>
