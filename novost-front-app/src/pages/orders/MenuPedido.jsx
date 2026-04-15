@@ -12,7 +12,7 @@ import PagoModalPedido from '../../components/pasarela/PagoModalPedido';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import defecto from '../../assets/images/Error.jpg';
-import './orders.css';
+import './Orders.css';
 
 const MySwal = withReactContent(Swal);
 
