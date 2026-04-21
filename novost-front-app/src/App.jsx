@@ -32,7 +32,13 @@ import PedidoRoute from './pages/orders/PedidoRoute';
 import GestionMenu from './pages/menu/GestionMenu';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Configuración principal de rutas, autenticación y gestión de sesión de la aplicación
+
+// Inicialización de Google Analytics 4 para tracking de eventos y pageviews
+
 ReactGA.initialize("G-B5NHNCTWWW");
+
+// Componente RouteTracker: registra cada cambio de página en Google Analytics
 
 const RouteTracker = () => {
   const location = useLocation();
@@ -45,11 +51,15 @@ const RouteTracker = () => {
   return null;
 };
 
+// Componente SessionManager: envuelve la aplicación con hooks de timeout de inactividad y expiración de token
+
 const SessionManager = ({ children }) => {
   useIdleTimeout(10); 
   useTokenExpiration();
   return children;
 };
+
+// Configuración de Router, ToastContainer para notificaciones y AccessibilityBar
 
 function App() {
   return (

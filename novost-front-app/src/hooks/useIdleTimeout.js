@@ -2,7 +2,12 @@ import { useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2'; 
 
+// Hook personalizado para cerrar sesión automáticamente por inactividad del usuario
+
 const useIdleTimeout = (timeoutMinutes = 10) => {
+
+  // Inicialización: hooks de navegación y ubicación actual
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -10,6 +15,8 @@ const useIdleTimeout = (timeoutMinutes = 10) => {
 
     localStorage.clear();
     sessionStorage.clear(); 
+
+    // Función handleLogout: limpia almacenamiento, muestra alerta y redirige al login
 
     Swal.fire({
       title: 'Sesión finalizada',
@@ -28,6 +35,8 @@ const useIdleTimeout = (timeoutMinutes = 10) => {
       }
     });
   }, [navigate]);
+
+  // Effect: configura temporizador de inactividad excluyendo rutas públicas, y resetea al detectar actividad del usuario (mouse, teclado, scroll, touch)
 
   useEffect(() => {
 

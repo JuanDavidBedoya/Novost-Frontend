@@ -4,6 +4,8 @@ import Header from './Header';
 import Footer from './Footer';
 import './Layout.css';
 
+// Componente contenedor principal que envuelve toda la aplicación con Header y Footer
+
 const Layout = () => {
   return (
     <div className="app-layout">

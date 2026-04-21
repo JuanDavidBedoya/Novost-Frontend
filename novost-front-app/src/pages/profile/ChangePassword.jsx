@@ -8,7 +8,12 @@ import restaurantImg from '../../assets/images/Password.jpg';
 import { toast } from 'react-toastify';
 import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
+// Página para cambiar contraseña del usuario autenticado
+
 const ChangePassword = () => {
+
+  // Obtiene cédula del usuario desde localStorage para identificar quién cambia la contraseña
+
   const navigate = useNavigate();
   
   const cedulaUsuario = localStorage.getItem('cedula') || '1234567890'; 
@@ -18,11 +23,15 @@ const ChangePassword = () => {
     contrasenaNueva: ''
   });
 
+  // Estado: errores, visibilidad de contraseñas, mensaje toast y loading
+
   const [errors, setErrors] = useState({});
   const [showPasswordAnterior, setShowPasswordAnterior] = useState(false);
   const [showPasswordNueva, setShowPasswordNueva] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Función handleChange: actualiza estado del formulario y limpia errores del campo
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,10 +41,14 @@ const ChangePassword = () => {
     }
   };
 
+  // Función auxiliar: muestra mensaje toast temporal
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(''), 4000); 
   };
+
+  // Función handleSubmit: valida y envía cambio de contraseña, redirige al perfil en caso de éxito
 
   const handleSubmit = async (e) => {
     e.preventDefault();

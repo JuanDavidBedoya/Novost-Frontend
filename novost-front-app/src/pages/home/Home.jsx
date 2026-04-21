@@ -15,11 +15,15 @@ import dash from '../../assets/images/Dash.jpg';
 import menu from '../../assets/images/Menu.jpg';
 import lista from '../../assets/images/Lista.jpg';
 
+// Extrae datos del usuario del localStorage y obtiene rol y nombre
+
 const Home = () => {
   const navigate = useNavigate();
   const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
   const rol = usuarioLocal?.rol || 'CLIENTE';
   const nombreUsuario = usuarioLocal ? usuarioLocal.nombre.split(' ')[0] : 'Invitado';
+
+  // Objeto contentByRole: define opciones de navegación específicas para cada rol
 
   const contentByRole = {
     CLIENTE: [

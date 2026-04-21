@@ -1,3 +1,5 @@
+// Página de registro de trabajadores con validación y manejo de errores
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowLeft, ShieldCheck } from 'lucide-react';
@@ -7,6 +9,8 @@ import './Auth.css';
 import restaurantImg from '../../assets/images/Worker.jpg';
 import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 import ReCAPTCHA from "react-google-recaptcha";
+
+// Estado: datos del formulario, token reCAPTCHA, errores, visibilidad de contraseña y loading
 
 const RegistrarTrabajador = () => {
   const navigate = useNavigate();
@@ -24,6 +28,8 @@ const RegistrarTrabajador = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Función handleChange: actualiza estado del formulario y limpia errores del campo
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -32,10 +38,14 @@ const RegistrarTrabajador = () => {
     }
   };
 
+  // Función auxiliar: muestra mensaje toast temporal
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(''), 4000); 
   };
+
+  // Función handleSubmit: valida formulario, envía datos de registro de trabajador y resetea el formulario en caso de éxito
 
   const handleSubmit = async (e) => {
     e.preventDefault();

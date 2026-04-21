@@ -1,9 +1,13 @@
 import axios from 'axios';
 
+// Configuración centralizada de la instancia axios con interceptores para autenticación
+
 const api = axios.create({
-  baseURL: 'http://18.190.234.243'
-  //baseURL: 'http://localhost:8080',
+  baseURL: 'http://18.190.234.243' //URL de Despliegue
+  //baseURL: 'http://localhost:8080',  URL de Producción
 });
+
+// Interceptor de solicitud: añade token JWT al header Authorization si existe
 
 api.interceptors.request.use(
   (config) => {
@@ -17,6 +21,8 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Interceptor de respuesta: maneja errores 401 (no autorizado) limpiando sesión y redirigiendo al login
 
 api.interceptors.response.use(
   (response) => response,
