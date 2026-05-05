@@ -2,8 +2,13 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, User, Utensils } from 'lucide-react';
 
+// Componente de encabezado con navegación y control de sesión del usuario
+// Hook para navegación programática tras logout
+
 const Header = () => {
   const navigate = useNavigate();
+
+  // Función para cerrar sesión: limpia almacenamiento local y redirige al login
 
   const handleLogout = () => {
 

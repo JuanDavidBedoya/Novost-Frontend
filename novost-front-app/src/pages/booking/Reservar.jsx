@@ -6,7 +6,12 @@ import './Reservas.css';
 import { toast } from 'react-toastify';
 import { showErrorToast } from '../../lib/errorHandler';
 
+// Página de creación de reservas con verificación de disponibilidad en tiempo real
+
 export default function Reservar() {
+
+  // Estado: loading, disponibilidad de mesas, cédula del usuario y datos del formulario
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [disponibilidad, setDisponibilidad] = useState({ cargando: false, mesas: 0 });
@@ -18,6 +23,8 @@ export default function Reservar() {
     numPersonas: 0
   });
 
+  // Función auxiliar: genera array de horas disponibles cada 30 minutos (12:00 a 21:30)
+
   const generarHorasDisponibles = () => {
     const horas = [];
     for (let i = 12; i <= 21; i++) {
@@ -26,6 +33,8 @@ export default function Reservar() {
     }
     return horas;
   };
+
+  // Función obtenerDisponibilidad: consulta mesas disponibles según fecha, hora y número de personas
 
   const obtenerDisponibilidad = useCallback(async () => {
     if (!formData.fecha) {
@@ -54,6 +63,8 @@ export default function Reservar() {
     }
   }, [formData.fecha, formData.horaInicio, formData.numPersonas]);
 
+  // Effect: ejecuta búsqueda de disponibilidad con debounce de 300ms al cambiar filtros
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       obtenerDisponibilidad();
@@ -61,6 +72,8 @@ export default function Reservar() {
 
     return () => clearTimeout(timeoutId);
   }, [obtenerDisponibilidad]);
+
+  // Función handleSubmit: valida número de personas, crea reserva en API y redirige a mis reservas
 
   const handleSubmit = async (e) => {
     e.preventDefault();

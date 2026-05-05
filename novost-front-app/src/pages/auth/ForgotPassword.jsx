@@ -1,3 +1,5 @@
+// Página de recuperación de contraseña con validación y manejo de errores
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -8,6 +10,8 @@ import restaurantImg from '../../assets/images/Restart.jpg';
 import { toast } from 'react-toastify';
 import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
+// Estado: email, errores de validación, mensaje toast, loading y bandera de éxito
+
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -16,10 +20,14 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // Función auxiliar: muestra mensaje toast temporal
+
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 4000);
   };
+
+  // Función handleSubmit: envía solicitud de recuperación, maneja errores de validación y muestra feedback
 
   const handleSubmit = async (e) => {
     e.preventDefault();

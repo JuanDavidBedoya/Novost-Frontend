@@ -2,11 +2,16 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 
+// Formulario de checkout con integración de Stripe para procesamiento de pagos
+// Estado: stripe instance, elementos del formulario, mensaje de feedback e indicador de procesamiento
+
 export default function CheckoutForm({ idReserva }) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Función handleSubmit: confirma el pago con Stripe y maneja respuesta de éxito o error
 
   const handleSubmit = async (e) => {
     e.preventDefault();

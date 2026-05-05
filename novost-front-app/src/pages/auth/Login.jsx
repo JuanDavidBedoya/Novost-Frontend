@@ -8,8 +8,12 @@ import restaurantImg from '../../assets/images/Login.jpg';
 import { handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 import ga4 from 'react-ga4'
 
+// Página de login con autenticación de dos factores (2FA) y tracking de eventos
+
 const Login = () => {
   const navigate = useNavigate();
+
+  // Estado: credenciales (email, password, código 2FA), errores, visibilidad de contraseña, paso del flujo y timestamp
 
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
@@ -22,6 +26,8 @@ const Login = () => {
   const [paso, setPaso] = useState(1); 
 
   const [startTime, setStartTime] = useState(null);
+
+  // Funciones de cambio de input: actualizan estado y limpian errores asociados al campo
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -38,10 +44,14 @@ const Login = () => {
     if(errors.codigo) setErrors(prev => ({ ...prev, codigo: '' }));
   };
 
+  // Función auxiliar: muestra mensaje toast temporal
+
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 4000);
   };
+
+  // Función handleLoginSubmit: valida credenciales, mide tiempo de respuesta, registra evento GA4 y avanza a paso 2FA
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -80,6 +90,8 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Función handleVerificarCodigo: verifica código 2FA, almacena token/usuario y redirige según rol
 
   const handleVerificarCodigo = async (e) => {
     e.preventDefault();

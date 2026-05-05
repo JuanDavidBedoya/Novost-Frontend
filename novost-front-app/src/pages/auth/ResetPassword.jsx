@@ -8,10 +8,17 @@ import restaurantImg from '../../assets/images/Restart.jpg';
 import { toast } from 'react-toastify';
 import { showErrorToast, handleFormErrors, getErrorMessage } from '../../lib/errorHandler';
 
+// Página para resetear contraseña usando token de recuperación
+
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  // Extrae token de los parámetros de URL para validar solicitud de reset
+
   const token = searchParams.get('token'); 
+
+  // Estado: nueva contraseña, errores, visibilidad de contraseña, mensaje toast y loading
 
   const [nuevaContrasenia, setNuevaContrasenia] = useState('');
   const [errors, setErrors] = useState({});
@@ -19,10 +26,14 @@ const ResetPassword = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Función auxiliar: muestra mensaje toast temporal
+
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 4000);
   };
+
+  // Función handleSubmit: envía nueva contraseña con token, valida respuesta y redirige al login
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -8,7 +8,11 @@ import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'react-toastify';
 import { showErrorToast } from '../../lib/errorHandler';
 
+// Página de mis reservas con filtros, búsqueda, cancelación y gestión de pagos
+
 const MySwal = withReactContent(Swal);
+
+// Estado: lista de reservas, filtros de búsqueda y datos del modal de pago
 
 export default function MisReservas() {
   const [reservas, setReservas] = useState([]);
@@ -17,6 +21,8 @@ export default function MisReservas() {
   
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Función auxiliar: genera array de horas disponibles cada 30 minutos (12:00 a 21:30)
 
   const generarHorasDisponibles = () => {
     const horas = [];
@@ -28,9 +34,13 @@ export default function MisReservas() {
     return horas;
   };
 
+  // Función fetchReservas: obtiene reservas del usuario con filtros opcionales
+
   const fetchReservas = useCallback(async () => {
     try {
       const { data } = await api.get('/reservas/buscar', { params: filtros });
+
+      // Effect: ejecuta búsqueda al cambiar filtros
       
       let reservasFiltradas = data;
       if (filtros.estado) {
@@ -47,6 +57,8 @@ export default function MisReservas() {
     fetchReservas();
   }, [fetchReservas]);
 
+  // Effect: detecta pago exitoso en URL y recarga reservas con delay
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get('status') === 'success') {
@@ -60,6 +72,8 @@ export default function MisReservas() {
       }, 2000);
     }
   }, [location, navigate, fetchReservas]);
+
+  // Función handleCancelar: muestra confirmación SweetAlert2 y cancela reserv
 
   const handleCancelar = async (id) => {
     const result = await MySwal.fire({
@@ -87,6 +101,8 @@ export default function MisReservas() {
     }
   };
 
+  // Función handleIniciarPago: crea intento de pago en API y abre modal con clientSecret
+
   const handleIniciarPago = async (idReserva) => {
     try {
       const response = await api.post(`/pagos/crear-intento?idReserva=${idReserva}`, {});
@@ -99,6 +115,8 @@ export default function MisReservas() {
       showErrorToast(error, toast);
     }
   };
+
+  // Función limpiarFiltros: resetea todos los filtros a valores vacíos
 
   const limpiarFiltros = () => {
     setFiltros({ fecha: '', hora: '', personas: '', estado: '' });

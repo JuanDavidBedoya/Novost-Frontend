@@ -7,7 +7,7 @@ import reserva from '../../assets/images/Reserva.jpg';
 const PedidoCode = () => {
   const [code, setCode] = useState('');
   const navigate = useNavigate();
-  const CORRECT_CODE = '15243'; // Cambia al código real
+  const CORRECT_CODE = '15243'; 
 
   useEffect(() => {
     const hasPedidoAccess = sessionStorage.getItem('pedidoAccess') === 'true';

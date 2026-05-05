@@ -7,12 +7,18 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import './Reservas.css';
 
+// Página de gestión de reservas con filtros, búsqueda y finalización
+
 const MySwal = withReactContent(Swal);
+
+// Estado: lista de reservas, loading general, y ID de reserva en proceso de finalización
 
 const GestionarReservas = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [finalizandoId, setFinalizandoId] = useState(null);
+
+  // Función auxiliar: genera array de horas disponibles cada 30 minutos (12:00 a 21:30)
   
   const generarHorasDisponibles = () => {
     const horas = [];
@@ -23,12 +29,16 @@ const GestionarReservas = () => {
     return horas;
   };
 
+  // Estado: filtros de búsqueda (fecha, hora, personas, estado)
+
   const [filtros, setFiltros] = useState({
     fecha: '',
     hora: '',
     personas: '',
     estado: ''
   });
+
+  // Función fetchReservas: obtiene reservas de la API con filtros opcionales y filtra por estado
 
   const fetchReservas = async () => {
     setLoading(true);
@@ -53,6 +63,8 @@ const GestionarReservas = () => {
     }
   };
 
+  // Effect: ejecuta búsqueda con debounce de 500ms al cambiar filtros
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchReservas();
@@ -61,14 +73,20 @@ const GestionarReservas = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [filtros]);
 
+  // Función handleFilterChange: actualiza estado de filtros
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFiltros(prev => ({ ...prev, [name]: value }));
   };
 
+  // Función limpiarFiltros: resetea todos los filtros a valores vacíos
+
   const limpiarFiltros = () => {
     setFiltros({ fecha: '', hora: '', personas: '', estado: '' });
   };
+
+  // Función finalizarReserva: muestra confirmación SweetAlert2, finaliza reserva en API y actualiza estado local
 
   const finalizarReserva = async (idReserva) => {
     const result = await MySwal.fire({

@@ -1,7 +1,10 @@
 import { Facebook, Instagram, Twitter } from 'lucide-react';
+
+// Componente de pie de página con información de la marca, enlaces legales y créditos
+
 const Footer = () => {
   return (
-    <footer className="app-footer">
+    <footer className="app-footer"> 
       <div className="footer-content">
         <div className="footer-section brand">
           <h3>Novost</h3>

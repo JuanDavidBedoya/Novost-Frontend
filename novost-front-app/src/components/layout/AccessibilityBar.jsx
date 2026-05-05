@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { ZoomIn, ZoomOut, EyeOff, Type, RefreshCw, Contrast, PersonStanding } from 'lucide-react';
 
+// Componente de barra de accesibilidad con controles para zoom, contraste y modo texto
+
 const AccessibilityBar = () => {
   const [fontSizeScale, setFontSizeScale] = useState(100);
   const [isTextOnly, setIsTextOnly] = useState(false);
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Effects: sincronizar cambios de estado con el DOM (tamaño de fuente y clases CSS)
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSizeScale}%`;
@@ -27,10 +31,14 @@ const AccessibilityBar = () => {
     }
   }, [isHighContrast]);
 
+  // Funciones auxiliares para modificar el tamaño de fuente y modos de accesibilidad
+
   const increaseFont = () => setFontSizeScale(prev => Math.min(prev + 10, 170));
   const decreaseFont = () => setFontSizeScale(prev => Math.max(prev - 10, 60));
   const toggleTextOnly = () => setIsTextOnly(prev => !prev);
   const toggleHighContrast = () => setIsHighContrast(prev => !prev);
+
+  // Reiniciar todas las opciones de accesibilidad a valores por defecto
   
   const resetDefaults = () => {
     setFontSizeScale(100);
@@ -38,9 +46,13 @@ const AccessibilityBar = () => {
     setIsHighContrast(false);
   };
 
+  // Botón flotante para abrir/cerrar la barra de accesibilidad
+
   const toggleBar = () => {
     setIsOpen(prev => !prev);
   };
+
+  // Barra expandida con todos los controles: zoom, contraste, modo texto y reset
 
   return (
     <div className="accessibility-container" aria-label="Herramientas de accesibilidad">

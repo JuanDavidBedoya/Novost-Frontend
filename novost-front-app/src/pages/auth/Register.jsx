@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'; // ← agrega useRef
+import { useState, useRef } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
@@ -10,7 +10,11 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import ReCAPTCHA from "react-google-recaptcha";
 
+// Página de registro con validación, reCAPTCHA y manejo de cuentas reactivadas
+
 const MySwal = withReactContent(Swal);
+
+// Estado: datos del formulario, errores, visibilidad de contraseña, token reCAPTCHA y loading
 
 const Register = () => {
   const navigate = useNavigate();
@@ -31,6 +35,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null); 
 
+  // Función handleChange: actualiza estado del formulario y limpia errores del campo
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const finalValue = type === 'checkbox' ? checked : value;
@@ -42,11 +48,15 @@ const Register = () => {
     }
   };
 
+  // Función auxiliar: muestra mensaje toast temporal con opción de estado reactivada
+
   const showToast = (message, reactivada = false) => {
     setToastMessage(message);
     setToastReactivada(reactivada);
     setTimeout(() => setToastMessage(''), 4000);
   };
+
+  // Función handleSubmit: valida reCAPTCHA, envía registro, maneja respuesta 202 (cuenta reactivada) y 200 (nuevo registro)
 
   const handleSubmit = async (e) => {
     e.preventDefault();

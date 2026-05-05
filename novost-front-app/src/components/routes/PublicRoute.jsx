@@ -1,5 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
+//Rutas públicas
+
 const PublicRoute = ({ children }) => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   

@@ -5,9 +5,16 @@ import CheckoutForm from './CheckoutForm';
 import { X, CreditCard, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 
+// Modal de pago para reservas con temporizador y integración de Stripe
+
 export default function PagoModal({ clientSecret, idReserva, onClose }) {
+
+  // Estado: tiempo restante para completar el pago y referencia al intervalo del timer
+
   const [tiempoRestante, setTiempoRestante] = useState(120);
   const timerRef = useRef(null);
+
+  // Effect: inicia temporizador de 2 minutos que muestra advertencia y cierra modal si expira
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -29,6 +36,8 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
     };
   }, [onClose]);
 
+  // Función auxiliar: convierte segundos a formato minutos:segundos
+
   const formatTiempo = (segundos) => {
     const mins = Math.floor(segundos / 60);
     const secs = segundos % 60;
@@ -36,6 +45,8 @@ export default function PagoModal({ clientSecret, idReserva, onClose }) {
   };
 
   if (!clientSecret) return null;
+
+  // Configuración de apariencia de Stripe: tema, colores personalizados y estilos de inputs
 
   const appearance = {
     theme: 'stripe',

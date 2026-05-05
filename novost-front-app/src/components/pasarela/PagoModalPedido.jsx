@@ -5,15 +5,16 @@ import CheckoutFormPedido from './CheckoutFormPedido';
 import { X, CreditCard, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-/**
- * Props:
- *   clientSecret   — secret de Stripe para el PaymentIntent
- *   onClose        — llamado cuando el usuario cierra sin pagar (X o timeout)
- *   onPagoExitoso  — llamado por CheckoutFormPedido cuando Stripe confirma el pago
- */
+// Modal de pago para pedidos con temporizador y integración de Stripe
+
 export default function PagoModalPedido({ clientSecret, onClose, onPagoExitoso }) {
+
+  // Estado: tiempo restante para completar el pago y referencia al intervalo del timer
+
   const [tiempoRestante, setTiempoRestante] = useState(120);
   const timerRef = useRef(null);
+
+  // Effect: inicia temporizador de 2 minutos que muestra advertencia y cierra modal si expira
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -33,6 +34,8 @@ export default function PagoModalPedido({ clientSecret, onClose, onPagoExitoso }
     };
   }, [onClose]);
 
+  // Función auxiliar: convierte segundos a formato minutos:segundos
+
   const formatTiempo = (segundos) => {
     const mins = Math.floor(segundos / 60);
     const secs = segundos % 60;
@@ -40,6 +43,8 @@ export default function PagoModalPedido({ clientSecret, onClose, onPagoExitoso }
   };
 
   if (!clientSecret) return null;
+
+  // Configuración de apariencia de Stripe: tema, colores personalizados y estilos de inputs
 
   const appearance = {
     theme: 'stripe',

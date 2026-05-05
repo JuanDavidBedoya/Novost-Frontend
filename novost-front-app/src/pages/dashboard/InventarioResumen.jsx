@@ -6,10 +6,14 @@ import {
 import api from '../../api/apiConfig';
 import './Dashboard.css';
 
+//Muestra un Resumen del Inventario
+
 const InventarioResumen = () => {
   const [datos, setDatos] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  //Carga y Muestra el resumen
 
   useEffect(() => {
     const fetchInventario = async () => {

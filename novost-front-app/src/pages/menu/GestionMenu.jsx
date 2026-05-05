@@ -8,9 +8,13 @@ import api from '../../api/apiConfig';
 import { toast } from 'react-toastify';
 import './GestionMenu.css';
 
+// Panel de administración de menú con gestión de platos, ingredientes e imágenes en Cloudinary
+
 const IMAGEN_DEFAULT = '/imagen-por-defecto.jpg';
 const CLOUD_NAME    = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+// Estado: lista de platos, categorías, modal, filtros, formulario y campos de búsqueda de ingredientes
 
 const GestionMenu = () => {
   const [platos, setPlatos]           = useState([]);
@@ -32,6 +36,8 @@ const GestionMenu = () => {
   const [mostrarDropdown, setMostrarDropdown] = useState(false);
   const [guardando, setGuardando]             = useState(false);
   const dropdownRef = useRef(null);
+
+  // Effect: carga datos iniciales (platos y categorías) al montar el componente
 
   useEffect(() => { cargarDatos(); }, []);
 
@@ -65,6 +71,8 @@ const GestionMenu = () => {
     return () => clearTimeout(timer);
   }, [busqueda]);
 
+  // Función cargarDatos: obtiene platos y categorías de la API
+
   const cargarDatos = async () => {
     try {
       const [resPlatos, resCategorias] = await Promise.all([
@@ -79,6 +87,8 @@ const GestionMenu = () => {
       setLoading(false);
     }
   };
+
+  // Función subirImagenCloudinary: sube archivo a Cloudinary y guarda URL en el formulario
 
   const subirImagenCloudinary = async (archivo) => {
     setSubiendoImagen(true);
@@ -100,6 +110,8 @@ const GestionMenu = () => {
     }
   };
 
+  // Función handleImagenChange: procesa archivo seleccionado y ejecuta subida a Cloudinary
+
   const handleImagenChange = (e) => {
     const archivo = e.target.files[0];
     if (!archivo) return;
@@ -108,6 +120,8 @@ const GestionMenu = () => {
     reader.readAsDataURL(archivo);
     subirImagenCloudinary(archivo);
   };
+
+  // Función agregarIngrediente: añade ingrediente a la lista evitando duplicados
 
   const agregarIngrediente = (item) => {
     if (ingredientes.find(i => i.idAlimento === item.idAlimento)) {
@@ -124,15 +138,21 @@ const GestionMenu = () => {
     setMostrarDropdown(false);
   };
 
+  // Función actualizarCantidad: modifica cantidad necesaria de un ingrediente específico
+
   const actualizarCantidad = (idAlimento, valor) => {
     setIngredientes(prev =>
       prev.map(i => i.idAlimento === idAlimento ? { ...i, cantidadNecesaria: valor } : i)
     );
   };
 
+  // Función eliminarIngrediente: remueve ingrediente de la lista
+
   const eliminarIngrediente = (idAlimento) => {
     setIngredientes(prev => prev.filter(i => i.idAlimento !== idAlimento));
   };
+
+  // Función toggleHabilitado: habilita/deshabilita plato en la API y actualiza estado local
 
   const toggleHabilitado = async (idPlato, estadoActual) => {
     try {
@@ -146,12 +166,16 @@ const GestionMenu = () => {
     }
   };
 
+  // Función resetForm: limpia todos los campos del formulario
+
   const resetForm = () => {
     setForm({ nombrePlato: '', descripcion: '', precioPlato: '', idCategoria: '', imagenUrl: '' });
     setImagenPreview(null);
     setIngredientes([]);
     setBusqueda('');
   };
+
+  // Función handleCrearPlato: valida formulario, prepara payload y crea plato en la API
 
   const handleCrearPlato = async (e) => {
     e.preventDefault();
@@ -196,6 +220,8 @@ const GestionMenu = () => {
       setGuardando(false);
     }
   };
+
+  // Filtrado de platos por categoría y función de formato de moneda
 
   const platosFiltrados = categoriaFiltro === 'Todos'
     ? platos
