@@ -16,7 +16,6 @@ import './Orders.css';
 
 const MySwal = withReactContent(Swal);
 
-// ── [RNF-03] Reporte de carga de imágenes Cloudinary ─────────────────────────
 const reportarImagenEvento = async (idPlato, imagenUrl, resultado) => {
   try {
     await api.post('/metricas/imagen-evento', {
@@ -24,14 +23,13 @@ const reportarImagenEvento = async (idPlato, imagenUrl, resultado) => {
       imagenUrl,
       navegador: navigator.userAgent,
       dispositivo: window.innerWidth <= 768 ? 'movil' : 'pc',
-      resultado // "exito" o "fallo"
+      resultado
     });
   } catch {
     // No interrumpe la experiencia del usuario si falla el reporte
   }
 };
 
-// ── [RNF-15] Reporte de tiempo de redireccionamiento ─────────────────────────
 const reportarRedirectEvento = async (duracionSegundos) => {
   try {
     await api.post('/metricas/redirect-evento', {
@@ -44,7 +42,6 @@ const reportarRedirectEvento = async (duracionSegundos) => {
   }
 };
 
-// ── [RNF-11] Reporte de fallos visibles en pantalla al crear pedido ───────────
 const reportarPedidoFallo = async (tipoError, motivo) => {
   try {
     await api.post('/metricas/pedido-fallo-evento', { tipoError, motivo });
@@ -53,28 +50,24 @@ const reportarPedidoFallo = async (tipoError, motivo) => {
   }
 };
 
-// Imagen por defecto si el plato no tiene URL asignada
 const IMAGEN_DEFAULT = defecto;
 
 const MenuPedido = () => {
 
-  const [modalPago, setModalPago] = useState({
-    open: false, clientSecret: ''
-  });
-
+  const [modalPago, setModalPago] = useState({ open: false, clientSecret: '' });
   const [errores, setErrores] = useState({ mesa: '', carrito: '' });
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [categoriaActiva, setCategoriaActiva] = useState('Entradas');
-  const [platos, setPlatos]     = useState([]);
-  const [mesas, setMesas]       = useState([]);
-  const [carrito, setCarrito]   = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [mesa, setMesa]         = useState('');
-  const [observaciones, setObservaciones] = useState('');
-  const [fechaHora, setFechaHora] = useState(new Date());
+  const [categoriaActiva, setCategoriaActiva]       = useState('Entradas');
+  const [platos, setPlatos]                         = useState([]);
+  const [mesas, setMesas]                           = useState([]);
+  const [carrito, setCarrito]                       = useState([]);
+  const [loading, setLoading]                       = useState(true);
+  const [mesa, setMesa]                             = useState('');
+  const [observacionesPorPlato, setObservacionesPorPlato] = useState({});
+  const [fechaHora, setFechaHora]                   = useState(new Date());
 
   const categorias = [
     { id: 'Entradas', icono: <Coffee size={18} /> },
@@ -146,13 +139,13 @@ const MenuPedido = () => {
           });
 
           return nuevosPlatos.map(p => ({
-            id:         p.idPlato,
-            nombre:     p.nombrePlato,
-            descripcion:p.descripcion,
-            precio:     p.precioPlato,
-            categoria:  p.categoria,
-            disponible: p.disponible,
-            imagenUrl:  p.imagenUrl || IMAGEN_DEFAULT
+            id:          p.idPlato,
+            nombre:      p.nombrePlato,
+            descripcion: p.descripcion,
+            precio:      p.precioPlato,
+            categoria:   p.categoria,
+            disponible:  p.disponible,
+            imagenUrl:   p.imagenUrl || IMAGEN_DEFAULT
           }));
         });
       } catch { /* no interrumpir la experiencia */ }
@@ -220,17 +213,41 @@ const MenuPedido = () => {
   };
 
   const decrementarCantidad = (id) => {
-    setCarrito(prev =>
-      prev
+    setCarrito(prev => {
+      const actualizado = prev
         .map(p => p.id === id ? { ...p, cantidad: p.cantidad - 1 } : p)
-        .filter(p => p.cantidad > 0)
-    );
+        .filter(p => p.cantidad > 0);
+      // Si el plato fue eliminado del carrito, limpiar su observación
+      if (!actualizado.find(p => p.id === id)) {
+        setObservacionesPorPlato(prevObs => {
+          const copia = { ...prevObs };
+          delete copia[id];
+          return copia;
+        });
+      }
+      return actualizado;
+    });
   };
 
   const incrementarCantidad = (id) => {
     setCarrito(prev =>
       prev.map(p => p.id === id ? { ...p, cantidad: p.cantidad + 1 } : p)
     );
+  };
+
+  // ── Observaciones por plato ──────────────────────────────────────────────────
+
+  // Combina todas las observaciones en una sola cadena para enviar al backend
+  const construirObservacionFinal = () => {
+    return carrito
+      .filter(p => {
+        const valor = observacionesPorPlato[p.id] || '';
+        const prefijo = `${p.nombre}: `;
+        // Solo incluir si el usuario escribió algo más allá del prefijo
+        return valor.startsWith(prefijo) && valor.slice(prefijo.length).trim().length > 0;
+      })
+      .map(p => observacionesPorPlato[p.id].trim())
+      .join(' (-) ') || null;
   };
 
   // ── Totales ──────────────────────────────────────────────────────────────────
@@ -250,14 +267,13 @@ const MenuPedido = () => {
   const limpiarFormulario = () => {
     setCarrito([]);
     setMesa('');
-    setObservaciones('');
+    setObservacionesPorPlato({});
     setErrores({ mesa: '', carrito: '' });
   };
 
   // ── Confirmar pedido ─────────────────────────────────────────────────────────
   const confirmarPedido = async (metodoPago) => {
 
-    // ── [RNF-11] Validación con reporte de errores visibles ─────────────────
     const nuevosErrores = { mesa: '', carrito: '' };
     let hayErrores = false;
 
@@ -276,8 +292,8 @@ const MenuPedido = () => {
     if (hayErrores) return;
 
     const pedidoPayload = {
-      idMesa:       parseInt(mesa),
-      observaciones: observaciones || null,
+      idMesa:        parseInt(mesa),
+      observaciones: construirObservacionFinal(),
       metodoPago,
       detalles: carrito.map(p => ({
         idPlato:  p.id,
@@ -314,7 +330,6 @@ const MenuPedido = () => {
 
         limpiarFormulario();
 
-        // ── [RNF-15] Mide tiempo de redirección tras pago en caja ────────────
         const inicio = performance.now();
         navigate('/pedidos');
         requestAnimationFrame(() => {
@@ -329,7 +344,6 @@ const MenuPedido = () => {
       } catch (error) {
         console.error('Error al procesar el pedido:', error);
         const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
-        // ── [RNF-11] Reporta error del servidor ──────────────────────────────
         reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
         toast.error(`No se pudo registrar el pedido: ${mensajeBackend}`);
       }
@@ -338,36 +352,32 @@ const MenuPedido = () => {
 
     // ── Pago en Línea ────────────────────────────────────────────────────────
     try {
-    // ✅ PASO 1 — Crear el pedido primero
-    const responsePedido = await api.post('/pedidos', pedidoPayload);
-    const pedidoCreado = responsePedido.data;
+      const responsePedido = await api.post('/pedidos', pedidoPayload);
+      const pedidoCreado = responsePedido.data;
 
-    limpiarFormulario();
+      limpiarFormulario();
 
-    // ✅ PASO 2 — Crear intento de pago para el pedido ya existente
-    try {
-      const intentoRes = await api.post('/pagos/pedido/crear-intento-existente', {
-        idPedido: pedidoCreado.idPedido
-      });
+      try {
+        const intentoRes = await api.post('/pagos/pedido/crear-intento-existente', {
+          idPedido: pedidoCreado.idPedido
+        });
 
-      setModalPago({
-        open: true,
-        clientSecret: intentoRes.data.clientSecret
-      });
+        setModalPago({
+          open: true,
+          clientSecret: intentoRes.data.clientSecret
+        });
 
-    } catch {
-      // Si falla el intento de pago, el pedido existe en RECIBIDO
-      // El usuario puede completar el pago desde /pedidos
-      toast.info('Tu pedido fue creado. Puedes completar el pago desde Mis Pedidos.');
-      navigate('/pedidos');
+      } catch {
+        toast.info('Tu pedido fue creado. Puedes completar el pago desde Mis Pedidos.');
+        navigate('/pedidos');
+      }
+
+    } catch (error) {
+      console.error('Error al procesar el pedido:', error);
+      const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
+      reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
+      toast.error(`No se pudo registrar el pedido: ${mensajeBackend}`);
     }
-
-  } catch (error) {
-    console.error('Error al procesar el pedido:', error);
-    const mensajeBackend = error.response?.data?.message || 'Ocurrió un error inesperado.';
-    reportarPedidoFallo('ERROR_SERVIDOR', mensajeBackend);
-    toast.error(`No se pudo registrar el pedido: ${mensajeBackend}`);
-  }
   };
 
   const handleCerrarModal = () => {
@@ -380,7 +390,6 @@ const MenuPedido = () => {
     limpiarFormulario();
     setModalPago({ open: false, clientSecret: '', pedidoPayload: null });
 
-    // ── [RNF-15] Mide tiempo de redirección tras pago en línea ───────────────
     const inicio = performance.now();
     navigate('/pedidos');
     requestAnimationFrame(() => {
@@ -468,59 +477,87 @@ const MenuPedido = () => {
               </>
             ) : (
               carrito.map((cartItem) => (
-                <div className="carrito-item" key={cartItem.id}>
-                  <div className="carrito-item-img">
-                    {/* [RNF-03] Reporte de imagen en miniatura del carrito */}
-                    <img
-                      src={cartItem.imagenUrl || IMAGEN_DEFAULT}
-                      alt={cartItem.nombre}
-                      className="img-miniatura"
-                      onLoad={() =>
-                        cartItem.imagenUrl &&
-                        reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'exito')
-                      }
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = IMAGEN_DEFAULT;
-                        cartItem.imagenUrl &&
-                          reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'fallo');
+                <div className="carrito-item-wrapper" key={cartItem.id}>
+
+                  {/* Fila del plato */}
+                  <div className="carrito-item">
+                    <div className="carrito-item-img">
+                      <img
+                        src={cartItem.imagenUrl || IMAGEN_DEFAULT}
+                        alt={cartItem.nombre}
+                        className="img-miniatura"
+                        onLoad={() =>
+                          cartItem.imagenUrl &&
+                          reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'exito')
+                        }
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = IMAGEN_DEFAULT;
+                          cartItem.imagenUrl &&
+                            reportarImagenEvento(cartItem.id, cartItem.imagenUrl, 'fallo');
+                        }}
+                      />
+                    </div>
+                    <div className="carrito-item-info">
+                      <h4>{cartItem.nombre}</h4>
+                      <span>{formatCurrency(cartItem.precio * cartItem.cantidad)}</span>
+                    </div>
+                    <div className="cantidad-controls">
+                      <button
+                        className="btn-cantidad"
+                        onClick={() => decrementarCantidad(cartItem.id)}
+                        title="Disminuir cantidad"
+                      >
+                        <Minus size={14} strokeWidth={3} />
+                      </button>
+                      <span className="cantidad-valor">{cartItem.cantidad}</span>
+                      <button
+                        className="btn-cantidad"
+                        onClick={() => incrementarCantidad(cartItem.id)}
+                        title="Aumentar cantidad"
+                      >
+                        <Plus size={14} strokeWidth={3} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Campo de observación individual por plato */}
+                  <div className="observacion-plato">
+                    <textarea
+                      rows="2"
+                      value={observacionesPorPlato[cartItem.id] || ''}
+                      placeholder={`${cartItem.nombre}: observaciones...`}
+                      onChange={(e) => {
+                        const valor = e.target.value;
+                        const prefijo = `${cartItem.nombre}: `;
+                        // Evitar que el usuario borre el prefijo con el nombre del plato
+                        if (!valor.startsWith(prefijo)) return;
+                        setObservacionesPorPlato(prev => ({
+                          ...prev,
+                          [cartItem.id]: valor
+                        }));
+                      }}
+                      onFocus={(e) => {
+                        // Inicializar con el prefijo si el campo está vacío
+                        if (!observacionesPorPlato[cartItem.id]) {
+                          const prefijo = `${cartItem.nombre}: `;
+                          setObservacionesPorPlato(prev => ({
+                            ...prev,
+                            [cartItem.id]: prefijo
+                          }));
+                          // Mover cursor al final del prefijo
+                          setTimeout(() => {
+                            e.target.selectionStart = prefijo.length;
+                            e.target.selectionEnd   = prefijo.length;
+                          }, 0);
+                        }
                       }}
                     />
                   </div>
-                  <div className="carrito-item-info">
-                    <h4>{cartItem.nombre}</h4>
-                    <span>{formatCurrency(cartItem.precio * cartItem.cantidad)}</span>
-                  </div>
-                  <div className="cantidad-controls">
-                    <button
-                      className="btn-cantidad"
-                      onClick={() => decrementarCantidad(cartItem.id)}
-                      title="Disminuir cantidad"
-                    >
-                      <Minus size={14} strokeWidth={3} />
-                    </button>
-                    <span className="cantidad-valor">{cartItem.cantidad}</span>
-                    <button
-                      className="btn-cantidad"
-                      onClick={() => incrementarCantidad(cartItem.id)}
-                      title="Aumentar cantidad"
-                    >
-                      <Plus size={14} strokeWidth={3} />
-                    </button>
-                  </div>
+
                 </div>
               ))
             )}
-          </div>
-
-          <div className="observaciones-group">
-            <label>Observaciones</label>
-            <textarea
-              placeholder="Ej: Sin cebolla, término medio..."
-              value={observaciones}
-              onChange={(e) => setObservaciones(e.target.value)}
-              rows="3"
-            />
           </div>
 
           <div className="totales-section">
@@ -576,7 +613,6 @@ const MenuPedido = () => {
               key={plato.id}
             >
               <div className="plato-img-wrapper">
-                {/* [RNF-03] Reporte de imagen en la card del plato */}
                 <img
                   src={plato.imagenUrl || IMAGEN_DEFAULT}
                   alt={`Plato de ${plato.nombre}`}

@@ -99,29 +99,24 @@ const Login = () => {
     setErrors({});
 
     try {
-      const response = await api.post('/auth/verificar-login', { email, codigo: codigoVerificacion });
-      const { token, user } = response.data; 
-
-      ga4.event('login_success', { 
-        user_role: user.rol,
-        browser: navigator.userAgent 
+      const response = await api.post('/auth/verificar-login', { 
+          email, codigo: codigoVerificacion 
       });
-      
+      const { token, user, reactivada } = response.data; // <-- leer reactivada
+
+      // Si la cuenta fue reactivada, guardar bandera para mostrarla en Home
+      if (reactivada) {
+        sessionStorage.setItem('mostrarBienvenidaDeVuelta', 'true');
+      }
+
       localStorage.setItem('token', token);
       localStorage.setItem('cedula', user.cedula);
       localStorage.setItem('usuario', JSON.stringify(user));
 
       switch (user.rol) {
-        case 'ADMINISTRADOR':
-          navigate('/admin-home');
-          break;
-        case 'TRABAJADOR':
-          navigate('/worker-home');
-          break;
-        case 'CLIENTE':
-        default:
-          navigate('/home');
-          break;
+        case 'ADMINISTRADOR': navigate('/admin-home'); break;
+        case 'TRABAJADOR':    navigate('/worker-home'); break;
+        default:              navigate('/home'); break;
       }
     } catch (error) {
 

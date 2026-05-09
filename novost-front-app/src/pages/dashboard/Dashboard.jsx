@@ -7,41 +7,48 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Calendar, Clock, DollarSign,
-  Loader, BarChart3, UtensilsCrossed, Tag, Users, ShoppingBag, Package
+  Loader, BarChart3, UtensilsCrossed, Tag, Users, ShoppingBag, Package,
+  CreditCard, Banknote
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import api from '../../api/apiConfig';
 import InventarioResumen from './InventarioResumen';
-
-// ── Paleta de colores para las gráficas de platos ────────────────────────────
+ 
+// ── Paleta de colores ─────────────────────────────────────────────────────────
 const COLORES_PLATOS = [
   '#a03ce6', '#e94560', '#00c2d4', '#f59e0b',
   '#16a34a', '#6366f1', '#ec4899', '#0ea5e9',
   '#84cc16', '#f97316'
 ];
-
+ 
 const COLORES_ESTADOS = {
   PENDIENTE: '#f59e0b',
   PAGADA:    '#16a34a',
   CANCELADA: '#dc2626'
 };
-
+ 
 const COLORES_CATEGORIAS = ['#a03ce6', '#e94560', '#00c2d4', '#f59e0b', '#16a34a', '#6366f1'];
-
+ 
+// Colores fijos para el pie Caja / Línea
+const COLOR_CAJA  = '#a03ce6';
+const COLOR_LINEA = '#00c2d4';
+ 
+// ── Componente principal ──────────────────────────────────────────────────────
 const Dashboard = () => {
   const navigate = useNavigate();
   const usuarioLocal  = JSON.parse(localStorage.getItem('usuario'));
   const nombreUsuario = usuarioLocal ? usuarioLocal.nombre.split(' ')[0] : 'Admin';
-
-  const [pestañaActiva, setPestañaActiva] = useState('finanzas');
-  const [datos,         setDatos]         = useState(null);
-  const [datosPlatos,   setDatosPlatos]   = useState(null);
-  const [loading,       setLoading]       = useState(true);
-  const [loadingPlatos,   setLoadingPlatos]   = useState(false);
-  const [datosClientes,   setDatosClientes]   = useState(null);
-  const [loadingClientes, setLoadingClientes] = useState(false);
-
+ 
+  const [pestañaActiva,    setPestañaActiva]    = useState('finanzas');
+  const [subFinanzas,      setSubFinanzas]      = useState('dia'); // 'dia' | 'semana' | 'mes'
+  const [datos,            setDatos]            = useState(null);
+  const [datosPlatos,      setDatosPlatos]      = useState(null);
+  const [loading,          setLoading]          = useState(true);
+  const [loadingPlatos,    setLoadingPlatos]    = useState(false);
+  const [datosClientes,    setDatosClientes]    = useState(null);
+  const [loadingClientes,  setLoadingClientes]  = useState(false);
+ 
   // Carga financiera al montar
   useEffect(() => {
     const fetchFinanzas = async () => {
@@ -56,7 +63,7 @@ const Dashboard = () => {
     };
     fetchFinanzas();
   }, []);
-
+ 
   // Carga de platos al cambiar a esa pestaña
   useEffect(() => {
     if (pestañaActiva !== 'platos' || datosPlatos) return;
@@ -73,13 +80,30 @@ const Dashboard = () => {
     };
     fetchPlatos();
   }, [pestañaActiva, datosPlatos]);
-
+ 
+  // Carga de clientes al cambiar a esa pestaña
+  useEffect(() => {
+    if (pestañaActiva !== 'clientes' || datosClientes) return;
+    const fetchClientes = async () => {
+      setLoadingClientes(true);
+      try {
+        const response = await api.get('/dashboard/clientes');
+        setDatosClientes(response.data);
+      } catch (error) {
+        console.error('Error clientes:', error);
+      } finally {
+        setLoadingClientes(false);
+      }
+    };
+    fetchClientes();
+  }, [pestañaActiva, datosClientes]);
+ 
   const formatCurrency = (value) =>
     new Intl.NumberFormat('es-US', {
       style: 'currency', currency: 'USD', maximumFractionDigits: 2
-    }).format(value);
-
-  // ── Tooltip financiero ────────────────────────────────────────────────────
+    }).format(value ?? 0);
+ 
+  // ── Tooltip para barras / línea / área ───────────────────────────────────
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -98,24 +122,260 @@ const Dashboard = () => {
     }
     return null;
   };
-
-  // Carga de clientes al cambiar a esa pestaña
-  useEffect(() => {
-    if (pestañaActiva !== 'clientes' || datosClientes) return;
-    const fetchClientes = async () => {
-      setLoadingClientes(true);
-      try {
-        const response = await api.get('/dashboard/clientes');
-        setDatosClientes(response.data);
-      } catch (error) {
-        console.error('Error clientes:', error);
-      } finally {
-        setLoadingClientes(false);
-      }
-    };
-    fetchClientes();
-  }, [pestañaActiva, datosClientes]);
-
+ 
+  // ── Tooltip para el Pie ───────────────────────────────────────────────────
+  const PieTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{
+          background: '#ffffff', border: `2px solid ${payload[0].payload.fill}`,
+          borderRadius: '12px', padding: '10px 14px',
+          boxShadow: '0 8px 25px rgba(0,0,0,0.12)'
+        }}>
+          <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase',
+            letterSpacing: '1px', margin: '0 0 2px', fontWeight: 600 }}>
+            {payload[0].name}
+          </p>
+          <p style={{ color: '#1a1a1a', fontSize: '1rem', margin: 0, fontWeight: 700 }}>
+            {formatCurrency(payload[0].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+ 
+  // ── Sub-vistas de Finanzas ────────────────────────────────────────────────
+ 
+  const buildPieData = (caja, linea) => [
+    { name: 'Caja',  value: caja  || 0, fill: COLOR_CAJA  },
+    { name: 'Línea', value: linea || 0, fill: COLOR_LINEA },
+  ];
+ 
+  const renderLabel = ({ name, percent }) =>
+    percent > 0 ? `${(percent * 100).toFixed(0)}%` : '';
+ 
+  // Vista: Ingresos del Día
+  const VistaHoy = () => {
+    const pieData = buildPieData(datos?.kpiHoyCaja, datos?.kpiHoyLinea);
+    return (
+      <>
+        {/* KPI cards */}
+        <section className="kpi-section">
+          <div className="kpi-card">
+            <div className="kpi-icon"><Clock size={24} /></div>
+            <div className="kpi-info"><p>Total del día</p><h3>{formatCurrency(datos?.kpiHoy)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><Banknote size={24} /></div>
+            <div className="kpi-info"><p>Caja</p><h3>{formatCurrency(datos?.kpiHoyCaja)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><CreditCard size={24} /></div>
+            <div className="kpi-info"><p>Línea</p><h3>{formatCurrency(datos?.kpiHoyLinea)}</h3></div>
+          </div>
+        </section>
+ 
+        {/* Charts */}
+        <div className="charts-grid">
+          {/* Barra por hora */}
+          <div className="chart-card">
+            <h3><Clock size={16} /> Ingresos por hora</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={datos?.chartHoy || []} barCategoryGap="35%">
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#a03ce6" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#7b2cb5" stopOpacity={0.8} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                  <XAxis dataKey="label" stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false}
+                    tickFormatter={(v) => `$${v}`} width={45} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(160,60,230,0.08)' }} />
+                  <Bar dataKey="total" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+ 
+          {/* Pie Caja vs Línea */}
+          <div className="chart-card">
+            <h3><DollarSign size={16} /> Distribución de ingresos</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%"
+                    outerRadius={100} innerRadius={50}
+                    labelLine={false} label={renderLabel} paddingAngle={3}>
+                    {pieData.map((entry, i) => (
+                      <Cell key={i} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<PieTooltip />} />
+                  <Legend formatter={(value) => (
+                    <span style={{ color: '#555', fontSize: '0.85rem' }}>{value}</span>
+                  )} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+ 
+  // Vista: Ingresos Semanales
+  const VistaSemana = () => {
+    const pieData = buildPieData(datos?.kpiSemanaCaja, datos?.kpiSemanaLinea);
+    return (
+      <>
+        <section className="kpi-section">
+          <div className="kpi-card">
+            <div className="kpi-icon"><Calendar size={24} /></div>
+            <div className="kpi-info"><p>Total semana</p><h3>{formatCurrency(datos?.kpiSemana)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><Banknote size={24} /></div>
+            <div className="kpi-info"><p>Caja</p><h3>{formatCurrency(datos?.kpiSemanaCaja)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><CreditCard size={24} /></div>
+            <div className="kpi-info"><p>Línea</p><h3>{formatCurrency(datos?.kpiSemanaLinea)}</h3></div>
+          </div>
+        </section>
+ 
+        <div className="charts-grid">
+          {/* Línea por día de la semana */}
+          <div className="chart-card">
+            <h3><Calendar size={16} /> Ingresos por día</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={datos?.chartSemana || []}>
+                  <defs>
+                    <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#a03ce6" />
+                      <stop offset="100%" stopColor="#e94560" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                  <XAxis dataKey="label" stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false}
+                    tickFormatter={(v) => `$${v}`} width={45} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Line type="monotone" dataKey="total" stroke="url(#lineGradient)"
+                    strokeWidth={3}
+                    dot={{ r: 5, fill: '#a03ce6', stroke: '#ffffff', strokeWidth: 2 }}
+                    activeDot={{ r: 8, fill: '#e94560', stroke: '#ffffff', strokeWidth: 2 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+ 
+          {/* Pie Caja vs Línea */}
+          <div className="chart-card">
+            <h3><DollarSign size={16} /> Distribución de ingresos</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%"
+                    outerRadius={100} innerRadius={50}
+                    labelLine={false} label={renderLabel} paddingAngle={3}>
+                    {pieData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                  </Pie>
+                  <Tooltip content={<PieTooltip />} />
+                  <Legend formatter={(value) => (
+                    <span style={{ color: '#555', fontSize: '0.85rem' }}>{value}</span>
+                  )} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+ 
+  // Vista: Ingresos Mensuales
+  const VistaMes = () => {
+    const pieData = buildPieData(datos?.kpiMesCaja, datos?.kpiMesLinea);
+    return (
+      <>
+        <section className="kpi-section">
+          <div className="kpi-card">
+            <div className="kpi-icon"><TrendingUp size={24} /></div>
+            <div className="kpi-info"><p>Total del mes</p><h3>{formatCurrency(datos?.kpiMes)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><Banknote size={24} /></div>
+            <div className="kpi-info"><p>Caja</p><h3>{formatCurrency(datos?.kpiMesCaja)}</h3></div>
+          </div>
+          <div className="kpi-card">
+            <div className="kpi-icon"><CreditCard size={24} /></div>
+            <div className="kpi-info"><p>Línea</p><h3>{formatCurrency(datos?.kpiMesLinea)}</h3></div>
+          </div>
+        </section>
+ 
+        <div className="charts-grid">
+          {/* Área por día del mes */}
+          <div className="chart-card full-width-chart">
+            <h3><TrendingUp size={16} /> Ingresos por día del mes</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={datos?.chartMes || []}>
+                  <defs>
+                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"   stopColor="#a03ce6" stopOpacity={0.35} />
+                      <stop offset="50%"  stopColor="#7b2cb5" stopOpacity={0.15} />
+                      <stop offset="100%" stopColor="#a03ce6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                  <XAxis dataKey="label" stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="transparent"
+                    tick={{ fill: '#666', fontSize: 11 }} axisLine={false} tickLine={false}
+                    tickFormatter={(v) => `$${v}`} width={50} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area type="monotone" dataKey="total" stroke="#a03ce6" strokeWidth={3}
+                    fillOpacity={1} fill="url(#areaGradient)" dot={false}
+                    activeDot={{ r: 6, fill: '#e94560', stroke: '#ffffff', strokeWidth: 2 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+ 
+          {/* Pie Caja vs Línea */}
+          <div className="chart-card">
+            <h3><DollarSign size={16} /> Distribución de ingresos</h3>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%"
+                    outerRadius={100} innerRadius={50}
+                    labelLine={false} label={renderLabel} paddingAngle={3}>
+                    {pieData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                  </Pie>
+                  <Tooltip content={<PieTooltip />} />
+                  <Legend formatter={(value) => (
+                    <span style={{ color: '#555', fontSize: '0.85rem' }}>{value}</span>
+                  )} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+ 
+  // ── Loading global ────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -125,12 +385,13 @@ const Dashboard = () => {
       </div>
     );
   }
-
+ 
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="dashboard-container">
       <Helmet><title>Novost — Dashboard</title></Helmet>
-
-      {/* ── Hero ── */}
+ 
+      {/* Hero */}
       <section className="dashboard-hero">
         <div className="hero-welcome-corner">
           <div className="role-badge">Administrador</div>
@@ -144,18 +405,18 @@ const Dashboard = () => {
           </p>
         </div>
       </section>
-
-      {/* ── Tabs ── */}
+ 
+      {/* Tabs principales */}
       <div className="dashboard-tabs">
-        <button className={`dashboard-tab ${pestañaActiva === 'finanzas' ? 'active' : 'inactive'}`}
+        <button className={`dashboard-tab ${pestañaActiva === 'finanzas'   ? 'active' : 'inactive'}`}
           onClick={() => setPestañaActiva('finanzas')}>
           <DollarSign size={18} /> Estadísticas Financieras
         </button>
-        <button className={`dashboard-tab ${pestañaActiva === 'platos' ? 'active' : 'inactive'}`}
+        <button className={`dashboard-tab ${pestañaActiva === 'platos'     ? 'active' : 'inactive'}`}
           onClick={() => setPestañaActiva('platos')}>
           <UtensilsCrossed size={18} /> Análisis de Platos
         </button>
-        <button className={`dashboard-tab ${pestañaActiva === 'clientes' ? 'active' : 'inactive'}`}
+        <button className={`dashboard-tab ${pestañaActiva === 'clientes'   ? 'active' : 'inactive'}`}
           onClick={() => setPestañaActiva('clientes')}>
           <Users size={18} /> Análisis de Clientes
         </button>
@@ -164,118 +425,42 @@ const Dashboard = () => {
           <Package size={18} /> Inventario
         </button>
       </div>
-
+ 
       {/* ── Pestaña FINANZAS ── */}
       {pestañaActiva === 'finanzas' && (
         <>
-          <section className="kpi-section">
-            <div className="kpi-card">
-              <div className="kpi-icon"><Clock size={24} /></div>
-              <div className="kpi-info">
-                <p>Ingresos hoy</p>
-                <h3>{formatCurrency(datos?.kpiHoy || 0)}</h3>
-              </div>
-            </div>
-            <div className="kpi-card">
-              <div className="kpi-icon"><Calendar size={24} /></div>
-              <div className="kpi-info">
-                <p>Esta semana</p>
-                <h3>{formatCurrency(datos?.kpiSemana || 0)}</h3>
-              </div>
-            </div>
-            <div className="kpi-card">
-              <div className="kpi-icon"><TrendingUp size={24} /></div>
-              <div className="kpi-info">
-                <p>Total acumulado · año</p>
-                <h3>{formatCurrency(datos?.kpiTotal || 0)}</h3>
-              </div>
-            </div>
-          </section>
-
+          {/* Sub-tabs financieros */}
+          <div className="finanzas-subtabs">
+            <button
+              className={`finanzas-subtab ${subFinanzas === 'dia' ? 'active' : ''}`}
+              onClick={() => setSubFinanzas('dia')}>
+              <Clock size={15} /> Ingresos del Día
+            </button>
+            <button
+              className={`finanzas-subtab ${subFinanzas === 'semana' ? 'active' : ''}`}
+              onClick={() => setSubFinanzas('semana')}>
+              <Calendar size={15} /> Ingresos Semanales
+            </button>
+            <button
+              className={`finanzas-subtab ${subFinanzas === 'mes' ? 'active' : ''}`}
+              onClick={() => setSubFinanzas('mes')}>
+              <TrendingUp size={15} /> Ingresos Mensuales
+            </button>
+          </div>
+ 
           <section className="charts-section">
             <div className="charts-section-header">
               <h2>Análisis financiero</h2>
-              <span>Período activo</span>
+              <span>
+                {subFinanzas === 'dia'    && 'Hoy'}
+                {subFinanzas === 'semana' && 'Esta semana'}
+                {subFinanzas === 'mes'    && 'Este mes'}
+              </span>
             </div>
-            <div className="charts-grid">
-              <div className="chart-card">
-                <h3><Clock size={16} /> Ingresos del día · por hora</h3>
-                <div className="chart-wrapper">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={datos?.chartHoy || []} barCategoryGap="35%">
-                      <defs>
-                        <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#a03ce6" stopOpacity={1} />
-                          <stop offset="100%" stopColor="#7b2cb5" stopOpacity={0.8} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
-                      <XAxis dataKey="label" stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false}
-                        tickFormatter={(v) => `$${v}`} width={45} />
-                      <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(160,60,230,0.08)' }} />
-                      <Bar dataKey="total" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="chart-card">
-                <h3><Calendar size={16} /> Ingresos de la semana</h3>
-                <div className="chart-wrapper">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={datos?.chartSemana || []}>
-                      <defs>
-                        <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stopColor="#a03ce6" />
-                          <stop offset="100%" stopColor="#e94560" />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
-                      <XAxis dataKey="label" stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false}
-                        tickFormatter={(v) => `$${v}`} width={45} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Line type="monotone" dataKey="total" stroke="url(#lineGradient)"
-                        strokeWidth={3}
-                        dot={{ r: 5, fill: '#a03ce6', stroke: '#ffffff', strokeWidth: 2 }}
-                        activeDot={{ r: 8, fill: '#e94560', stroke: '#ffffff', strokeWidth: 2 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="chart-card full-width">
-                <h3><DollarSign size={16} /> Ingresos históricos · año actual</h3>
-                <div className="chart-wrapper">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={datos?.chartMeses || []}>
-                      <defs>
-                        <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%"   stopColor="#a03ce6" stopOpacity={0.35} />
-                          <stop offset="50%"  stopColor="#7b2cb5" stopOpacity={0.15} />
-                          <stop offset="100%" stopColor="#a03ce6" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 6" stroke="rgba(0,0,0,0.08)" vertical={false} />
-                      <XAxis dataKey="label" stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis stroke="transparent"
-                        tick={{ fill: '#666666', fontSize: 11 }} axisLine={false} tickLine={false}
-                        tickFormatter={(v) => `$${v}`} width={50} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Area type="monotone" dataKey="total" stroke="#a03ce6" strokeWidth={3}
-                        fillOpacity={1} fill="url(#areaGradient)" dot={false}
-                        activeDot={{ r: 6, fill: '#e94560', stroke: '#ffffff', strokeWidth: 2 }} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
+ 
+            {subFinanzas === 'dia'    && <VistaHoy    />}
+            {subFinanzas === 'semana' && <VistaSemana />}
+            {subFinanzas === 'mes'    && <VistaMes    />}
           </section>
         </>
       )}

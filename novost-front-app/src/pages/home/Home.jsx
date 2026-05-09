@@ -5,6 +5,7 @@ import {
   Users, BarChart3, Settings, CheckSquare, UtensilsCrossed 
 } from 'lucide-react';
 import './Home.css';
+import { useEffect, useState } from 'react'; 
 
 // Importación de assets
 import calendar from '../../assets/images/Calendar.jpg'; 
@@ -23,7 +24,15 @@ const Home = () => {
   const rol = usuarioLocal?.rol || 'CLIENTE';
   const nombreUsuario = usuarioLocal ? usuarioLocal.nombre.split(' ')[0] : 'Invitado';
 
-  // Objeto contentByRole: define opciones de navegación específicas para cada rol
+  const [mensajeBienvenida, setMensajeBienvenida] = useState('');
+
+  useEffect(() => {
+    if (sessionStorage.getItem('mostrarBienvenidaDeVuelta') === 'true') {
+      setMensajeBienvenida(`¡Bienvenido de vuelta, ${nombreUsuario}! Tu cuenta ha sido reactivada.`);
+      sessionStorage.removeItem('mostrarBienvenidaDeVuelta'); // Mostrar solo una vez
+      setTimeout(() => setMensajeBienvenida(''), 5000); // Desaparece a los 5s
+    }
+  }, []);
 
   const contentByRole = {
     CLIENTE: [
@@ -48,6 +57,18 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      {mensajeBienvenida && (
+        <div style={{ 
+            position: 'fixed', top: '20px', right: '20px', zIndex: 9999,
+            backgroundColor: '#99E89D', color: 'white',
+            padding: '1rem 1.5rem', borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            fontSize: '1rem', fontWeight: '500',
+            maxWidth: '350px'
+        }}>
+          {mensajeBienvenida}
+        </div>
+      )}
       <Helmet>
         <title>Novost - Panel de {rol}</title>
       </Helmet>

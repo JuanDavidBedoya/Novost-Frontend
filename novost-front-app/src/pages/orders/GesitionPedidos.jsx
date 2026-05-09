@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../api/apiConfig';
 import {
   Calendar, Filter, RefreshCw, CheckCircle, PackageCheck,
-  Clock, Hash, UtensilsCrossed, ChevronRight, AlertCircle
+  Clock, Hash, UtensilsCrossed, ChevronRight, AlertCircle,
+  Banknote, CreditCard, TrendingUp, X
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -22,7 +23,7 @@ const formatFecha = (fecha) => {
     day: '2-digit', month: 'long', year: 'numeric'
   });
 };
- 
+
 const formatHora = (hora) => {
   if (!hora) return '—';
   const [h, m] = hora.split(':');
@@ -142,15 +143,110 @@ function SkeletonFila() {
   );
 }
 
+// ─── Modal Cierre de Caja ─────────────────────────────────────────────────────
+
+function CierreCajaModal({ datos, onClose }) {
+  if (!datos) return null;
+
+  const porcentajeCaja  = datos.totalDia > 0 ? (datos.totalCaja  / datos.totalDia) * 100 : 0;
+  const porcentajeLinea = datos.totalDia > 0 ? (datos.totalLinea / datos.totalDia) * 100 : 0;
+
+  return (
+    <div className="cierre-overlay" onClick={onClose}>
+      <div className="cierre-modal" onClick={(e) => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="cierre-header">
+          <div className="cierre-header-left">
+            <TrendingUp size={20} />
+            <div>
+              <h2>Cierre de Caja</h2>
+              <span>{new Date().toLocaleDateString('es-CO', {
+                weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+              })}</span>
+            </div>
+          </div>
+          <button className="cierre-close" onClick={onClose} aria-label="Cerrar">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Total general */}
+        <div className="cierre-total-card">
+          <p>Total del día</p>
+          <h3>{formatMoneda(datos.totalDia)}</h3>
+          <span>{datos.cantidadPedidos} pedido{datos.cantidadPedidos !== 1 ? 's' : ''} pagado{datos.cantidadPedidos !== 1 ? 's' : ''}</span>
+        </div>
+
+        {/* Desglose */}
+        <div className="cierre-desglose">
+          {/* Caja */}
+          <div className="cierre-metodo cierre-metodo-caja">
+            <div className="cierre-metodo-icon">
+              <Banknote size={20} />
+            </div>
+            <div className="cierre-metodo-info">
+              <span className="cierre-metodo-label">Efectivo · Caja</span>
+              <span className="cierre-metodo-monto">{formatMoneda(datos.totalCaja)}</span>
+              <span className="cierre-metodo-sub">
+                {datos.cantidadCaja} pedido{datos.cantidadCaja !== 1 ? 's' : ''} · {porcentajeCaja.toFixed(1)}%
+              </span>
+            </div>
+          </div>
+
+          {/* Línea */}
+          <div className="cierre-metodo cierre-metodo-linea">
+            <div className="cierre-metodo-icon">
+              <CreditCard size={20} />
+            </div>
+            <div className="cierre-metodo-info">
+              <span className="cierre-metodo-label">Pago en Línea</span>
+              <span className="cierre-metodo-monto">{formatMoneda(datos.totalLinea)}</span>
+              <span className="cierre-metodo-sub">
+                {datos.cantidadLinea} pedido{datos.cantidadLinea !== 1 ? 's' : ''} · {porcentajeLinea.toFixed(1)}%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Barra de distribución */}
+        <div className="cierre-barra-wrapper">
+          <div className="cierre-barra">
+            <div
+              className="cierre-barra-caja"
+              style={{ width: `${porcentajeCaja}%` }}
+              title={`Caja: ${porcentajeCaja.toFixed(1)}%`}
+            />
+            <div
+              className="cierre-barra-linea"
+              style={{ width: `${porcentajeLinea}%` }}
+              title={`Línea: ${porcentajeLinea.toFixed(1)}%`}
+            />
+          </div>
+          <div className="cierre-barra-labels">
+            <span style={{ color: '#a03ce6' }}>Caja {porcentajeCaja.toFixed(0)}%</span>
+            <span style={{ color: '#00c2d4' }}>Línea {porcentajeLinea.toFixed(0)}%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 // ─── Página principal ─────────────────────────────────────────────────────────
 
 export default function GestionPedidos() {
-  const [pedidos, setPedidos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingAccion, setLoadingAccion] = useState(null);
-  const [filtros, setFiltros] = useState({ fecha: '', estado: '' });
+  const [pedidos,        setPedidos]        = useState([]);
+  const [loading,        setLoading]        = useState(true);
+  const [loadingAccion,  setLoadingAccion]  = useState(null);
+  const [filtros,        setFiltros]        = useState({ fecha: '', estado: '' });
 
-  // Contadores por estado
+  // Cierre de Caja
+  const [cierreVisible,  setCierreVisible]  = useState(false);
+  const [cierreData,     setCierreData]     = useState(null);
+  const [loadingCierre,  setLoadingCierre]  = useState(false);
+
   const contadores = ESTADOS.reduce((acc, e) => {
     acc[e] = pedidos.filter(p => p.estadoPedido === e).length;
     return acc;
@@ -173,6 +269,20 @@ export default function GestionPedidos() {
   }, [filtros]);
 
   useEffect(() => { fetchPedidos(); }, [fetchPedidos]);
+
+  // ── Abre el modal de Cierre de Caja ──────────────────────────────────────
+  const handleCierreCaja = async () => {
+    setLoadingCierre(true);
+    try {
+      const { data } = await api.get('/dashboard/cierre-caja');
+      setCierreData(data);
+      setCierreVisible(true);
+    } catch (error) {
+      showErrorToast(error, toast);
+    } finally {
+      setLoadingCierre(false);
+    }
+  };
 
   const handleAvanzar = async (pedido, accion) => {
     const result = await MySwal.fire({
@@ -212,16 +322,38 @@ export default function GestionPedidos() {
 
   return (
     <div className="gp-page">
+
+      {/* ── Modal Cierre de Caja ── */}
+      {cierreVisible && (
+        <CierreCajaModal
+          datos={cierreData}
+          onClose={() => setCierreVisible(false)}
+        />
+      )}
+
       {/* ── Header ── */}
       <div className="gp-header">
         <div className="gp-header-text">
           <h1>Gestión de <span>Pedidos</span></h1>
           <p>Administra y actualiza el estado de todos los pedidos del restaurante.</p>
         </div>
-        <button className="gp-btn-refresh" onClick={fetchPedidos} title="Recargar">
-          <RefreshCw size={16} />
-          <span>Actualizar</span>
-        </button>
+        <div className="gp-header-actions">
+          <button
+            className="gp-btn-cierre"
+            onClick={handleCierreCaja}
+            disabled={loadingCierre}
+            title="Ver resumen del día"
+          >
+            {loadingCierre
+              ? <span className="gp-spinner" />
+              : <TrendingUp size={16} />}
+            <span>Cierre de Caja</span>
+          </button>
+          <button className="gp-btn-refresh" onClick={fetchPedidos} title="Recargar">
+            <RefreshCw size={16} />
+            <span>Actualizar</span>
+          </button>
+        </div>
       </div>
 
       {/* ── Tarjetas de resumen ── */}

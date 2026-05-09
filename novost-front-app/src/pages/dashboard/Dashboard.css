@@ -47,6 +47,57 @@
   padding: 0;
 }
 
+.finanzas-subtabs {
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem auto 0rem auto; /* <-- ESTO CENTRA EL CONTENEDOR EN LA PANTALLA */
+  padding: 0.35rem;
+  border-radius: 14px;
+  width: fit-content;
+}
+ 
+.finanzas-subtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.5rem; /* Mismo tamaño que los de arriba */
+  border: 1px solid var(--border-color); /* Borde igual a las inactivas de arriba */
+  border-radius: 50px; /* Forma redonda */
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--bg-secondary); /* Fondo gris claro igual a las de arriba */
+  color: var(--text-secondary);
+}
+
+.finanzas-subtab:hover {
+  background: var(--bg-card);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.finanzas-subtab.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(160, 60, 230, 0.3);
+}
+
+/* Para que los iconos dentro de los botones de ingresos también coincidan */
+.finanzas-subtab svg {
+  width: 18px;
+  height: 18px;
+}
+ 
+/* Gráfica de área que ocupa todo el ancho en la vista mensual */
+.full-width-chart {
+  grid-column: 1 / -1;
+}
+
 /* Decorative glow effects */
 .dashboard-hero::before {
   content: '';
@@ -317,7 +368,8 @@
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 4rem; 
+  margin-top: 3rem;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -477,11 +529,6 @@
   
   .kpi-card {
     padding: 1.5rem;
-  }
-  
-  .charts-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
   }
   
   .chart-card {
