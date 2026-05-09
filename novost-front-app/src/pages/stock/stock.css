@@ -881,3 +881,69 @@ body.high-contrast-mode .stock-status-badge {
 body.high-contrast-mode .stock-modal-overlay {
   background: rgba(0, 0, 0, 0.9) !important;
 }
+
+/* Navigation Section for Advanced Features */
+.stock-navigation-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--stock-white);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--stock-border);
+}
+
+.stock-navigation-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--stock-text-dark);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.stock-nav-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stock-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stock-nav-tipos {
+  background: linear-gradient(135deg, #8a2be2, #7b24d1);
+  color: white;
+}
+
+.stock-nav-tipos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+
+.stock-nav-alertas {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.stock-nav-alertas:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.stock-nav-entradas {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.stock-nav-entradas:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}

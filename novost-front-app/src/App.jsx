@@ -20,6 +20,10 @@ import PublicRoute from './components/routes/PublicRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import StockCode from './pages/stock/StockCode';
 import StockRoute from './pages/stock/StockRoute';
+import TiposProducto from './pages/stock/TiposProducto';
+import ProductosPorTipo from './pages/stock/ProductosPorTipo';
+import AlertasVencimiento from './pages/stock/AlertasVencimiento';
+import EntradaCompra from './pages/stock/EntradaCompra';
 import Dashboard from './pages/dashboard/Dashboard';
 import Menu from './pages/orders/MenuPedido';
 import Pedidos from './pages/orders/MisPedidos';
@@ -117,6 +121,10 @@ function App() {
 
             <Route path="/stock-code" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockCode /></ProtectedRoute>} />
             <Route path="/stock" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><StockRoute /></ProtectedRoute>} />
+            <Route path="/stock/tipos" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><TiposProducto /></ProtectedRoute>} />
+            <Route path="/stock/tipo/:idTipo" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><ProductosPorTipo /></ProtectedRoute>} />
+            <Route path="/stock/alertas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><AlertasVencimiento /></ProtectedRoute>} />
+            <Route path="/stock/entradas" element={<ProtectedRoute allowedRoles={['ADMINISTRADOR', 'TRABAJADOR']}><EntradaCompra /></ProtectedRoute>} />
             
           </Route>
 

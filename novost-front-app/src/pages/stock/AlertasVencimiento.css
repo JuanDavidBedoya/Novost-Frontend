@@ -1,0 +1,322 @@
+/* AlertasVencimiento Page Styles - Based on Stock Design */
+:root {
+  --alertas-primary: #8a2be2;
+  --alertas-primary-hover: #7b24d1;
+  --alertas-text-dark: #1f2937;
+  --alertas-text-muted: #6b7280;
+  --alertas-bg-light: #f9fafb;
+  --alertas-border: #e5e7eb;
+  --alertas-white: #ffffff;
+  --alertas-success: #10b981;
+  --alertas-warning: #f59e0b;
+  --alertas-danger: #ef4444;
+}
+
+.alertas-page-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Header */
+.alertas-page-header {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.alertas-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--alertas-white);
+  border: 1px solid var(--alertas-border);
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--alertas-text-muted);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.alertas-back-button:hover {
+  background: var(--alertas-bg-light);
+  color: var(--alertas-primary);
+  border-color: var(--alertas-primary);
+}
+
+.alertas-header-content {
+  text-align: center;
+}
+
+.alertas-header-content h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--alertas-text-dark);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.alertas-header-content p {
+  color: var(--alertas-text-muted);
+  font-size: 1rem;
+}
+
+/* Stats Grid */
+.alertas-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.alertas-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--alertas-white);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--alertas-border);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.alertas-stat-card:nth-child(1) { animation-delay: 0.1s; }
+.alertas-stat-card:nth-child(2) { animation-delay: 0.2s; }
+.alertas-stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+.alertas-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15);
+}
+
+.alertas-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.alertas-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.alertas-stat-info span {
+  font-size: 0.8rem;
+  color: var(--alertas-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alertas-stat-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--alertas-text-dark);
+  margin: 0;
+}
+
+/* Table Container */
+.alertas-table-container {
+  background: var(--alertas-white);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--alertas-border);
+  overflow: hidden;
+}
+
+.alertas-loading,
+.alertas-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--alertas-text-muted);
+}
+
+.alertas-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--alertas-border);
+  border-top-color: var(--alertas-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.alertas-empty svg {
+  color: var(--alertas-primary);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.alertas-empty h3 {
+  color: var(--alertas-text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.alertas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alertas-table thead {
+  background: var(--alertas-bg-light);
+}
+
+.alertas-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--alertas-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--alertas-border);
+}
+
+.alertas-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--alertas-border);
+}
+
+.alertas-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.alertas-table tbody tr:hover {
+  background-color: var(--alertas-bg-light);
+}
+
+.alerta-row.vencido {
+  background-color: #ffebee;
+}
+
+.alerta-row.critico {
+  background-color: #fff3e0;
+}
+
+.alerta-row.proximo {
+  background-color: #fff8e1;
+}
+
+.alerta-product-name {
+  color: var(--alertas-text-dark);
+  font-weight: 500;
+}
+
+.alerta-value {
+  font-weight: 600;
+  color: var(--alertas-text-dark);
+}
+
+.alerta-date {
+  color: var(--alertas-text-muted);
+  font-size: 0.9rem;
+}
+
+.alerta-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.alerta-days {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .alertas-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .alertas-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .alertas-table-container {
+    overflow-x: auto;
+  }
+  
+  .alertas-table {
+    min-width: 800px;
+  }
+}
+
+/* Alto Contraste */
+body.high-contrast-mode .alertas-page-container {
+  background-color: #000000 !important;
+}
+
+body.high-contrast-mode .alertas-stats-grid,
+body.high-contrast-mode .alertas-table-container {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast-mode .alertas-header-content h1,
+body.high-contrast-mode .alertas-header-content p,
+body.high-contrast-mode .alertas-stat-info h3,
+body.high-contrast-mode .alerta-product-name,
+body.high-contrast-mode .alerta-value {
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .alertas-stat-card,
+body.high-contrast-mode .alertas-add-button,
+body.high-contrast-mode .alertas-input,
+body.high-contrast-mode .alertas-select {
+  background-color: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .alertas-table th,
+body.high-contrast-mode .alertas-table td {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+}

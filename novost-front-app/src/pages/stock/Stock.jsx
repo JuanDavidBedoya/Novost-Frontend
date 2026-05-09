@@ -13,7 +13,10 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   X,
-  Check
+  Check,
+  Tags,
+  Calendar,
+  ShoppingCart
 } from 'lucide-react';
 import api from '../../api/apiConfig';
 import { showErrorToast } from '../../lib/errorHandler';
@@ -38,8 +41,8 @@ const Stock = () => {
   const [formData, setFormData] = useState({
     nombreAlimento: '',
     tipoMedida: 'KILO',
-    stockActual: '',
-    stockMinimo: ''
+    stockMinimo: '',
+    idTipo: ''
   });
 
   const userRole = localStorage.getItem('rol');
@@ -91,8 +94,8 @@ const Stock = () => {
       setFormData({
         nombreAlimento: producto.nombreAlimento,
         tipoMedida: producto.tipoMedida,
-        stockActual: producto.stockActual,
-        stockMinimo: producto.stockMinimo
+        stockMinimo: producto.stockMinimo,
+        idTipo: producto.tipoProducto?.idTipo || ''
       });
       setEsNuevo(false);
     } else {
@@ -100,8 +103,8 @@ const Stock = () => {
       setFormData({
         nombreAlimento: '',
         tipoMedida: 'KILO',
-        stockActual: '',
-        stockMinimo: ''
+        stockMinimo: '',
+        idTipo: ''
       });
       setEsNuevo(true);
     }
@@ -114,8 +117,8 @@ const Stock = () => {
     setFormData({
       nombreAlimento: '',
       tipoMedida: 'KILO',
-      stockActual: '',
-      stockMinimo: ''
+      stockMinimo: '',
+      idTipo: ''
     });
   };
 
@@ -125,8 +128,8 @@ const Stock = () => {
       const payload = {
         nombreAlimento: formData.nombreAlimento,
         tipoMedida: formData.tipoMedida,
-        stockActual: parseFloat(formData.stockActual),
-        stockMinimo: parseFloat(formData.stockMinimo)
+        stockMinimo: parseFloat(formData.stockMinimo),
+        idTipo: formData.idTipo ? parseInt(formData.idTipo) : null
       };
 
       if (esNuevo) {
@@ -229,7 +232,7 @@ const Stock = () => {
             <Package size={32} />
             Control de Inventario
           </h1>
-          <p>Gestiona el stock de tu restaurante</p>
+          <p>Gestión del stock del restaurante</p>
         </div>
       </div>
 
@@ -320,109 +323,119 @@ const Stock = () => {
         </button>
       </div>
 
-      {/* Products Table */}
-      <div className="stock-table-container">
-        {loading ? (
-          <div className="stock-loading">
-            <div className="spinner"></div>
-            <p>Cargando inventario...</p>
-          </div>
-        ) : filteredProductos.length === 0 ? (
-          <div className="stock-empty">
-            <Package size={48} />
-            <h3>No se encontraron productos</h3>
-            <p>Intenta con otros filtros de búsqueda</p>
-          </div>
-        ) : (
-          <table className="stock-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Tipo</th>
-                <th>Stock Actual</th>
-                <th>Stock Mínimo</th>
-                <th>Consumo Hoy</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProductos.map((producto) => (
-                <tr key={producto.idAlimento}>
-                  <td className="stock-product-name">
-                    <strong>{producto.nombreAlimento}</strong>
-                  </td>
-                  <td>
-                    <span className={`stock-type-badge stock-type-${producto.tipoMedida.toLowerCase()}`}>
-                      {producto.tipoMedida}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="stock-value">
-                      {getUnidadDisplay(producto)} {getMedidaLabel(producto.tipoMedida)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="stock-value">
-                      {producto.stockMinimo} {getMedidaLabel(producto.tipoMedida)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="stock-consumo">
-                      {producto.consumoHoy || 0} {getMedidaLabel(producto.tipoMedida)}
-                    </span>
-                  </td>
-                  <td>
-                    {producto.belowMinStock ? (
-                      <span className="stock-status-badge stock-status-bajo">
-                        <AlertTriangle size={14} />
-                        Bajo
-                      </span>
-                    ) : (
-                      <span className="stock-status-badge stock-status-normal">
-                        <Check size={14} />
-                        Normal
-                      </span>
-                    )}
-                  </td>
-                  <td className="stock-actions">
-                    <button 
-                      className="stock-action-btn stock-action-agregar"
-                      onClick={() => handleOpenStockModal(producto, 'agregar')}
-                      title="Agregar Stock"
-                    >
-                      <ArrowUpCircle size={18} />
-                    </button>
-                    <button 
-                      className="stock-action-btn stock-action-quitar"
-                      onClick={() => handleOpenStockModal(producto, 'quitar')}
-                      title="Quitar Stock"
-                    >
-                      <ArrowDownCircle size={18} />
-                    </button>
-                    <button 
-                      className="stock-action-btn stock-action-edit"
-                      onClick={() => handleOpenModal(producto)}
-                      title="Editar"
-                    >
-                      <Edit size={18} />
-                    </button>
-                    {userRole === 'ADMINISTRADOR' && (
-                      <button 
-                        className="stock-action-btn stock-action-delete"
-                        onClick={() => handleDelete(producto)}
-                        title="Eliminar"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+      {/* Navegación a nuevas funcionalidades */}
+      <div className="stock-navigation-section">
+        <h3>Acciones Avanzadas</h3>
+        <div className="stock-nav-buttons">
+          <button 
+            className="stock-nav-btn stock-nav-tipos"
+            onClick={() => navigate('/stock/tipos')}
+          >
+            <Tags size={20} />
+            <span>Ver Tipos de Productos</span>
+          </button>
+          
+          <button 
+            className="stock-nav-btn stock-nav-alertas"
+            onClick={() => navigate('/stock/alertas')}
+          >
+            <Calendar size={20} />
+            <span>Alertas de Vencimiento</span>
+          </button>
+          
+          <button 
+            className="stock-nav-btn stock-nav-entradas"
+            onClick={() => navigate('/stock/entradas')}
+          >
+            <ShoppingCart size={20} />
+            <span>Registrar Entrada de Compra</span>
+          </button>
+        </div>
       </div>
+
+       {/* Products Table */}
+       <div className="stock-table-container">
+         {loading ? (
+           <div className="stock-loading">
+             <div className="spinner"></div>
+             <p>Cargando inventario...</p>
+           </div>
+         ) : filteredProductos.length === 0 ? (
+           <div className="stock-empty">
+             <Package size={48} />
+             <h3>No se encontraron productos</h3>
+             <p>Intenta con otros filtros de búsqueda</p>
+           </div>
+         ) : (
+           <table className="stock-table">
+             <thead>
+               <tr>
+                 <th>Producto</th>
+                 <th>Tipo Medida</th>
+                 <th>Stock Actual</th>
+                 <th>Stock Mínimo</th>
+                 <th>Estado</th>
+                 <th>Acciones</th>
+               </tr>
+             </thead>
+             <tbody>
+               {filteredProductos.map((producto) => (
+                 <tr key={producto.idAlimento}>
+                   <td className="stock-product-name">
+                     <strong>{producto.nombreAlimento}</strong>
+                   </td>
+                   <td>
+                     <span className={`stock-type-badge stock-type-${producto.tipoMedida.toLowerCase()}`}>
+                       {producto.tipoMedida}
+                     </span>
+                   </td>
+                   <td>
+                     <span className="stock-value">
+                       {getUnidadDisplay(producto)} {getMedidaLabel(producto.tipoMedida)}
+                     </span>
+                   </td>
+                   <td>
+                     <span className="stock-value">
+                       {producto.stockMinimo} {getMedidaLabel(producto.tipoMedida)}
+                     </span>
+                   </td>
+                   <td>
+                     {producto.belowMinStock ? (
+                       <span className="stock-status-badge stock-status-bajo">
+                         <AlertTriangle size={14} />
+                         Bajo
+                       </span>
+                     ) : (
+                       <span className="stock-status-badge stock-status-normal">
+                         <Check size={14} />
+                         Normal
+                       </span>
+                     )}
+                   </td>
+                   <td className="stock-actions-cell">
+                     <div className="stock-actions">
+                       <button
+                         className="stock-action-btn stock-action-quitar"
+                         onClick={() => handleOpenStockModal(producto, 'quitar')}
+                         title="Reducir stock"
+                       >
+                         <ArrowDownCircle size={18} />
+                       </button>
+                       <button
+                         className="stock-action-btn stock-action-edit"
+                         onClick={() => handleOpenModal(producto)}
+                         title="Editar producto"
+                       >
+                         <Edit size={18} />
+                       </button>
+                     </div>
+                   </td>
+                 </tr>
+               ))}
+             </tbody>
+           </table>
+         )}
+       </div>
 
       {/* Create/Edit Modal */}
       {showModal && (
@@ -463,24 +476,31 @@ const Stock = () => {
                     <option value="UNIDAD">Unidad (und)</option>
                   </select>
                 </div>
+
+                <div className="stock-form-group">
+                  <label>Tipo de Producto</label>
+                  <select
+                    name="idTipo"
+                    value={formData.idTipo}
+                    onChange={handleInputChange}
+                    className="stock-select"
+                  >
+                    <option value="">Seleccionar tipo</option>
+                    <option value="1">Proteínas</option>
+                    <option value="2">Condimentos</option>
+                    <option value="3">Vegetales</option>
+                    <option value="4">Frutas</option>
+                    <option value="5">Granos</option>
+                    <option value="6">Lácteos</option>
+                    <option value="7">Bebidas</option>
+                    <option value="8">Congelados</option>
+                    <option value="9">Enlatados</option>
+                    <option value="10">Especias</option>
+                  </select>
+                </div>
               </div>
               
               <div className="stock-form-row">
-                <div className="stock-form-group">
-                  <label>Stock Actual</label>
-                  <input
-                    type="number"
-                    name="stockActual"
-                    value={formData.stockActual}
-                    onChange={handleInputChange}
-                    placeholder="0"
-                    step="0.01"
-                    min="0"
-                    required
-                    className="stock-input"
-                  />
-                </div>
-                
                 <div className="stock-form-group">
                   <label>Stock Mínimo</label>
                   <input

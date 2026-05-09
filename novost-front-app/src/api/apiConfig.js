@@ -3,8 +3,8 @@ import axios from 'axios';
 // Configuración centralizada de la instancia axios con interceptores para autenticación
 
 const api = axios.create({
-  baseURL: 'https://backend-api-967697766235.us-central1.run.app'
-  //baseURL: 'http://localhost:8080',
+  //baseURL: 'https://backend-api-967697766235.us-central1.run.app'
+  baseURL: 'http://localhost:8080',
 });
 
 // Interceptor de solicitud: añade token JWT al header Authorization si existe
