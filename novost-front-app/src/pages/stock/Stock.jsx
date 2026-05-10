@@ -197,7 +197,7 @@ const Stock = () => {
   };
 
   const getUnidadDisplay = (producto) => {
-    return producto.stockActual;
+    return producto.stockActual.toFixed(4);
   };
 
   const getMedidaLabel = (tipo) => {
