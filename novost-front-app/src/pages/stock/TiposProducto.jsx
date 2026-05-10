@@ -36,17 +36,33 @@ const TiposProducto = () => {
     cargarTipos();
   }, []);
 
-  const cargarTipos = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get('/inventario/tipos');
-      setTipos(response.data);
-    } catch (error) {
-      showErrorToast(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+   const cargarTipos = async () => {
+     try {
+       setLoading(true);
+       const response = await api.get('/inventario/tipos');
+       const tiposData = response.data;
+
+       // Obtener el conteo de productos para cada tipo
+       const tiposConCount = await Promise.all(
+         tiposData.map(async (tipo) => {
+           try {
+             const productosResponse = await api.get(`/inventario/tipos/${tipo.idTipo}/productos`);
+             const productosCount = Array.isArray(productosResponse.data) ? productosResponse.data.length : 0;
+             return { ...tipo, productosCount };
+           } catch (error) {
+             console.error(`Error obteniendo productos para el tipo ${tipo.idTipo}:`, error);
+             return { ...tipo, productosCount: 0 };
+           }
+         })
+       );
+
+       setTipos(tiposConCount);
+     } catch (error) {
+       showErrorToast(error);
+     } finally {
+       setLoading(false);
+     }
+   };
 
   const filteredTipos = tipos.filter(tipo => 
     tipo.nombreTipo.toLowerCase().includes(busqueda.toLowerCase())
