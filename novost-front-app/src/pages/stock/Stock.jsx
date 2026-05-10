@@ -197,7 +197,18 @@ const Stock = () => {
   };
 
   const getUnidadDisplay = (producto) => {
-    return producto.stockActual.toFixed(4);
+    const stock = producto.stockActual;
+    const stockStr = stock.toString();
+    const decimalIndex = stockStr.indexOf('.');
+    
+    if (decimalIndex === -1) {
+      return stockStr;
+    }
+    
+    const decimales = stockStr.length - decimalIndex - 1;
+    const decimalesMostrar = Math.min(decimales, 4);
+    
+    return stock.toFixed(decimalesMostrar);
   };
 
   const getMedidaLabel = (tipo) => {
